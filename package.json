@@ -10,7 +10,8 @@
     "lint:fix": "eslint 'src/**/*.{ts,tsx}' --fix",
     "preview": "vite preview",
     "commit": "pnpm lint-staged && git-cz",
-    "format": "prettier \"./src/**/*.{ts,tsx,css,json,md}\" --write --cache"
+    "format": "prettier \"./src/**/*.{ts,tsx,css,json,md}\" --write --cache",
+    "test": "vitest run"
   },
   "dependencies": {
     "@chakra-ui/react": "^3.16.0",
