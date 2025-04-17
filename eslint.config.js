@@ -1,36 +1,36 @@
 import js from "@eslint/js";
-import globals from "globals";
 import tseslint from "typescript-eslint";
 import pluginReact from "eslint-plugin-react";
-import { defineConfig } from "eslint/config";
+import { defineConfig, globalIgnores } from "eslint/config";
 import reactHooks from "eslint-plugin-react-hooks";
 import importPlugin from "eslint-plugin-import";
-import chakraUiPlugin from "eslint-plugin-chakra-ui";
+import chakraUi from "eslint-plugin-chakra-ui";
 import parser from "@typescript-eslint/parser";
+import react from "eslint-plugin-react";
 
 export default defineConfig([
   {
     files: ["./src/**/*.{js,mjs,cjs,ts,jsx,tsx}"],
-    plugins: { js, "react-hooks": reactHooks, "chakra-ui": chakraUiPlugin },
-    extends: [
-      "js/recommended",
-      "eslint:recommended",
-      "plugin:import/recommended",
-      "plugin:import/typescript",
-    ],
+    plugins: {
+      react,
+      "chakra-ui": chakraUi,
+      "@typescript-eslint": tseslint.plugin,
+    },
   },
   {
     languageOptions: {
       parserOptions: {
         parser,
         project: ["./tsconfig.json"],
-        tsconfigRootDir: __dirname,
+        ecmaFeatures: {
+          jsx: true,
+        },
       },
-      globals: globals.browser,
       ecmaVersion: "latest",
       sourceType: "module",
     },
   },
+  js.configs.recommended,
   tseslint.configs.recommended,
   pluginReact.configs.flat.recommended,
   reactHooks.configs["recommended-latest"],
@@ -48,16 +48,17 @@ export default defineConfig([
     },
     rules: {
       semi: "error",
-      "no-unused-vars": "warn",
-      "no-undef": "warn",
+      "no-undef": "off",
+      "import/no-unresolved": "off",
+      "react/jsx-uses-react": "error",
+      "react/jsx-uses-vars": "error",
       "react/react-in-jsx-scope": "off",
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
-      "import/no-dynamic-require": "warn",
-      "import/no-nodejs-modules": "warn",
       "chakra-ui/props-order": "error",
       "chakra-ui/props-shorthand": "error",
       "chakra-ui/require-specific-component": "error",
     },
   },
+  globalIgnores(["./src/components/ui"]),
 ]);
