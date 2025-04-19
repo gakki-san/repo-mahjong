@@ -1,13 +1,26 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import { Box, Text, Flex, NativeSelect, Button } from "@chakra-ui/react";
 import { COLOR } from "@/const/color";
+import { useScore } from "@/hooks/useScore";
 
 type Props = {
   close: () => void;
 };
 
 export const ScoreSelectPanel: FC<Props> = ({ close }) => {
-  const [score, setScore] = useState<string | null>(null);
+  const [score, setScore] = useScore();
+  const handleSetScore = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectScore = Number(event.currentTarget.value);
+    setDefaultScore(selectScore);
+  };
+
+  const setDefaultScore = (selectScore: number) => {
+    if (!selectScore) return;
+    const isRuleFour = selectScore === 25000;
+    const playerCount = isRuleFour ? 4 : 3;
+    setScore.set(Array(playerCount).fill(selectScore));
+  };
+
   const completeButton = () => {
     if (score === null) {
       return alert("点数を選択してください");
@@ -34,7 +47,7 @@ export const ScoreSelectPanel: FC<Props> = ({ close }) => {
         >
           <NativeSelect.Field
             placeholder="点数を選択してください"
-            onChange={(event) => setScore(event.currentTarget.value)}
+            onChange={(event) => handleSetScore(event)}
           >
             <option value="25000" aria-setsize={20}>
               25000
