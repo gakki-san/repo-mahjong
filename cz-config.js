@@ -37,11 +37,6 @@ module.exports = {
       emoji: "💡",
       value: "refactor",
     },
-    release: {
-      description: "Create a release commit",
-      emoji: "🏹",
-      value: "release",
-    },
     style: {
       description: "Markup, white-space, formatting, missing semi-colons...",
       emoji: "💄",
