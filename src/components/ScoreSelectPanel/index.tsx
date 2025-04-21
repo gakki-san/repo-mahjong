@@ -4,11 +4,11 @@ import { COLOR } from "@/const/color";
 import { SCORE } from "@/const/score";
 import { useScore } from "@/hooks/useScore";
 
-type Props = {
+type ScoreSelectPanelProps = {
   close: () => void;
 };
 
-export const ScoreSelectPanel: FC<Props> = ({ close }) => {
+export const ScoreSelectPanel: FC<ScoreSelectPanelProps> = ({ close }) => {
   const [score, setScore] = useScore();
 
   const handleSetScore = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -34,8 +34,9 @@ export const ScoreSelectPanel: FC<Props> = ({ close }) => {
       <Box>
         <Text
           textStyle="3xl"
+          pt={"50px"}
           fontWeight="bold"
-          style={{ textAlign: "center", paddingTop: "50px" }}
+          textAlign={"center"}
         >
           点数を入力してください
         </Text>
@@ -45,7 +46,7 @@ export const ScoreSelectPanel: FC<Props> = ({ close }) => {
           w="240px"
           key={"num"}
           size={"md"}
-          style={{ backgroundColor: COLOR.WHITE }}
+          backgroundColor={COLOR.WHITE}
         >
           <NativeSelect.Field
             placeholder="点数を選択してください"
