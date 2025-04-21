@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { Box, Text, Flex, NativeSelect, Button } from "@chakra-ui/react";
 import { COLOR } from "@/const/color";
+import { SCORE } from "@/const/score";
 import { useScore } from "@/hooks/useScore";
 
 type Props = {
@@ -9,14 +10,14 @@ type Props = {
 
 export const ScoreSelectPanel: FC<Props> = ({ close }) => {
   const [score, setScore] = useScore();
+
   const handleSetScore = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectScore = Number(event.currentTarget.value);
     setDefaultScore(selectScore);
   };
-
   const setDefaultScore = (selectScore: number) => {
     if (!selectScore) return;
-    const isRuleFour = selectScore === 25000;
+    const isRuleFour = selectScore === SCORE.FOUR_PLAYER_RULE;
     const playerCount = isRuleFour ? 4 : 3;
     setScore.set(Array(playerCount).fill(selectScore));
   };
@@ -27,6 +28,7 @@ export const ScoreSelectPanel: FC<Props> = ({ close }) => {
     }
     close();
   };
+
   return (
     <Box>
       <Box>
