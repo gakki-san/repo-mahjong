@@ -13,20 +13,24 @@ export const ScoreSelectPanel: FC<ScoreSelectPanelProps> = ({ close }) => {
 
   const handleSetScore = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectScore = Number(event.currentTarget.value);
-    setDefaultScore(selectScore);
+    setScoreForAllPlayers(selectScore);
   };
-  const setDefaultScore = (selectScore: number) => {
+  const setScoreForAllPlayers = (selectScore: number) => {
     if (!selectScore) return;
     const isRuleFour = selectScore === SCORE.FOUR_PLAYER_RULE;
     const playerCount = isRuleFour ? 4 : 3;
     setScore.set(Array(playerCount).fill(selectScore));
   };
 
+  const alertScoreNotSelected = () => {
+    alert("点数を選択してください");
+  };
   const completeButton = () => {
     if (score === null) {
-      return alert("点数を選択してください");
+      alertScoreNotSelected();
+    } else {
+      close();
     }
-    close();
   };
 
   return (
@@ -50,7 +54,7 @@ export const ScoreSelectPanel: FC<ScoreSelectPanelProps> = ({ close }) => {
         >
           <NativeSelect.Field
             placeholder="点数を選択してください"
-            onChange={(event) => handleSetScore(event)}
+            onChange={handleSetScore}
           >
             <option value="25000" aria-setsize={20}>
               25000
