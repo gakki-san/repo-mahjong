@@ -1,9 +1,10 @@
 import { FC } from "react";
 import { Box, Grid, VStack } from "@chakra-ui/react";
 import { COLOR } from "@/const/color";
+import { ScoreMap } from "@/hooks/useScore";
 
 type ScoreSummaryProps = {
-  score: number[];
+  score: ScoreMap;
 };
 
 export const ScoreSummary: FC<ScoreSummaryProps> = ({ score }) => {
@@ -22,7 +23,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({ score }) => {
           東家
         </Box>
         <Box w="200px" p="4" color="white" textAlign="center" bg={COLOR.BLACK}>
-          {score[0]}
+          {score?.east}
         </Box>
       </VStack>
 
@@ -31,7 +32,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({ score }) => {
           南家
         </Box>
         <Box w="200px" p="4" color="white" textAlign="center" bg={COLOR.BLACK}>
-          {score[1]}
+          {score?.south}
         </Box>
       </VStack>
 
@@ -40,7 +41,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({ score }) => {
           西家
         </Box>
         <Box w="200px" p="4" color="white" textAlign="center" bg={COLOR.BLACK}>
-          {score[2]}
+          {score?.west}
         </Box>
       </VStack>
 
@@ -49,7 +50,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({ score }) => {
           北家
         </Box>
         <Box w="200px" p="4" color="white" textAlign="center" bg={COLOR.BLACK}>
-          {score?.[3] ?? "👐"}
+          {score?.north ?? "👐"}
         </Box>
       </VStack>
     </Grid>
