@@ -2,15 +2,18 @@ import { FC } from "react";
 import { Box, Text, Flex, NativeSelect, Button } from "@chakra-ui/react";
 import { COLOR } from "@/const/color";
 import { SCORE } from "@/const/score";
-import { useScore } from "@/hooks/useScore";
 
 type ScoreSelectPanelProps = {
   close: () => void;
+  score: number[] | null;
+  setScore: (value: number[]) => void;
 };
 
-export const ScoreSelectPanel: FC<ScoreSelectPanelProps> = ({ close }) => {
-  const [score, setScore] = useScore();
-
+export const ScoreSelectPanel: FC<ScoreSelectPanelProps> = ({
+  close,
+  score,
+  setScore,
+}) => {
   const handleSetScore = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectScore = Number(event.currentTarget.value);
     setScoreForAllPlayers(selectScore);
@@ -19,7 +22,7 @@ export const ScoreSelectPanel: FC<ScoreSelectPanelProps> = ({ close }) => {
     if (!selectScore) return;
     const isRuleFour = selectScore === SCORE.FOUR_PLAYER_RULE;
     const playerCount = isRuleFour ? 4 : 3;
-    setScore.set(Array(playerCount).fill(selectScore));
+    setScore(Array(playerCount).fill(selectScore));
   };
 
   const alertScoreNotSelected = () => {
@@ -34,7 +37,7 @@ export const ScoreSelectPanel: FC<ScoreSelectPanelProps> = ({ close }) => {
   };
 
   return (
-    <Box>
+    <Box w={"100vw"} h={"100vh"} bgColor={"#a4ffd0"}>
       <Box>
         <Text
           textStyle="3xl"
