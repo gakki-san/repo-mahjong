@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Box, Button, Grid, VStack, Flex } from "@chakra-ui/react";
 import { COLOR } from "@/const/color";
-import { ScoreMap, Player } from "@/hooks/useScore";
+import { Player, ScoreMap } from "@/hooks/useScore";
 
 type ScoreSummaryProps = {
   score: ScoreMap;
@@ -19,19 +19,14 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   const houra = "east";
   const count = 4000;
 
-  console.log(score);
-
-  const handleRon = (loser: Player, winner: Player, points: number) => {
-    setScore({
-      ...score,
-      [winner]: score[winner] + points,
-      [loser]: score[loser] - points,
-    });
-  };
-
-  const handleTsumo = (winner: Player, points: number) => {
+  const handleTsumo = (
+    winner: Player,
+    points: number,
+    players: string[],
+    score: ScoreMap,
+  ) => {
     const newScore: ScoreMap = {} as ScoreMap;
-    if (!newScore) return;
+    if (!score || !newScore) return;
     const losePointPerson = players.length - 1;
     for (const player of players) {
       const person = player as Player;
@@ -41,8 +36,21 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
         newScore[person] = score[person] - points;
       }
     }
+    setScore(newScore);
+  };
 
-    console.log(newScore);
+  const handleRon = (
+    loser: Player,
+    winner: Player,
+    points: number,
+    score: ScoreMap,
+  ) => {
+    if (!score) return;
+    const newScore = {
+      ...score,
+      [winner]: score[winner] + points,
+      [loser]: score[loser] - points,
+    };
 
     setScore(newScore);
   };
@@ -114,10 +122,10 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
         </Flex>
       </VStack>
 
-      <Button onClick={() => handleTsumo(houra, count)}>
+      <Button onClick={() => handleTsumo(houra, count, players, score)}>
         親が4000点のツモだ！！！
       </Button>
-      <Button onClick={() => handleRon(hoju, houra, count)}>
+      <Button onClick={() => handleRon(hoju, houra, count, score)}>
         親が下家から4000の出上がりだ！！！
       </Button>
     </Grid>
