@@ -1,8 +1,8 @@
 import { useState } from "react";
 
-export type Seat = "east" | "south" | "west" | "north";
+export type Player = "east" | "south" | "west" | "north";
 
-export type ScoreMap = Record<Seat, number> | null;
+export type ScoreMap = Record<Player, number> | null;
 
 export type useScoreReturn = [
   ScoreMap,
