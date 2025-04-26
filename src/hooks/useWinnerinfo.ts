@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Player } from "./useScore";
 
-type WinInfo = {
+export type WinInfo = {
   winType: "tsumo" | "ron" | null;
   winner: Player | null;
-  loser: Player | null;
+  loser: Player[] | null;
   winPoints: number | null;
 };
 

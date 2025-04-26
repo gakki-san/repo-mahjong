@@ -1,9 +1,10 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { Player, ScoreMap } from "@/hooks/useScore";
 import { useWinnerInfo } from "@/hooks/useWinnerinfo";
 import { WindowScoreSummary } from "../WindowScoreSummary";
 import { Box } from "@chakra-ui/react";
 import { COLOR } from "@/const/color";
+import { InputWinType } from "../InputWinType";
 
 type ScoreSummaryProps = {
   score: ScoreMap;
@@ -14,9 +15,10 @@ type ScoreSummaryProps = {
 export const ScoreSummary: FC<ScoreSummaryProps> = ({
   score,
   // setScore,
-  // players,
+  players,
 }) => {
   const [winnerInfo, setWinnerInfo] = useWinnerInfo();
+  const [selectedWinType, setSelectedWinType] = useState<string | null>(null);
 
   const selectedWinner: React.MouseEventHandler<HTMLButtonElement> = (
     event,
@@ -67,23 +69,50 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
 
   //   setScore(newScore);
   // };
-
   const isClickedWinner = winnerInfo.winner;
+  const isTsumo = selectedWinType === "tsumo";
+  const isRon = selectedWinType === "ron";
 
   return (
     <>
       <WindowScoreSummary selectedWinner={selectedWinner} score={score} />
       {isClickedWinner && (
+        <InputWinType
+          winnerInfo={winnerInfo}
+          setWinnerInfo={setWinnerInfo}
+          players={players}
+          setSelectedWinType={setSelectedWinType}
+        />
+      )}
+      {isTsumo ? (
         <Box
           pos={"absolute"}
           top={0}
+          alignItems={"center"}
+          justifyContent={"center"}
+          flexDir={"column"}
+          display={"flex"}
           w={"100vw"}
           h={"100vh"}
           bg={COLOR.GREEN_PRIMARY}
         >
-          aaa
+          tsumo
         </Box>
-      )}
+      ) : isRon ? (
+        <Box
+          pos={"absolute"}
+          top={0}
+          alignItems={"center"}
+          justifyContent={"center"}
+          flexDir={"column"}
+          display={"flex"}
+          w={"100vw"}
+          h={"100vh"}
+          bg={COLOR.GREEN_PRIMARY}
+        >
+          ron
+        </Box>
+      ) : null}
     </>
   );
 };
