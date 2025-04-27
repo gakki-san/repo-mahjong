@@ -2,15 +2,19 @@ import { FC } from "react";
 import { Box, Text, Flex, NativeSelect, Button } from "@chakra-ui/react";
 import { COLOR } from "@/const/color";
 import { SCORE } from "@/const/score";
-import { useScore } from "@/hooks/useScore";
+import { ScoreMap } from "@/hooks/useScore";
 
 type ScoreSelectPanelProps = {
   close: () => void;
+  score: ScoreMap;
+  setScore: (value: ScoreMap) => void;
 };
 
-export const ScoreSelectPanel: FC<ScoreSelectPanelProps> = ({ close }) => {
-  const [score, setScore] = useScore();
-
+export const ScoreSelectPanel: FC<ScoreSelectPanelProps> = ({
+  close,
+  score,
+  setScore,
+}) => {
   const handleSetScore = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectScore = Number(event.currentTarget.value);
     setScoreForAllPlayers(selectScore);
@@ -18,8 +22,11 @@ export const ScoreSelectPanel: FC<ScoreSelectPanelProps> = ({ close }) => {
   const setScoreForAllPlayers = (selectScore: number) => {
     if (!selectScore) return;
     const isRuleFour = selectScore === SCORE.FOUR_PLAYER_RULE;
-    const playerCount = isRuleFour ? 4 : 3;
-    setScore.set(Array(playerCount).fill(selectScore));
+    const seats = isRuleFour ? SCORE.FOUR_RULE : SCORE.THREE_RULR;
+    const newScore = Object.fromEntries(
+      seats.map((seat) => [seat, selectScore]),
+    ) as ScoreMap;
+    setScore(newScore);
   };
 
   const alertScoreNotSelected = () => {
@@ -34,7 +41,7 @@ export const ScoreSelectPanel: FC<ScoreSelectPanelProps> = ({ close }) => {
   };
 
   return (
-    <Box>
+    <Box w={"100vw"} h={"100vh"} bgColor={"#a4ffd0"}>
       <Box>
         <Text
           textStyle="3xl"
