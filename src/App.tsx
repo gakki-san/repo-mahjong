@@ -1,13 +1,13 @@
-import { Button } from "@/components/ui/button";
+import { ScoreSelectPanel } from "./components/ScoreSelectPanel";
+import { useIsBoolean } from "./hooks/useIsBoolean";
 
 function App() {
+  const [boolean, { on: close }] = useIsBoolean();
   return (
-    <div>
-      <div>aaa</div>
-      <Button height={100} w={100} type={"submit"}>
-        aa
-      </Button>
-    </div>
+    <>
+      {/* ScoreSelectPanelは初期表示させるのでfalse時に表示。 */}
+      {boolean || <ScoreSelectPanel close={close} />};
+    </>
   );
 }
 
