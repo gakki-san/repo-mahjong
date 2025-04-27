@@ -1,10 +1,14 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Player, ScoreMap } from "@/hooks/useScore";
 import { useWinnerInfo } from "@/hooks/useWinnerinfo";
 import { WindowScoreSummary } from "../WindowScoreSummary";
-import { Box } from "@chakra-ui/react";
+import { Box, Button, NumberInput } from "@chakra-ui/react";
 import { COLOR } from "@/const/color";
 import { InputWinType } from "../InputWinType";
+import { InputLoser } from "../InputLoser";
+import { useIsBoolean } from "@/hooks/useIsBoolean";
+import { handleTsumo } from "@/logic/tsumo";
+import { handleRon } from "@/logic/ron";
 
 type ScoreSummaryProps = {
   score: ScoreMap;
@@ -12,66 +16,74 @@ type ScoreSummaryProps = {
   players: string[];
 };
 
+export type IsShowType = {
+  tsumo: boolean;
+  ron: boolean;
+};
+
 export const ScoreSummary: FC<ScoreSummaryProps> = ({
   score,
-  // setScore,
+  setScore,
   players,
 }) => {
   const [winnerInfo, setWinnerInfo] = useWinnerInfo();
   const [selectedWinType, setSelectedWinType] = useState<string | null>(null);
+  const [isShowInputScore, setIsShowInputScore] = useIsBoolean();
+
+  const [isShow, setIsShow] = useState<IsShowType>({
+    tsumo: false,
+    ron: false,
+  });
+  useEffect(() => {
+    if (selectedWinType === "tsumo") {
+      setIsShow({ tsumo: true, ron: false });
+    } else if (selectedWinType === "ron") {
+      setIsShow({ tsumo: false, ron: true });
+    }
+  }, [selectedWinType]);
 
   const selectedWinner: React.MouseEventHandler<HTMLButtonElement> = (
     event,
   ) => {
-    console.log(event.currentTarget.value);
     const winner = event.currentTarget.value as Player;
     setWinnerInfo({ winner: winner });
   };
-  console.log(winnerInfo);
+  console.log(isShow);
 
   if (!score) return;
-  // const hoju = "south";
-  // const houra = "east";
-  // const count = 4000;
-
-  // const handleTsumo = (
-  //   winner: Player,
-  //   points: number,
-  //   players: string[],
-  //   score: ScoreMap,
-  // ) => {
-  //   const newScore: ScoreMap = {} as ScoreMap;
-  //   if (!score || !newScore) return;
-  //   const losePointPerson = players.length - 1;
-  //   for (const player of players) {
-  //     const person = player as Player;
-  //     if (person === winner) {
-  //       newScore[person] = score[person] + points * losePointPerson;
-  //     } else {
-  //       newScore[person] = score[person] - points;
-  //     }
-  //   }
-  //   setScore(newScore);
-  // };
-
-  // const handleRon = (
-  //   loser: Player,
-  //   winner: Player,
-  //   points: number,
-  //   score: ScoreMap,
-  // ) => {
-  //   if (!score) return;
-  //   const newScore = {
-  //     ...score,
-  //     [winner]: score[winner] + points,
-  //     [loser]: score[loser] - points,
-  //   };
-
-  //   setScore(newScore);
-  // };
   const isClickedWinner = winnerInfo.winner;
-  const isTsumo = selectedWinType === "tsumo";
-  const isRon = selectedWinType === "ron";
+  // const isTsumo = selectedWinType === "tsumo" ? setIsShow({ tsumo: true, ron: false });
+  // const isRon = selectedWinType === "ron";
+
+  const allClose = () => {
+    setWinnerInfo({
+      winType: null,
+      winner: null,
+      loser: null,
+      winPoints: null,
+    });
+    setIsShow({ tsumo: false, ron: false });
+    setSelectedWinType(null);
+    setIsShowInputScore.off();
+  };
+  console.log("これがろん", isShow.ron);
+
+  const handleComplete = () => {
+    const winner = winnerInfo.winner as Player;
+    const point = winnerInfo.winPoints as number;
+    const loser = winnerInfo.loser as Player[];
+
+    if (winnerInfo.winType === "tsumo") {
+      const newScore = handleTsumo(winner, point, players, score) as ScoreMap;
+      setScore(newScore);
+    } else {
+      console.log(loser[0]);
+      const newScore = handleRon(loser[0], winner, point, score) as ScoreMap;
+      setScore(newScore);
+    }
+
+    allClose();
+  };
 
   return (
     <>
@@ -84,7 +96,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
           setSelectedWinType={setSelectedWinType}
         />
       )}
-      {isTsumo ? (
+      {isShow.tsumo && (
         <Box
           pos={"absolute"}
           top={0}
@@ -96,9 +108,41 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
           h={"100vh"}
           bg={COLOR.GREEN_PRIMARY}
         >
-          tsumo
+          点数入力
+          <NumberInput.Root
+            onValueChange={(event) => {
+              const winnerPoint = event.valueAsNumber;
+              setWinnerInfo({
+                winPoints: winnerPoint,
+              });
+            }}
+            w={"200px"}
+            min={300}
+            max={48000}
+          >
+            <NumberInput.Control />
+            <NumberInput.Input />
+          </NumberInput.Root>
+          <Button
+            textStyle="1xl"
+            mt={"50px"}
+            fontWeight="bold"
+            onClick={handleComplete}
+            paddingInline={"50px"}
+          >
+            決定
+          </Button>
         </Box>
-      ) : isRon ? (
+      )}
+      {isShow.ron && (
+        <InputLoser
+          winnerInfo={winnerInfo}
+          setWinnerInfo={setWinnerInfo}
+          ShowInputScore={setIsShowInputScore.on}
+          setIsShow={setIsShow}
+        />
+      )}
+      {isShowInputScore && (
         <Box
           pos={"absolute"}
           top={0}
@@ -110,9 +154,32 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
           h={"100vh"}
           bg={COLOR.GREEN_PRIMARY}
         >
-          ron
+          点数入力
+          <NumberInput.Root
+            onValueChange={(event) => {
+              const winnerPoint = event.valueAsNumber;
+              setWinnerInfo({
+                winPoints: winnerPoint,
+              });
+            }}
+            w={"200px"}
+            min={300}
+            max={48000}
+          >
+            <NumberInput.Control />
+            <NumberInput.Input />
+          </NumberInput.Root>
+          <Button
+            textStyle="1xl"
+            mt={"50px"}
+            fontWeight="bold"
+            onClick={handleComplete}
+            paddingInline={"50px"}
+          >
+            決定
+          </Button>
         </Box>
-      ) : null}
+      )}
     </>
   );
 };

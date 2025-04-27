@@ -40,6 +40,13 @@ export const InputWinType: FC<InputWinTypeProps> = ({
         loser: loser,
       });
     }
+    const loser = players.filter(
+      (item) => item !== isClickedWinner,
+    ) as Player[];
+    console.log(loser);
+    setWinnerInfo({
+      loser: loser,
+    });
     setSelectedWinType(winnerInfo.winType);
   };
   return (
