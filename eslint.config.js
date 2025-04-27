@@ -49,7 +49,6 @@ export default defineConfig([
     rules: {
       semi: "error",
       "no-undef": "off",
-      "import/no-unresolved": "off",
       "react/jsx-uses-react": "error",
       "react/jsx-uses-vars": "error",
       "react/react-in-jsx-scope": "off",
