@@ -12,7 +12,7 @@ type UseWinnerInfoReturn = [WinInfo, (value: Partial<WinInfo>) => void];
 
 export const useWinnerInfo = (): UseWinnerInfoReturn => {
   const [winnerInfo, setWinnerInfo] = useState<WinInfo>({
-    winType: null,
+    winType: "tsumo",
     winner: null,
     loser: null,
     winPoints: null,

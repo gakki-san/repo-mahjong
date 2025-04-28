@@ -8,14 +8,15 @@ type InputWinTypeProps = {
   winnerInfo: WinInfo;
   setWinnerInfo: (value: Partial<WinInfo>) => void;
   players: string[];
-  setSelectedWinType: (value: WinInfo["winType"]) => void;
+  // setSelectedWinType: (value: WinInfo["winType"]) => void;
+  setIsOpen: () => void;
 };
 
 export const InputWinType: FC<InputWinTypeProps> = ({
   winnerInfo,
   setWinnerInfo,
   players,
-  setSelectedWinType,
+  setIsOpen,
 }) => {
   const items = [
     {
@@ -47,7 +48,7 @@ export const InputWinType: FC<InputWinTypeProps> = ({
     setWinnerInfo({
       loser: loser,
     });
-    setSelectedWinType(winnerInfo.winType);
+    setIsOpen();
   };
   return (
     <Box
@@ -62,7 +63,7 @@ export const InputWinType: FC<InputWinTypeProps> = ({
       bg={COLOR.GREEN_PRIMARY}
     >
       <RadioGroup.Root
-        defaultValue="1"
+        defaultValue="tsumo"
         value={winnerInfo.winType}
         onValueChange={(event) => {
           const winType = event.value as "tsumo" | "ron";

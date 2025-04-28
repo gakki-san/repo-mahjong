@@ -1,22 +1,21 @@
-import { Dispatch, FC, SetStateAction } from "react";
 import { Box, Button, HStack, RadioGroup } from "@chakra-ui/react";
 import { COLOR } from "@/const/color";
 import { WinInfo } from "@/hooks/useWinnerinfo";
 import { Player } from "@/hooks/useScore";
-import { IsShowType } from "../ScoreSummary";
+import { FC } from "react";
 
 type InputLoserProps = {
   winnerInfo: WinInfo;
   setWinnerInfo: (value: Partial<WinInfo>) => void;
   ShowInputScore: () => void;
-  setIsShow: Dispatch<SetStateAction<IsShowType>>;
+  setIsOpen: () => void;
 };
 
 export const InputLoser: FC<InputLoserProps> = ({
   winnerInfo,
   setWinnerInfo,
   ShowInputScore,
-  setIsShow,
+  setIsOpen,
 }) => {
   const items = [
     {
@@ -43,7 +42,7 @@ export const InputLoser: FC<InputLoserProps> = ({
 
   const handleComplete = () => {
     if (winnerInfo.loser?.length === 2) return;
-    setIsShow({ ron: false } as IsShowType);
+    setIsOpen();
     ShowInputScore();
   };
   return (

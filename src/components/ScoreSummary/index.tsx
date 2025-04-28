@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import { Player, ScoreMap } from "@/hooks/useScore";
 import { useWinnerInfo } from "@/hooks/useWinnerinfo";
 import { WindowScoreSummary } from "../WindowScoreSummary";
@@ -27,20 +27,11 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   players,
 }) => {
   const [winnerInfo, setWinnerInfo] = useWinnerInfo();
-  const [selectedWinType, setSelectedWinType] = useState<string | null>(null);
   const [isShowInputScore, setIsShowInputScore] = useIsBoolean();
+  const [isOpen, setIsOpen] = useIsBoolean(false);
 
-  const [isShow, setIsShow] = useState<IsShowType>({
-    tsumo: false,
-    ron: false,
-  });
-  useEffect(() => {
-    if (selectedWinType === "tsumo") {
-      setIsShow({ tsumo: true, ron: false });
-    } else if (selectedWinType === "ron") {
-      setIsShow({ tsumo: false, ron: true });
-    }
-  }, [selectedWinType]);
+  const isTsumo = winnerInfo.winType === "tsumo";
+  const isRon = winnerInfo.winType === "ron";
 
   const selectedWinner: React.MouseEventHandler<HTMLButtonElement> = (
     event,
@@ -48,12 +39,9 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
     const winner = event.currentTarget.value as Player;
     setWinnerInfo({ winner: winner });
   };
-  console.log(isShow);
 
   if (!score) return;
   const isClickedWinner = winnerInfo.winner;
-  // const isTsumo = selectedWinType === "tsumo" ? setIsShow({ tsumo: true, ron: false });
-  // const isRon = selectedWinType === "ron";
 
   const allClose = () => {
     setWinnerInfo({
@@ -62,22 +50,20 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
       loser: null,
       winPoints: null,
     });
-    setIsShow({ tsumo: false, ron: false });
-    setSelectedWinType(null);
+    setIsOpen.off();
     setIsShowInputScore.off();
   };
-  console.log("これがろん", isShow.ron);
 
   const handleComplete = () => {
+    if (winnerInfo.winPoints === null) return;
     const winner = winnerInfo.winner as Player;
-    const point = winnerInfo.winPoints as number;
+    const point = winnerInfo.winPoints;
     const loser = winnerInfo.loser as Player[];
 
     if (winnerInfo.winType === "tsumo") {
       const newScore = handleTsumo(winner, point, players, score) as ScoreMap;
       setScore(newScore);
     } else {
-      console.log(loser[0]);
       const newScore = handleRon(loser[0], winner, point, score) as ScoreMap;
       setScore(newScore);
     }
@@ -93,10 +79,10 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
           winnerInfo={winnerInfo}
           setWinnerInfo={setWinnerInfo}
           players={players}
-          setSelectedWinType={setSelectedWinType}
+          setIsOpen={setIsOpen.on}
         />
       )}
-      {isShow.tsumo && (
+      {isOpen && isTsumo && (
         <Box
           pos={"absolute"}
           top={0}
@@ -134,12 +120,12 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
           </Button>
         </Box>
       )}
-      {isShow.ron && (
+      {isOpen && isRon && (
         <InputLoser
           winnerInfo={winnerInfo}
           setWinnerInfo={setWinnerInfo}
           ShowInputScore={setIsShowInputScore.on}
-          setIsShow={setIsShow}
+          setIsOpen={setIsOpen.off}
         />
       )}
       {isShowInputScore && (
