@@ -8,7 +8,7 @@ export type WinInfo = {
   winPoints: number | null;
 };
 
-type UseWinnerInfoReturn = [WinInfo, (value: Partial<WinInfo>) => void];
+export type UseWinnerInfoReturn = [WinInfo, (value: Partial<WinInfo>) => void];
 
 export const useWinnerInfo = (): UseWinnerInfoReturn => {
   const [winnerInfo, setWinnerInfo] = useState<WinInfo>({

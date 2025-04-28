@@ -2,13 +2,12 @@ import { FC } from "react";
 import { Player, ScoreMap } from "@/hooks/useScore";
 import { useWinnerInfo } from "@/hooks/useWinnerinfo";
 import { WindowScoreSummary } from "../WindowScoreSummary";
-import { Box, Button, NumberInput } from "@chakra-ui/react";
-import { COLOR } from "@/const/color";
 import { InputWinType } from "../InputWinType";
 import { InputLoser } from "../InputLoser";
 import { useIsBoolean } from "@/hooks/useIsBoolean";
-import { handleTsumo } from "@/logic/tsumo";
-import { handleRon } from "@/logic/ron";
+import { InputWinPoint } from "../InputWinPoint";
+import { closeAllModal } from "@/logic/closeAllModal";
+import { handleApplyScore } from "@/logic/handleApplyScore";
 
 type ScoreSummaryProps = {
   score: ScoreMap;
@@ -43,32 +42,9 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   if (!score) return;
   const isClickedWinner = winnerInfo.winner;
 
-  const allClose = () => {
-    setWinnerInfo({
-      winType: null,
-      winner: null,
-      loser: null,
-      winPoints: null,
-    });
-    setIsOpen.off();
-    setIsShowInputScore.off();
-  };
-
   const handleComplete = () => {
-    if (winnerInfo.winPoints === null) return;
-    const winner = winnerInfo.winner as Player;
-    const point = winnerInfo.winPoints;
-    const loser = winnerInfo.loser as Player[];
-
-    if (winnerInfo.winType === "tsumo") {
-      const newScore = handleTsumo(winner, point, players, score) as ScoreMap;
-      setScore(newScore);
-    } else {
-      const newScore = handleRon(loser[0], winner, point, score) as ScoreMap;
-      setScore(newScore);
-    }
-
-    allClose();
+    handleApplyScore(winnerInfo, setScore, players, score);
+    closeAllModal(setWinnerInfo, setIsOpen.off, setIsShowInputScore.off);
   };
 
   return (
@@ -83,42 +59,10 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
         />
       )}
       {isOpen && isTsumo && (
-        <Box
-          pos={"absolute"}
-          top={0}
-          alignItems={"center"}
-          justifyContent={"center"}
-          flexDir={"column"}
-          display={"flex"}
-          w={"100vw"}
-          h={"100vh"}
-          bg={COLOR.GREEN_PRIMARY}
-        >
-          点数入力
-          <NumberInput.Root
-            onValueChange={(event) => {
-              const winnerPoint = event.valueAsNumber;
-              setWinnerInfo({
-                winPoints: winnerPoint,
-              });
-            }}
-            w={"200px"}
-            min={300}
-            max={48000}
-          >
-            <NumberInput.Control />
-            <NumberInput.Input />
-          </NumberInput.Root>
-          <Button
-            textStyle="1xl"
-            mt={"50px"}
-            fontWeight="bold"
-            onClick={handleComplete}
-            paddingInline={"50px"}
-          >
-            決定
-          </Button>
-        </Box>
+        <InputWinPoint
+          handleComplete={handleComplete}
+          setWinnerInfo={setWinnerInfo}
+        />
       )}
       {isOpen && isRon && (
         <InputLoser
@@ -129,43 +73,24 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
         />
       )}
       {isShowInputScore && (
-        <Box
-          pos={"absolute"}
-          top={0}
-          alignItems={"center"}
-          justifyContent={"center"}
-          flexDir={"column"}
-          display={"flex"}
-          w={"100vw"}
-          h={"100vh"}
-          bg={COLOR.GREEN_PRIMARY}
-        >
-          点数入力
-          <NumberInput.Root
-            onValueChange={(event) => {
-              const winnerPoint = event.valueAsNumber;
-              setWinnerInfo({
-                winPoints: winnerPoint,
-              });
-            }}
-            w={"200px"}
-            min={300}
-            max={48000}
-          >
-            <NumberInput.Control />
-            <NumberInput.Input />
-          </NumberInput.Root>
-          <Button
-            textStyle="1xl"
-            mt={"50px"}
-            fontWeight="bold"
-            onClick={handleComplete}
-            paddingInline={"50px"}
-          >
-            決定
-          </Button>
-        </Box>
+        <InputWinPoint
+          handleComplete={handleComplete}
+          setWinnerInfo={setWinnerInfo}
+        />
       )}
+      {/* <Box
+        pos={"absolute"}
+        top={0}
+        alignItems={"center"}
+        justifyContent={"center"}
+        flexDir={"column"}
+        display={"flex"}
+        w={"100vw"}
+        h={"100vh"}
+        bg={COLOR.GREEN_PRIMARY}
+      >
+        kodomotsumo
+      </Box> */}
     </>
   );
 };
