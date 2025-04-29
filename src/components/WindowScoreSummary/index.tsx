@@ -17,6 +17,7 @@ export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
       justifyContent="start"
       templateRows="repeat(3, 1fr)"
       templateColumns="repeat(3, 1fr)"
+      overflow={"hidden"}
       w="100vw"
       h="100vh"
       bg={COLOR.GREEN_PRIMARY}

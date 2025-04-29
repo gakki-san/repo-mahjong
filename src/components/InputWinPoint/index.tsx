@@ -1,16 +1,17 @@
-import { FC } from "react";
+import { ComponentProps, FC } from "react";
 import { Box, Button, NumberInput } from "@chakra-ui/react";
 import { COLOR } from "@/const/color";
-import { WinInfo } from "@/hooks/useWinnerinfo";
 
 type InputWinPointProps = {
   handleComplete: () => void;
-  setWinnerInfo: (value: Partial<WinInfo>) => void;
+  handleWinPointChange: ComponentProps<
+    typeof NumberInput.Root
+  >["onValueChange"];
 };
 
 export const InputWinPoint: FC<InputWinPointProps> = ({
   handleComplete,
-  setWinnerInfo,
+  handleWinPointChange,
 }) => {
   return (
     <Box
@@ -26,12 +27,7 @@ export const InputWinPoint: FC<InputWinPointProps> = ({
     >
       点数入力
       <NumberInput.Root
-        onValueChange={(event) => {
-          const winnerPoint = event.valueAsNumber;
-          setWinnerInfo({
-            winPoints: winnerPoint,
-          });
-        }}
+        onValueChange={handleWinPointChange}
         w={"200px"}
         min={300}
         max={48000}

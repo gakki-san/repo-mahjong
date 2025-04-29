@@ -8,6 +8,7 @@ import { useIsBoolean } from "@/hooks/useIsBoolean";
 import { InputWinPoint } from "../InputWinPoint";
 import { closeAllModal } from "@/logic/closeAllModal";
 import { handleApplyScore } from "@/logic/handleApplyScore";
+import { handleWinPointChange } from "@/logic/handleWinPointChange";
 
 type ScoreSummaryProps = {
   score: ScoreMap;
@@ -61,7 +62,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
       {isOpen && isTsumo && (
         <InputWinPoint
           handleComplete={handleComplete}
-          setWinnerInfo={setWinnerInfo}
+          handleWinPointChange={handleWinPointChange(setWinnerInfo)}
         />
       )}
       {isOpen && isRon && (
@@ -75,7 +76,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
       {isShowInputScore && (
         <InputWinPoint
           handleComplete={handleComplete}
-          setWinnerInfo={setWinnerInfo}
+          handleWinPointChange={handleWinPointChange(setWinnerInfo)}
         />
       )}
       {/* <Box
