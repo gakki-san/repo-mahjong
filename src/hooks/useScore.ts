@@ -2,10 +2,10 @@ import { useState } from "react";
 
 export type Player = "east" | "south" | "west" | "north";
 
-export type ScoreMap = Record<Player, number> | null;
+export type ScoreMap = Record<Player, number>;
 
 export type useScoreReturn = [
-  ScoreMap,
+  ScoreMap | null,
   action: {
     set: (value: ScoreMap) => void;
     reset: () => void;

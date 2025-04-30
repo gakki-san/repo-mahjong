@@ -6,7 +6,7 @@ import { ScoreMap } from "@/hooks/useScore";
 
 type ScoreSelectPanelProps = {
   close: () => void;
-  score: ScoreMap;
+  score: ScoreMap | null;
   setScore: (value: ScoreMap) => void;
 };
 

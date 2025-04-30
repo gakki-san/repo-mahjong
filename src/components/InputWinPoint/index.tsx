@@ -47,3 +47,13 @@ export const InputWinPoint: FC<InputWinPointProps> = ({
     </Box>
   );
 };
+
+// const PLAYER = {
+//   EAST: "east",
+//   SOUTH: "south",
+// } as const;
+
+// type ValueOf<T> = T[keyof T]
+// type Player = ValueOf<typeof PLAYER>
+
+// const players = Object.values(PLAYER)
