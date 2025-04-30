@@ -1,15 +1,7 @@
-import { ComponentProps, FC, useState } from "react";
-import {
-  Box,
-  Button,
-  Flex,
-  Grid,
-  HStack,
-  RadioGroup,
-  VStack,
-} from "@chakra-ui/react";
+import { FC, useState } from "react";
+import { Box, Button, Flex, Grid, VStack } from "@chakra-ui/react";
 import { COLOR } from "@/const/color";
-import { ScoreMap } from "@/hooks/useScore";
+import { Player, ScoreMap } from "@/hooks/useScore";
 import { useIsBoolean } from "@/hooks/useIsBoolean";
 
 type WindowScoreSummaryProps = {
@@ -21,46 +13,49 @@ export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
   selectedWinner,
   score,
 }) => {
-  const playerList = [
-    { id: "1", name: "東家" },
-    { id: "2", name: "南家" },
-    { id: "3", name: "西家" },
-    { id: "4", name: "北家" },
-  ];
-  const [players, setPlayers] = useState<typeof playerList>(playerList);
+  const playerList = {
+    east: false,
+    south: false,
+    west: false,
+    north: false,
+  };
+  const [isReachList, setIsReachList] = useState<typeof playerList>(playerList);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isShowReachModal, setIsShowReachModal] = useIsBoolean();
   const [selectedReachPlayer, setSelectedReachPlayer] = useState("");
 
-  const handleReach = () => {
-    if (players.length === 0) return;
-    setIsShowReachModal.on();
-  };
-
-  const handleOnchange: ComponentProps<
-    typeof RadioGroup.Root
-  >["onValueChange"] = (event) => {
-    const players = event.value;
-    if (players) {
-      setSelectedReachPlayer(players);
-    }
-  };
-
-  const handlePopReachMovie = () => {
-    setIsPopupOpen(true);
-    const audio = new Audio("public/audio.mp3");
-    audio.addEventListener("ended", () => {
-      setIsPopupOpen(false);
-    });
+  const resetReach = () => {
+    setIsReachList((prev) => ({
+      ...prev,
+      [selectedReachPlayer]: false,
+    }));
     setIsShowReachModal.off();
+  };
 
-    const RestReachablePlayers = players.filter(
-      (item) => item.name !== selectedReachPlayer,
-    );
+  const noResetReach = () => {
+    setIsShowReachModal.off();
+  };
 
-    setPlayers(RestReachablePlayers);
+  const handleReach = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const eventReachPlayer = event.currentTarget.value as Player;
+    setSelectedReachPlayer(eventReachPlayer);
 
-    audio.play();
+    if (isReachList[eventReachPlayer]) {
+      alert("貴様すでに立直をしているなぁ！！！");
+      setIsShowReachModal.on();
+    } else {
+      setIsReachList((prev) => ({
+        ...prev,
+        [eventReachPlayer]: true,
+      }));
+      setIsPopupOpen(true);
+      const audio = new Audio("public/audio.mp3");
+      audio.addEventListener("ended", () => {
+        setIsPopupOpen(false);
+      });
+
+      audio.play();
+    }
   };
 
   return (
@@ -85,9 +80,29 @@ export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
         >
           東家
         </Button>
-        <Box w="200px" p="4" color="white" textAlign="center" bg={COLOR.BLACK}>
-          {score?.east}
-        </Box>
+        <Flex gap={"20px"}>
+          <Box
+            w="200px"
+            p="4"
+            color="white"
+            textAlign="center"
+            bg={COLOR.BLACK}
+          >
+            {score?.east}
+          </Box>
+          <Button
+            w="40px"
+            h="40px"
+            m={"auto"}
+            fontWeight={"bold"}
+            bg={COLOR.RED}
+            borderRadius={"50%"}
+            onClick={handleReach}
+            value={"east"}
+          >
+            立直
+          </Button>
+        </Flex>
       </VStack>
 
       <VStack gridColumn={3} gridRow={2} transform="rotate(-90deg)">
@@ -103,30 +118,31 @@ export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
         >
           南場
         </Button>
-        <Box
-          w="200px"
-          h="50px"
-          p="2"
-          color="white"
-          textAlign="center"
-          bg={COLOR.BLACK}
-        >
-          {score?.south}
-        </Box>
+        <Flex gap={"20px"}>
+          <Box
+            w="200px"
+            h="50px"
+            p="2"
+            color="white"
+            textAlign="center"
+            bg={COLOR.BLACK}
+          >
+            {score?.south}
+          </Box>
+          <Button
+            w="40px"
+            h="40px"
+            m={"auto"}
+            fontWeight={"bold"}
+            bg={COLOR.RED}
+            borderRadius={"50%"}
+            onClick={handleReach}
+            value={"south"}
+          >
+            立直
+          </Button>
+        </Flex>
       </VStack>
-      <Button
-        gridColumn={2}
-        gridRow={2}
-        w="80px"
-        h="80px"
-        m={"auto"}
-        fontWeight={"bold"}
-        bg={COLOR.RED}
-        borderRadius={"50%"}
-        onClick={handleReach}
-      >
-        立直
-      </Button>
 
       <VStack gridColumn={2} gridRow={3}>
         <Button
@@ -140,9 +156,29 @@ export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
         >
           西場
         </Button>
-        <Box w="200px" p="4" color="white" textAlign="center" bg={COLOR.BLACK}>
-          {score?.west}
-        </Box>
+        <Flex gap={"20px"}>
+          <Box
+            w="200px"
+            p="4"
+            color="white"
+            textAlign="center"
+            bg={COLOR.BLACK}
+          >
+            {score?.west}
+          </Box>
+          <Button
+            w="40px"
+            h="40px"
+            m={"auto"}
+            fontWeight={"bold"}
+            bg={COLOR.RED}
+            borderRadius={"50%"}
+            onClick={handleReach}
+            value={"west"}
+          >
+            立直
+          </Button>
+        </Flex>
       </VStack>
 
       <VStack gridColumn={1} gridRow={2} transform="rotate(90deg)">
@@ -159,16 +195,30 @@ export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
             北家
           </Button>
         </Flex>
-        <Flex
-          align="center"
-          justify="center"
-          w="200px"
-          h="50px"
-          p="2"
-          color="white"
-          bg={COLOR.BLACK}
-        >
-          {score?.north ?? "👐"}
+        <Flex gap={"20px"}>
+          <Flex
+            align="center"
+            justify="center"
+            w="200px"
+            h="50px"
+            p="2"
+            color="white"
+            bg={COLOR.BLACK}
+          >
+            {score?.north ?? "👐"}
+          </Flex>
+          <Button
+            w="40px"
+            h="40px"
+            m={"auto"}
+            fontWeight={"bold"}
+            bg={COLOR.RED}
+            borderRadius={"50%"}
+            onClick={handleReach}
+            value={"north"}
+          >
+            立直
+          </Button>
         </Flex>
       </VStack>
 
@@ -211,6 +261,29 @@ export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
         </Flex>
       )}
       {isShowReachModal && (
+        <>
+          <Box
+            pos={"absolute"}
+            top={0}
+            alignItems={"center"}
+            justifyContent={"center"}
+            flexDir={"column"}
+            display={"flex"}
+            w={"100vw"}
+            h={"100vh"}
+            bg={COLOR.WHITE}
+          >
+            立直取り消す？
+            <Button mt={"20px"} onClick={resetReach}>
+              はい
+            </Button>
+            <Button mt={"20px"} onClick={noResetReach}>
+              いいえ
+            </Button>
+          </Box>
+        </>
+      )}
+      {/* {isShowReachModal && (
         <Box
           pos={"absolute"}
           top={0}
@@ -244,7 +317,7 @@ export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
             完了
           </Button>
         </Box>
-      )}
+      )} */}
 
       {/* <Button onClick={() => handleTsumo(houra, count, players, score)}>
         親が4000点のツモだ！！！
