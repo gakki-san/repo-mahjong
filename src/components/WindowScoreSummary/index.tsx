@@ -7,11 +7,13 @@ import { useIsBoolean } from "@/hooks/useIsBoolean";
 type WindowScoreSummaryProps = {
   selectedWinner: React.MouseEventHandler<HTMLButtonElement>;
   score: ScoreMap;
+  setScore: (value: ScoreMap) => void;
 };
 
 export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
   selectedWinner,
   score,
+  setScore,
 }) => {
   const playerList = {
     east: false,
@@ -30,10 +32,27 @@ export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
       [selectedReachPlayer]: false,
     }));
     setIsShowReachModal.off();
+    calculateReachScore("minus", selectedReachPlayer);
   };
 
   const noResetReach = () => {
     setIsShowReachModal.off();
+  };
+  const calculateReachScore = (type: string, player: string) => {
+    const reachPlayer = player as Player;
+    if (score === null) return;
+    const reachPoint = 1000;
+    if (type === "plus") {
+      setScore({
+        ...score,
+        [player]: score[reachPlayer] - reachPoint,
+      });
+    } else {
+      setScore({
+        ...score,
+        [player]: score[reachPlayer] + reachPoint,
+      });
+    }
   };
 
   const handleReach = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -41,20 +60,30 @@ export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
     setSelectedReachPlayer(eventReachPlayer);
 
     if (isReachList[eventReachPlayer]) {
-      alert("貴様すでに立直をしているなぁ！！！");
+      const audio = new Audio("public/dio.mp3");
+      audio.play();
       setIsShowReachModal.on();
     } else {
       setIsReachList((prev) => ({
         ...prev,
         [eventReachPlayer]: true,
       }));
+
       setIsPopupOpen(true);
+
       const audio = new Audio("public/audio.mp3");
       audio.addEventListener("ended", () => {
         setIsPopupOpen(false);
       });
 
-      audio.play();
+      if (eventReachPlayer !== "south") {
+        audio.play();
+      } else {
+        setTimeout(() => {
+          setIsPopupOpen(false);
+        }, 3000);
+      }
+      calculateReachScore("plus", eventReachPlayer);
     }
   };
 
@@ -243,19 +272,35 @@ export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
             borderRadius="md"
           >
             <Box pos="relative" pt="56.25%">
-              <iframe
-                src="public/reach.mp4"
-                title="動画タイトル"
-                allowFullScreen
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  width: "100%",
-                  height: "100%",
-                  border: "none",
-                }}
-              />
+              {selectedReachPlayer === "south" ? (
+                <iframe
+                  src="public/atmic.mp4"
+                  title="動画タイトル"
+                  allowFullScreen
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "100%",
+                    border: "none",
+                  }}
+                />
+              ) : (
+                <iframe
+                  src="public/reach.mp4"
+                  title="動画タイトル"
+                  allowFullScreen
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "100%",
+                    border: "none",
+                  }}
+                />
+              )}
             </Box>
           </Box>
         </Flex>
@@ -273,11 +318,21 @@ export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
             h={"100vh"}
             bg={COLOR.WHITE}
           >
-            立直取り消す？
-            <Button mt={"20px"} onClick={resetReach}>
+            貴様、既に立直しているな？ 立直取り消す？
+            <Button
+              mt={"20px"}
+              color={COLOR.WHITE}
+              bg={COLOR.BLACK}
+              onClick={resetReach}
+            >
               はい
             </Button>
-            <Button mt={"20px"} onClick={noResetReach}>
+            <Button
+              mt={"20px"}
+              color={COLOR.WHITE}
+              bg={COLOR.BLACK}
+              onClick={noResetReach}
+            >
               いいえ
             </Button>
           </Box>

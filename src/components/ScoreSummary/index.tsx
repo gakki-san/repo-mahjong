@@ -78,7 +78,11 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
 
   return (
     <>
-      <WindowScoreSummary selectedWinner={selectedWinner} score={score} />
+      <WindowScoreSummary
+        selectedWinner={selectedWinner}
+        score={score}
+        setScore={setScore}
+      />
       {isClickedWinner && (
         <InputWinType
           winnerInfo={winnerInfo}
