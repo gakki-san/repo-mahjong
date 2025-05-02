@@ -13,6 +13,7 @@ import { Box, Button, Flex, NumberInput } from "@chakra-ui/react";
 import { COLOR } from "@/const/color";
 import { childrenTsumo } from "@/logic/childrenTsumo";
 import { useReachFlags } from "@/hooks/useReachFlags";
+import { usePlayerPoint } from "@/hooks/usePlayerPoint";
 
 type ScoreSummaryProps = {
   score: ScoreMap;
@@ -33,8 +34,8 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   const [winnerInfo, setWinnerInfo] = useWinnerInfo();
   const [isShowInputScore, setIsShowInputScore] = useIsBoolean();
   const [isOpen, setIsOpen] = useIsBoolean(false);
-  const [childrenPoint, setChildrenPoint] = useState(0);
-  const [parentPoint, setParentPoint] = useState(0);
+  const [childrenPoint, setChildrenPoint] = usePlayerPoint();
+  const [parentPoint, setParentPoint] = usePlayerPoint();
 
   const [reachFlags, setReachFlags] = useReachFlags();
   const [isPopupOpen, setIsPopupOpen] = useIsBoolean();
@@ -123,7 +124,6 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   const handleParentPoint: ComponentProps<
     typeof NumberInput.Root
   >["onValueChange"] = (event) => {
-    console.log(event.valueAsNumber);
     setParentPoint(event.valueAsNumber);
   };
 
