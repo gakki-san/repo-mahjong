@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-type ReachFlagsProps = {
+export type ReachFlagsProps = {
   east: boolean;
   south: boolean;
   west: boolean;
@@ -14,7 +14,17 @@ const initialReachFlags: ReachFlagsProps = {
   north: false,
 };
 
-export const useReachFlags = () => {
+export type SetReachFlagsReturn = {
+  update: (updater: (prev: ReachFlagsProps) => ReachFlagsProps) => void;
+  replace: (list: ReachFlagsProps) => void;
+};
+
+export type useReachFlagsReturn = [
+  reachFlags: ReachFlagsProps,
+  actions: SetReachFlagsReturn,
+];
+
+export const useReachFlags = (): useReachFlagsReturn => {
   const [reachFlags, setReachFlags] =
     useState<ReachFlagsProps>(initialReachFlags);
 

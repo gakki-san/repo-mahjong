@@ -14,6 +14,7 @@ import { COLOR } from "@/const/color";
 import { childrenTsumo } from "@/logic/childrenTsumo";
 import { useReachFlags } from "@/hooks/useReachFlags";
 import { usePlayerPoint } from "@/hooks/usePlayerPoint";
+import { playReachAudio } from "@/logic/attemptReach";
 
 type ScoreSummaryProps = {
   score: ScoreMap;
@@ -54,6 +55,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   const noResetReach = () => {
     setIsShowReachModal.off();
   };
+
   const calculateReachScore = (type: string, player: string) => {
     const reachPlayer = player as Player;
     if (score === null) return;
@@ -87,18 +89,8 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
 
       setIsPopupOpen.on();
 
-      const audio = new Audio("public/audio.mp3");
-      audio.addEventListener("ended", () => {
-        setIsPopupOpen.off();
-      });
+      playReachAudio(eventReachPlayer, setIsPopupOpen.off);
 
-      if (eventReachPlayer !== "south") {
-        audio.play();
-      } else {
-        setTimeout(() => {
-          setIsPopupOpen.off();
-        }, 3000);
-      }
       calculateReachScore("plus", eventReachPlayer);
     }
   };
