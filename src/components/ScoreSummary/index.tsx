@@ -9,9 +9,10 @@ import { InputWinPoint } from "../InputWinPoint";
 import { closeAllModal } from "@/logic/closeAllModal";
 import { handleApplyScore } from "@/logic/handleApplyScore";
 import { handleWinPointChange } from "@/logic/handleWinPointChange";
-import { Box, Button, NumberInput } from "@chakra-ui/react";
+import { Box, Button, Flex, NumberInput } from "@chakra-ui/react";
 import { COLOR } from "@/const/color";
 import { childrenTsumo } from "@/logic/childrenTsumo";
+import { useReachFlags } from "@/hooks/useReachFlags";
 
 type ScoreSummaryProps = {
   score: ScoreMap;
@@ -34,6 +35,72 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   const [isOpen, setIsOpen] = useIsBoolean(false);
   const [childrenPoint, setChildrenPoint] = useState(0);
   const [parentPoint, setParentPoint] = useState(0);
+
+  const [reachFlags, setReachFlags] = useReachFlags();
+  const [isPopupOpen, setIsPopupOpen] = useIsBoolean();
+  const [isShowReachModal, setIsShowReachModal] = useIsBoolean();
+  const [selectedReachPlayer, setSelectedReachPlayer] = useState("");
+
+  const resetReach = () => {
+    setReachFlags.update((prev) => ({
+      ...prev,
+      [selectedReachPlayer]: false,
+    }));
+    setIsShowReachModal.off();
+    calculateReachScore("minus", selectedReachPlayer);
+  };
+
+  const noResetReach = () => {
+    setIsShowReachModal.off();
+  };
+  const calculateReachScore = (type: string, player: string) => {
+    const reachPlayer = player as Player;
+    if (score === null) return;
+    const reachPoint = 1000;
+    if (type === "plus") {
+      setScore({
+        ...score,
+        [player]: score[reachPlayer] - reachPoint,
+      });
+    } else {
+      setScore({
+        ...score,
+        [player]: score[reachPlayer] + reachPoint,
+      });
+    }
+  };
+
+  const handleReach = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const eventReachPlayer = event.currentTarget.value as Player;
+    setSelectedReachPlayer(eventReachPlayer);
+
+    if (reachFlags[eventReachPlayer]) {
+      const audio = new Audio("public/dio.mp3");
+      audio.play();
+      setIsShowReachModal.on();
+    } else {
+      setReachFlags.update((prev) => ({
+        ...prev,
+        [eventReachPlayer]: true,
+      }));
+
+      setIsPopupOpen.on();
+
+      const audio = new Audio("public/audio.mp3");
+      audio.addEventListener("ended", () => {
+        setIsPopupOpen.off();
+      });
+
+      if (eventReachPlayer !== "south") {
+        audio.play();
+      } else {
+        setTimeout(() => {
+          setIsPopupOpen.off();
+        }, 3000);
+      }
+      calculateReachScore("plus", eventReachPlayer);
+    }
+  };
 
   const isTsumo = winnerInfo.winType === "tsumo";
   const isRon = winnerInfo.winType === "ron";
@@ -81,7 +148,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
       <WindowScoreSummary
         selectedWinner={selectedWinner}
         score={score}
-        setScore={setScore}
+        handleReach={handleReach}
       />
       {isClickedWinner && (
         <InputWinType
@@ -156,6 +223,94 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
           handleComplete={handleComplete}
           handleWinPointChange={handleWinPointChange(setWinnerInfo)}
         />
+      )}
+      {isShowReachModal && (
+        <>
+          <Box
+            pos={"absolute"}
+            top={0}
+            alignItems={"center"}
+            justifyContent={"center"}
+            flexDir={"column"}
+            display={"flex"}
+            w={"100vw"}
+            h={"100vh"}
+            bg={COLOR.WHITE}
+          >
+            貴様、既に立直しているな？ 立直取り消す？
+            <Button
+              mt={"20px"}
+              color={COLOR.WHITE}
+              bg={COLOR.BLACK}
+              onClick={resetReach}
+            >
+              はい
+            </Button>
+            <Button
+              mt={"20px"}
+              color={COLOR.WHITE}
+              bg={COLOR.BLACK}
+              onClick={noResetReach}
+            >
+              いいえ
+            </Button>
+          </Box>
+        </>
+      )}
+
+      {isPopupOpen && (
+        <Flex
+          pos="absolute"
+          zIndex={1000}
+          top="0"
+          left="0"
+          align="center"
+          justify="center"
+          w="100vw"
+          h="100vh"
+          bg="rgba(0,0,0,0.5)"
+        >
+          <Box
+            pos="relative"
+            overflow="hidden"
+            w="90%"
+            maxW="600px"
+            bg="white"
+            borderRadius="md"
+          >
+            <Box pos="relative" pt="56.25%">
+              {selectedReachPlayer === "south" ? (
+                <iframe
+                  src="public/atmic.mp4"
+                  title="動画タイトル"
+                  allowFullScreen
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "100%",
+                    border: "none",
+                  }}
+                />
+              ) : (
+                <iframe
+                  src="public/reach.mp4"
+                  title="動画タイトル"
+                  allowFullScreen
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "100%",
+                    border: "none",
+                  }}
+                />
+              )}
+            </Box>
+          </Box>
+        </Flex>
       )}
     </>
   );

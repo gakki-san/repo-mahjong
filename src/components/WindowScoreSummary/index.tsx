@@ -1,92 +1,19 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import { Box, Button, Flex, Grid, VStack } from "@chakra-ui/react";
 import { COLOR } from "@/const/color";
-import { Player, ScoreMap } from "@/hooks/useScore";
-import { useIsBoolean } from "@/hooks/useIsBoolean";
+import { ScoreMap } from "@/hooks/useScore";
 
 type WindowScoreSummaryProps = {
   selectedWinner: React.MouseEventHandler<HTMLButtonElement>;
   score: ScoreMap;
-  setScore: (value: ScoreMap) => void;
+  handleReach: (event: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
 export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
   selectedWinner,
   score,
-  setScore,
+  handleReach,
 }) => {
-  const playerList = {
-    east: false,
-    south: false,
-    west: false,
-    north: false,
-  };
-  const [isReachList, setIsReachList] = useState<typeof playerList>(playerList);
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [isShowReachModal, setIsShowReachModal] = useIsBoolean();
-  const [selectedReachPlayer, setSelectedReachPlayer] = useState("");
-
-  const resetReach = () => {
-    setIsReachList((prev) => ({
-      ...prev,
-      [selectedReachPlayer]: false,
-    }));
-    setIsShowReachModal.off();
-    calculateReachScore("minus", selectedReachPlayer);
-  };
-
-  const noResetReach = () => {
-    setIsShowReachModal.off();
-  };
-  const calculateReachScore = (type: string, player: string) => {
-    const reachPlayer = player as Player;
-    if (score === null) return;
-    const reachPoint = 1000;
-    if (type === "plus") {
-      setScore({
-        ...score,
-        [player]: score[reachPlayer] - reachPoint,
-      });
-    } else {
-      setScore({
-        ...score,
-        [player]: score[reachPlayer] + reachPoint,
-      });
-    }
-  };
-
-  const handleReach = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const eventReachPlayer = event.currentTarget.value as Player;
-    setSelectedReachPlayer(eventReachPlayer);
-
-    if (isReachList[eventReachPlayer]) {
-      const audio = new Audio("public/dio.mp3");
-      audio.play();
-      setIsShowReachModal.on();
-    } else {
-      setIsReachList((prev) => ({
-        ...prev,
-        [eventReachPlayer]: true,
-      }));
-
-      setIsPopupOpen(true);
-
-      const audio = new Audio("public/audio.mp3");
-      audio.addEventListener("ended", () => {
-        setIsPopupOpen(false);
-      });
-
-      if (eventReachPlayer !== "south") {
-        audio.play();
-      } else {
-        setTimeout(() => {
-          setIsPopupOpen(false);
-        }, 3000);
-      }
-      calculateReachScore("plus", eventReachPlayer);
-    }
-  };
-
   return (
     <Grid
       justifyContent="start"
@@ -250,136 +177,6 @@ export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
           </Button>
         </Flex>
       </VStack>
-
-      {isPopupOpen && (
-        <Flex
-          pos="absolute"
-          zIndex={1000}
-          top="0"
-          left="0"
-          align="center"
-          justify="center"
-          w="100vw"
-          h="100vh"
-          bg="rgba(0,0,0,0.5)"
-        >
-          <Box
-            pos="relative"
-            overflow="hidden"
-            w="90%"
-            maxW="600px"
-            bg="white"
-            borderRadius="md"
-          >
-            <Box pos="relative" pt="56.25%">
-              {selectedReachPlayer === "south" ? (
-                <iframe
-                  src="public/atmic.mp4"
-                  title="動画タイトル"
-                  allowFullScreen
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    width: "100%",
-                    height: "100%",
-                    border: "none",
-                  }}
-                />
-              ) : (
-                <iframe
-                  src="public/reach.mp4"
-                  title="動画タイトル"
-                  allowFullScreen
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    width: "100%",
-                    height: "100%",
-                    border: "none",
-                  }}
-                />
-              )}
-            </Box>
-          </Box>
-        </Flex>
-      )}
-      {isShowReachModal && (
-        <>
-          <Box
-            pos={"absolute"}
-            top={0}
-            alignItems={"center"}
-            justifyContent={"center"}
-            flexDir={"column"}
-            display={"flex"}
-            w={"100vw"}
-            h={"100vh"}
-            bg={COLOR.WHITE}
-          >
-            貴様、既に立直しているな？ 立直取り消す？
-            <Button
-              mt={"20px"}
-              color={COLOR.WHITE}
-              bg={COLOR.BLACK}
-              onClick={resetReach}
-            >
-              はい
-            </Button>
-            <Button
-              mt={"20px"}
-              color={COLOR.WHITE}
-              bg={COLOR.BLACK}
-              onClick={noResetReach}
-            >
-              いいえ
-            </Button>
-          </Box>
-        </>
-      )}
-      {/* {isShowReachModal && (
-        <Box
-          pos={"absolute"}
-          top={0}
-          alignItems={"center"}
-          justifyContent={"center"}
-          flexDir={"column"}
-          display={"flex"}
-          w={"100vw"}
-          h={"100vh"}
-          bg={COLOR.WHITE}
-        >
-          だれの無限立直？
-          <RadioGroup.Root
-            defaultValue="1"
-            mt={"20px"}
-            onValueChange={handleOnchange}
-          >
-            <HStack flexDir={"column"} gap="6" display={"flex"}>
-              {players.map((item, index) => (
-                <RadioGroup.Item key={index} value={item.name}>
-                  <RadioGroup.ItemHiddenInput />
-                  <RadioGroup.ItemIndicator />
-                  <RadioGroup.ItemText textStyle="2xl">
-                    {item.name}
-                  </RadioGroup.ItemText>
-                </RadioGroup.Item>
-              ))}
-            </HStack>
-          </RadioGroup.Root>
-          <Button mt={"20px"} onClick={handlePopReachMovie}>
-            完了
-          </Button>
-        </Box>
-      )} */}
-
-      {/* <Button onClick={() => handleTsumo(houra, count, players, score)}>
-        親が4000点のツモだ！！！
-      </Button>
-      <Button onClick={() => handleRon(hoju, houra, count, score)}>
-        親が下家から4000の出上がりだ！！！
-      </Button> */}
     </Grid>
   );
 };
