@@ -7,10 +7,14 @@ export const handleRon = (
   score: ScoreMap,
 ) => {
   if (!score) return;
-  const newScore = {
-    ...score,
-    [winner]: score[winner] + points,
-    [loser]: score[loser] - points,
-  };
+  const newScore = [...score];
+  newScore.map((_, index) => {
+    if (index === winner) {
+      newScore[index] += points;
+    }
+    if (index === loser) {
+      newScore[index] -= points;
+    }
+  });
   return newScore;
 };

@@ -23,10 +23,8 @@ export const ScoreSelectPanel: FC<ScoreSelectPanelProps> = ({
     if (!selectScore) return;
     const isRuleFour = selectScore === SCORE.FOUR_PLAYER_RULE;
     const seats = isRuleFour ? SCORE.FOUR_RULE : SCORE.THREE_RULR;
-    const newScore = Object.fromEntries(
-      seats.map((seat) => [seat, selectScore]),
-    ) as ScoreMap;
-    setScore(newScore);
+    const newScore = new Array(seats).fill(selectScore);
+    setScore(newScore as ScoreMap);
   };
 
   const alertScoreNotSelected = () => {

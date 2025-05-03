@@ -1,17 +1,17 @@
 import { useState } from "react";
 
 export type ReachFlagsProps = {
-  east: boolean;
-  south: boolean;
-  west: boolean;
-  north: boolean;
+  0: boolean;
+  1: boolean;
+  2: boolean;
+  3: boolean;
 };
 
 const initialReachFlags: ReachFlagsProps = {
-  east: false,
-  south: false,
-  west: false,
-  north: false,
+  0: false,
+  1: false,
+  2: false,
+  3: false,
 };
 
 export type SetReachFlagsReturn = {

@@ -1,33 +1,31 @@
-import { Player, ScoreMap } from "@/hooks/useScore";
+import { ScoreMap } from "@/hooks/useScore";
 
 export const childrenTsumo = (
   childrenPoint: number,
   parentPoint: number,
-  winner: string,
+  winner: number | null,
   prevScore: ScoreMap,
+  currentDirection: number,
 ) => {
-  if (winner === "east") {
+  if (currentDirection === 0) {
     alert("親があがってるよー。最初に押すボタン間違えた？");
   }
-
-  const players: Player[] = ["east", "south", "west", "north"];
-
+  if (winner === null) return;
   const twoPerson = 2;
   const winnerPoint = childrenPoint * twoPerson + parentPoint;
+  const parentIndex = (4 - currentDirection) % 4;
 
-  const newScore = {} as ScoreMap;
+  const newScore = [...prevScore];
 
-  for (const player of players) {
-    if (player === winner) {
-      newScore[player] = prevScore[player] + winnerPoint;
-      continue;
+  newScore.map((_, index) => {
+    if (winner === index) {
+      newScore[index] += winnerPoint;
+    } else if (parentIndex === index) {
+      newScore[index] -= parentPoint;
+    } else {
+      newScore[index] -= childrenPoint;
     }
-    if (player === "east") {
-      newScore[player] = prevScore[player] - parentPoint;
-      continue;
-    }
-    newScore[player] = prevScore[player] - childrenPoint;
-  }
+  });
 
   return newScore;
 };

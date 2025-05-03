@@ -8,8 +8,8 @@ type InputWinTypeProps = {
   winnerInfo: WinInfo;
   setWinnerInfo: (value: Partial<WinInfo>) => void;
   players: string[];
-  // setSelectedWinType: (value: WinInfo["winType"]) => void;
   setIsOpen: () => void;
+  setIsClickedWinner: () => void;
 };
 
 export const InputWinType: FC<InputWinTypeProps> = ({
@@ -17,6 +17,7 @@ export const InputWinType: FC<InputWinTypeProps> = ({
   setWinnerInfo,
   players,
   setIsOpen,
+  setIsClickedWinner,
 }) => {
   const items = [
     {
@@ -33,21 +34,15 @@ export const InputWinType: FC<InputWinTypeProps> = ({
 
   const handleDesideWinType = () => {
     if (winnerInfo.winType === "tsumo") {
-      const loser = players.filter(
-        (item) => item !== isClickedWinner,
-      ) as Player[];
-      console.log(loser);
+      const loser = Number(
+        players.find((item) => Number(item) !== isClickedWinner),
+      );
       setWinnerInfo({
-        loser: loser,
+        loser: loser as Player,
       });
     }
-    const loser = players.filter(
-      (item) => item !== isClickedWinner,
-    ) as Player[];
-    console.log(loser);
-    setWinnerInfo({
-      loser: loser,
-    });
+    setIsClickedWinner();
+
     setIsOpen();
   };
   return (

@@ -2,7 +2,7 @@ import { Box, Button, HStack, RadioGroup } from "@chakra-ui/react";
 import { COLOR } from "@/const/color";
 import { WinInfo } from "@/hooks/useWinnerinfo";
 import { Player } from "@/hooks/useScore";
-import { FC } from "react";
+import { ComponentProps, FC } from "react";
 
 type InputLoserProps = {
   winnerInfo: WinInfo;
@@ -20,31 +20,40 @@ export const InputLoser: FC<InputLoserProps> = ({
   const items = [
     {
       label: "東家",
-      value: "east",
+      value: "0",
     },
     {
       label: "南家",
-      value: "south",
+      value: "3",
     },
     {
       label: "西家",
-      value: "west",
+      value: "2",
     },
     {
       label: "北家",
-      value: "north",
+      value: "1",
     },
   ];
 
   const loserCandidate = items.filter(
-    (item) => item.value !== winnerInfo.winner,
+    (item) => Number(item.value) !== winnerInfo.winner,
   );
 
   const handleComplete = () => {
-    if (winnerInfo.loser?.length === 2) return;
     setIsOpen();
     ShowInputScore();
   };
+
+  const selectedLoser: ComponentProps<
+    typeof RadioGroup.Root
+  >["onValueChange"] = (event) => {
+    const loser = Number(event.value) as Player;
+    setWinnerInfo({
+      loser: loser,
+    });
+  };
+
   return (
     <Box
       pos={"absolute"}
@@ -70,13 +79,7 @@ export const InputLoser: FC<InputLoserProps> = ({
         <RadioGroup.Root
           defaultValue="1"
           mt={"20px"}
-          onValueChange={(event) => {
-            const loser = [] as Player[];
-            loser.push(event.value as Player);
-            setWinnerInfo({
-              loser: loser,
-            });
-          }}
+          onValueChange={selectedLoser}
         >
           <HStack flexDir={"column"} gap="6" display={"flex"}>
             {loserCandidate.map((item) => (

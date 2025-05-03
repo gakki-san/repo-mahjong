@@ -4,7 +4,7 @@ import { Player } from "./useScore";
 export type WinInfo = {
   winType: "tsumo" | "ron" | null;
   winner: Player | null;
-  loser: Player[] | null;
+  loser: Player | null;
   winPoints: number | null;
 };
 

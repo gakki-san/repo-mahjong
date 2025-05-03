@@ -6,7 +6,7 @@ export const playReachAudio = (player: Player, setIsPopupClose: () => void) => {
     setIsPopupClose();
   });
 
-  if (player !== "south") {
+  if (player !== 1) {
     audio.play();
   } else {
     setTimeout(() => {

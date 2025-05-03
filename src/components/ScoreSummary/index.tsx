@@ -1,5 +1,5 @@
 import { ComponentProps, FC, useState } from "react";
-import { Player, ScoreMap } from "@/hooks/useScore";
+import { Player, ScoreMap, UseScoreActionMap } from "@/hooks/useScore";
 import { useWinnerInfo } from "@/hooks/useWinnerinfo";
 import { WindowScoreSummary } from "../WindowScoreSummary";
 import { InputWinType } from "../InputWinType";
@@ -15,11 +15,17 @@ import { childrenTsumo } from "@/logic/childrenTsumo";
 import { useReachFlags } from "@/hooks/useReachFlags";
 import { usePlayerPoint } from "@/hooks/usePlayerPoint";
 import { playReachAudio } from "@/logic/attemptReach";
+import { useCurrentDirection } from "@/hooks/useCurrentDirection";
 
 type ScoreSummaryProps = {
   score: ScoreMap;
-  setScore: (value: ScoreMap) => void;
+  setScore: UseScoreActionMap;
   players: string[];
+};
+
+export type GameMaster = {
+  key: Player;
+  label: string;
 };
 
 export type IsShowType = {
@@ -32,6 +38,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   setScore,
   players,
 }) => {
+  const [currentDirection, setCurrentDirection] = useCurrentDirection();
   const [winnerInfo, setWinnerInfo] = useWinnerInfo();
   const [isShowInputScore, setIsShowInputScore] = useIsBoolean();
   const [isOpen, setIsOpen] = useIsBoolean(false);
@@ -41,7 +48,45 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   const [reachFlags, setReachFlags] = useReachFlags();
   const [isPopupOpen, setIsPopupOpen] = useIsBoolean();
   const [isShowReachModal, setIsShowReachModal] = useIsBoolean();
-  const [selectedReachPlayer, setSelectedReachPlayer] = useState("");
+  const [selectedReachPlayer, setSelectedReachPlayer] = useState(0);
+  const [isClickedWinner, setIsClickedWinner] = useIsBoolean();
+
+  const gameMaster = [
+    { key: 0, label: "東家" },
+    { key: 1, label: "北家" },
+    { key: 2, label: "西家" },
+    { key: 3, label: "南家" },
+  ] as GameMaster[];
+
+  // direction(number)を受け取り、引数が0番目にくる連番配列を返す
+  const genarateArrayDirection = (
+    currentDirection: 0 | 1 | 2 | 3,
+  ): number[] => {
+    const base = [0, 1, 2, 3];
+    return [
+      ...base.slice(currentDirection),
+      ...base.slice(0, currentDirection),
+    ];
+  };
+
+  // rotateされたcurrentDirectionとwinnerを受け取り、今回の勝者を示すnumberを返す
+  const getWinnerIndexInRotateDirection = (
+    rotateDirection: number[],
+    winner: Player,
+  ) => {
+    return rotateDirection.indexOf(winner);
+  };
+
+  const genaratedArrayDirection = genarateArrayDirection(currentDirection);
+
+  const rotatedGameMaster = [
+    ...gameMaster.slice(currentDirection),
+    ...gameMaster.slice(0, currentDirection),
+  ];
+
+  const handleMoveDirection = () => {
+    setCurrentDirection();
+  };
 
   const resetReach = () => {
     setReachFlags.update((prev) => ({
@@ -49,32 +94,28 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
       [selectedReachPlayer]: false,
     }));
     setIsShowReachModal.off();
-    calculateReachScore("minus", selectedReachPlayer);
+    calculateReachScore("unreach", selectedReachPlayer);
   };
 
   const noResetReach = () => {
     setIsShowReachModal.off();
   };
 
-  const calculateReachScore = (type: string, player: string) => {
-    const reachPlayer = player as Player;
+  const calculateReachScore = (type: string, player: number) => {
     if (score === null) return;
     const reachPoint = 1000;
-    if (type === "plus") {
-      setScore({
-        ...score,
-        [player]: score[reachPlayer] - reachPoint,
-      });
+    const newScore = [...score] as ScoreMap;
+    if (type === "reach") {
+      newScore[player] -= reachPoint;
+      setScore.set(newScore);
     } else {
-      setScore({
-        ...score,
-        [player]: score[reachPlayer] + reachPoint,
-      });
+      newScore[player] += reachPoint;
+      setScore.set(newScore);
     }
   };
 
   const handleReach = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const eventReachPlayer = event.currentTarget.value as Player;
+    const eventReachPlayer = Number(event.currentTarget.value) as Player;
     setSelectedReachPlayer(eventReachPlayer);
 
     if (reachFlags[eventReachPlayer]) {
@@ -91,7 +132,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
 
       playReachAudio(eventReachPlayer, setIsPopupOpen.off);
 
-      calculateReachScore("plus", eventReachPlayer);
+      calculateReachScore("reach", eventReachPlayer);
     }
   };
 
@@ -101,15 +142,19 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   const selectedWinner: React.MouseEventHandler<HTMLButtonElement> = (
     event,
   ) => {
-    const winner = event.currentTarget.value as Player;
-    setWinnerInfo({ winner: winner });
+    const winner = Number(event.currentTarget.value) as Player;
+    const regenarateWinner = getWinnerIndexInRotateDirection(
+      genaratedArrayDirection,
+      winner,
+    ) as Player;
+    setIsClickedWinner.on();
+    setWinnerInfo({ winner: regenarateWinner });
   };
 
   if (!score) return;
-  const isClickedWinner = winnerInfo.winner;
 
   const handleComplete = () => {
-    handleApplyScore(winnerInfo, setScore, players, score);
+    handleApplyScore(winnerInfo, setScore.set, players, score);
     closeAllModal(setWinnerInfo, setIsOpen.off, setIsShowInputScore.off);
   };
 
@@ -122,14 +167,18 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   const handleChildrenPoint: ComponentProps<
     typeof NumberInput.Root
   >["onValueChange"] = (event) => {
-    console.log(event.valueAsNumber);
     setChildrenPoint(event.valueAsNumber);
   };
 
   const handleSetScore = () => {
-    if (!winnerInfo.winner) return;
-    setScore(
-      childrenTsumo(childrenPoint, parentPoint, winnerInfo.winner, score),
+    setScore.set(
+      childrenTsumo(
+        childrenPoint,
+        parentPoint,
+        winnerInfo.winner,
+        score,
+        currentDirection,
+      ) as ScoreMap,
     );
 
     closeAllModal(setWinnerInfo, setIsOpen.off, setIsShowInputScore.off);
@@ -141,6 +190,8 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
         selectedWinner={selectedWinner}
         score={score}
         handleReach={handleReach}
+        handleMoveDirection={handleMoveDirection}
+        gameMasterOrder={rotatedGameMaster}
       />
       {isClickedWinner && (
         <InputWinType
@@ -148,11 +199,12 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
           setWinnerInfo={setWinnerInfo}
           players={players}
           setIsOpen={setIsOpen.on}
+          setIsClickedWinner={setIsClickedWinner.off}
         />
       )}
       {isOpen &&
         isTsumo &&
-        (winnerInfo.winner === "east" ? (
+        (currentDirection === 0 ? (
           <InputWinPoint
             handleComplete={handleComplete}
             handleWinPointChange={handleWinPointChange(setWinnerInfo)}
@@ -271,7 +323,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
             borderRadius="md"
           >
             <Box pos="relative" pt="56.25%">
-              {selectedReachPlayer === "south" ? (
+              {selectedReachPlayer === 1 ? (
                 <iframe
                   src="public/atmic.mp4"
                   title="動画タイトル"

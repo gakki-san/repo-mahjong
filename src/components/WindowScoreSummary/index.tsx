@@ -2,18 +2,62 @@ import { FC } from "react";
 import { Box, Button, Flex, Grid, VStack } from "@chakra-ui/react";
 import { COLOR } from "@/const/color";
 import { ScoreMap } from "@/hooks/useScore";
+import { GameMaster } from "../ScoreSummary";
 
 type WindowScoreSummaryProps = {
   selectedWinner: React.MouseEventHandler<HTMLButtonElement>;
   score: ScoreMap;
   handleReach: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  handleMoveDirection: () => void;
+  gameMasterOrder: GameMaster[];
 };
 
 export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
   selectedWinner,
   score,
   handleReach,
+  handleMoveDirection,
+  gameMasterOrder,
 }) => {
+  const players = [
+    {
+      key: gameMasterOrder[0]["key"],
+      label: gameMasterOrder[0]["label"],
+      gridColumn: 2,
+      gridRow: 1,
+      transform: "rotate(180deg)",
+    },
+    {
+      key: gameMasterOrder[1]["key"],
+      label: gameMasterOrder[1]["label"],
+      gridColumn: 3,
+      gridRow: 2,
+      transform: "rotate(-90deg)",
+    },
+    {
+      key: gameMasterOrder[2]["key"],
+      label: gameMasterOrder[2]["label"],
+      gridColumn: 2,
+      gridRow: 3,
+    },
+    {
+      key: gameMasterOrder[3]["key"],
+      label: gameMasterOrder[3]["label"],
+      gridColumn: 1,
+      gridRow: 2,
+      transform: "rotate(90deg)",
+    },
+  ];
+
+  console.log(players);
+
+  const uiPositions = [
+    { gridColumn: 2, gridRow: 1, transform: "rotate(180deg)" },
+    { gridColumn: 3, gridRow: 2, transform: "rotate(-90deg)" },
+    { gridColumn: 2, gridRow: 3 },
+    { gridColumn: 1, gridRow: 2, transform: "rotate(90deg)" },
+  ];
+
   return (
     <Grid
       justifyContent="start"
@@ -24,159 +68,62 @@ export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
       h="100vh"
       bg={COLOR.GREEN_PRIMARY}
     >
-      <VStack gridColumn={2} gridRow={1} transform="rotate(180deg)">
-        <Button
-          w="300px"
-          p="4"
-          color={COLOR.BLACK}
-          textAlign="center"
-          bg="white"
-          onClick={selectedWinner}
-          value="east"
-        >
-          東家
-        </Button>
-        <Flex gap={"20px"}>
-          <Box
-            w="200px"
-            p="4"
-            color="white"
-            textAlign="center"
-            bg={COLOR.BLACK}
+      {gameMasterOrder.map((item, index) => {
+        const directionPosition = uiPositions[index];
+        return (
+          <VStack
+            key={item.key}
+            gridColumn={directionPosition.gridColumn}
+            gridRow={directionPosition.gridRow}
+            transform={directionPosition.transform}
           >
-            {score?.east}
-          </Box>
-          <Button
-            w="40px"
-            h="40px"
-            m={"auto"}
-            fontWeight={"bold"}
-            bg={COLOR.RED}
-            borderRadius={"50%"}
-            onClick={handleReach}
-            value={"east"}
-          >
-            立直
-          </Button>
-        </Flex>
-      </VStack>
-
-      <VStack gridColumn={3} gridRow={2} transform="rotate(-90deg)">
-        <Button
-          w="300px"
-          h="50px"
-          p="2"
-          color={COLOR.BLACK}
-          textAlign="center"
-          bg="white"
-          onClick={selectedWinner}
-          value={"south"}
-        >
-          南場
-        </Button>
-        <Flex gap={"20px"}>
-          <Box
-            w="200px"
-            h="50px"
-            p="2"
-            color="white"
-            textAlign="center"
-            bg={COLOR.BLACK}
-          >
-            {score?.south}
-          </Box>
-          <Button
-            w="40px"
-            h="40px"
-            m={"auto"}
-            fontWeight={"bold"}
-            bg={COLOR.RED}
-            borderRadius={"50%"}
-            onClick={handleReach}
-            value={"south"}
-          >
-            立直
-          </Button>
-        </Flex>
-      </VStack>
-
-      <VStack gridColumn={2} gridRow={3}>
-        <Button
-          w="300px"
-          p="4"
-          color={COLOR.BLACK}
-          textAlign="center"
-          bg="white"
-          onClick={selectedWinner}
-          value={"west"}
-        >
-          西場
-        </Button>
-        <Flex gap={"20px"}>
-          <Box
-            w="200px"
-            p="4"
-            color="white"
-            textAlign="center"
-            bg={COLOR.BLACK}
-          >
-            {score?.west}
-          </Box>
-          <Button
-            w="40px"
-            h="40px"
-            m={"auto"}
-            fontWeight={"bold"}
-            bg={COLOR.RED}
-            borderRadius={"50%"}
-            onClick={handleReach}
-            value={"west"}
-          >
-            立直
-          </Button>
-        </Flex>
-      </VStack>
-
-      <VStack gridColumn={1} gridRow={2} transform="rotate(90deg)">
-        <Flex align="center" justify="center">
-          <Button
-            w="300px"
-            h="50px"
-            p="2"
-            color={COLOR.BLACK}
-            bg="white"
-            onClick={selectedWinner}
-            value={"north"}
-          >
-            北家
-          </Button>
-        </Flex>
-        <Flex gap={"20px"}>
-          <Flex
-            align="center"
-            justify="center"
-            w="200px"
-            h="50px"
-            p="2"
-            color="white"
-            bg={COLOR.BLACK}
-          >
-            {score?.north ?? "👐"}
-          </Flex>
-          <Button
-            w="40px"
-            h="40px"
-            m={"auto"}
-            fontWeight={"bold"}
-            bg={COLOR.RED}
-            borderRadius={"50%"}
-            onClick={handleReach}
-            value={"north"}
-          >
-            立直
-          </Button>
-        </Flex>
-      </VStack>
+            <Button
+              w="300px"
+              h="50px"
+              p="4"
+              color={COLOR.BLACK}
+              bg="white"
+              onClick={selectedWinner}
+              value={item.key}
+            >
+              {item.label}
+            </Button>
+            <Flex gap="20px">
+              <Box
+                w="200px"
+                h="50px"
+                p="2"
+                color="white"
+                textAlign="center"
+                bg={COLOR.BLACK}
+              >
+                {score[index]}
+              </Box>
+              <Button
+                w="40px"
+                h="40px"
+                m="auto"
+                fontWeight="bold"
+                bg={COLOR.RED}
+                borderRadius="50%"
+                onClick={handleReach}
+                value={index}
+              >
+                立直
+              </Button>
+            </Flex>
+          </VStack>
+        );
+      })}
+      <Button
+        pos={"absolute"}
+        top={"50%"}
+        left={"50%"}
+        transform="translate(-50%, -50%)"
+        onClick={handleMoveDirection}
+      >
+        親流し
+      </Button>
     </Grid>
   );
 };
