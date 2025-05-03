@@ -1,16 +1,15 @@
 import { useState } from "react";
 
-export type Player = "east" | "south" | "west" | "north";
+export type Player = 0 | 1 | 2 | 3;
 
-export type ScoreMap = Record<Player, number> | null;
+export type ScoreMap = [number, number, number, number];
 
-export type useScoreReturn = [
-  ScoreMap,
-  action: {
-    set: (value: ScoreMap) => void;
-    reset: () => void;
-  },
-];
+export type UseScoreActionMap = {
+  set: (value: ScoreMap) => void;
+  reset: () => void;
+};
+
+export type useScoreReturn = [ScoreMap | null, action: UseScoreActionMap];
 
 export const useScore = (): useScoreReturn => {
   const [score, setScore] = useState<ScoreMap | null>(null);

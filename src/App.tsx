@@ -8,6 +8,7 @@ function App() {
   const [score, action] = useScore();
 
   const players = score ? Object.keys(score) : [];
+  console.log("players", players);
 
   return (
     <>
@@ -16,7 +17,7 @@ function App() {
         <ScoreSelectPanel close={close} score={score} setScore={action.set} />
       )}
       {score && (
-        <ScoreSummary score={score} setScore={action.set} players={players} />
+        <ScoreSummary score={score} setScore={action} players={players} />
       )}
     </>
   );

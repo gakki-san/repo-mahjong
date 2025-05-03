@@ -6,17 +6,15 @@ export const handleTsumo = (
   players: string[],
   score: ScoreMap,
 ) => {
-  const newScore: ScoreMap = {} as ScoreMap;
-  if (!score || !newScore) return;
+  if (!score) return;
+  const newScore = [...score];
   const losePointPerson = players.length - 1;
-  for (const player of players) {
-    const person = player as Player;
-    if (person === winner) {
-      newScore[person] = score[person] + points * losePointPerson;
+  score.map((_, index) => {
+    if (index === winner) {
+      newScore[index] += points * losePointPerson;
     } else {
-      newScore[person] = score[person] - points;
+      newScore[index] -= points;
     }
-  }
-
+  });
   return newScore;
 };

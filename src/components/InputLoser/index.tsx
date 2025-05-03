@@ -1,51 +1,59 @@
-import { Dispatch, FC, SetStateAction } from "react";
 import { Box, Button, HStack, RadioGroup } from "@chakra-ui/react";
 import { COLOR } from "@/const/color";
 import { WinInfo } from "@/hooks/useWinnerinfo";
 import { Player } from "@/hooks/useScore";
-import { IsShowType } from "../ScoreSummary";
+import { ComponentProps, FC } from "react";
 
 type InputLoserProps = {
   winnerInfo: WinInfo;
   setWinnerInfo: (value: Partial<WinInfo>) => void;
   ShowInputScore: () => void;
-  setIsShow: Dispatch<SetStateAction<IsShowType>>;
+  setIsOpen: () => void;
 };
 
 export const InputLoser: FC<InputLoserProps> = ({
   winnerInfo,
   setWinnerInfo,
   ShowInputScore,
-  setIsShow,
+  setIsOpen,
 }) => {
   const items = [
     {
       label: "東家",
-      value: "east",
+      value: "0",
     },
     {
       label: "南家",
-      value: "south",
+      value: "3",
     },
     {
       label: "西家",
-      value: "west",
+      value: "2",
     },
     {
       label: "北家",
-      value: "north",
+      value: "1",
     },
   ];
 
   const loserCandidate = items.filter(
-    (item) => item.value !== winnerInfo.winner,
+    (item) => Number(item.value) !== winnerInfo.winner,
   );
 
   const handleComplete = () => {
-    if (winnerInfo.loser?.length === 2) return;
-    setIsShow({ ron: false } as IsShowType);
+    setIsOpen();
     ShowInputScore();
   };
+
+  const selectedLoser: ComponentProps<
+    typeof RadioGroup.Root
+  >["onValueChange"] = (event) => {
+    const loser = Number(event.value) as Player;
+    setWinnerInfo({
+      loser: loser,
+    });
+  };
+
   return (
     <Box
       pos={"absolute"}
@@ -71,13 +79,7 @@ export const InputLoser: FC<InputLoserProps> = ({
         <RadioGroup.Root
           defaultValue="1"
           mt={"20px"}
-          onValueChange={(event) => {
-            const loser = [] as Player[];
-            loser.push(event.value as Player);
-            setWinnerInfo({
-              loser: loser,
-            });
-          }}
+          onValueChange={selectedLoser}
         >
           <HStack flexDir={"column"} gap="6" display={"flex"}>
             {loserCandidate.map((item) => (

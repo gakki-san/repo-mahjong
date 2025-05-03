@@ -4,7 +4,7 @@ import { Player } from "./useScore";
 export type WinInfo = {
   winType: "tsumo" | "ron" | null;
   winner: Player | null;
-  loser: Player[] | null;
+  loser: Player | null;
   winPoints: number | null;
 };
 
@@ -12,7 +12,7 @@ type UseWinnerInfoReturn = [WinInfo, (value: Partial<WinInfo>) => void];
 
 export const useWinnerInfo = (): UseWinnerInfoReturn => {
   const [winnerInfo, setWinnerInfo] = useState<WinInfo>({
-    winType: null,
+    winType: "tsumo",
     winner: null,
     loser: null,
     winPoints: null,
