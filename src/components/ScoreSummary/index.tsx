@@ -22,7 +22,6 @@ type ScoreSummaryProps = {
   setScore: UseScoreActionMap;
   players: string[];
 };
-
 export type GameMaster = {
   key: Player;
   label: string;
