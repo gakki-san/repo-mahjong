@@ -119,7 +119,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
     setSelectedReachPlayer(eventReachPlayer);
 
     if (reachFlags[eventReachPlayer]) {
-      const audio = new Audio("public/dio.mp3");
+      const audio = new Audio("/dio.mp3");
       audio.play();
       setIsShowReachModal.on();
     } else {
@@ -325,7 +325,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
             <Box pos="relative" pt="56.25%">
               {selectedReachPlayer === 1 ? (
                 <iframe
-                  src="public/atmic.mp4"
+                  src="/atmic.mp4"
                   title="動画タイトル"
                   allowFullScreen
                   style={{
@@ -339,7 +339,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
                 />
               ) : (
                 <iframe
-                  src="public/reach.mp4"
+                  src="/reach.mp4"
                   title="動画タイトル"
                   allowFullScreen
                   style={{
