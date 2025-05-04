@@ -48,6 +48,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   const [isPopupOpen, setIsPopupOpen] = useIsBoolean();
   const [isShowReachModal, setIsShowReachModal] = useIsBoolean();
   const [selectedReachPlayer, setSelectedReachPlayer] = useState(0);
+  const [selectedWinner, setSelectedWinner] = useState(0);
   const [isClickedWinner, setIsClickedWinner] = useIsBoolean();
 
   const gameMaster = [
@@ -138,7 +139,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   const isTsumo = winnerInfo.winType === "tsumo";
   const isRon = winnerInfo.winType === "ron";
 
-  const selectedWinner: React.MouseEventHandler<HTMLButtonElement> = (
+  const handleSelectedWinner: React.MouseEventHandler<HTMLButtonElement> = (
     event,
   ) => {
     const winner = Number(event.currentTarget.value) as Player;
@@ -146,11 +147,15 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
       genaratedArrayDirection,
       winner,
     ) as Player;
+
     setIsClickedWinner.on();
+    setSelectedWinner(winner);
     setWinnerInfo({ winner: regenarateWinner });
   };
 
   if (!score) return;
+  console.log("currentDirection", currentDirection);
+  console.log("selectedReachPlayer", selectedReachPlayer);
 
   const handleComplete = () => {
     handleApplyScore(winnerInfo, setScore.set, players, score);
@@ -183,10 +188,12 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
     closeAllModal(setWinnerInfo, setIsOpen.off, setIsShowInputScore.off);
   };
 
+  console.log("winnerInfo.winner ", winnerInfo.winner);
+
   return (
     <>
       <WindowScoreSummary
-        selectedWinner={selectedWinner}
+        selectedWinner={handleSelectedWinner}
         score={score}
         handleReach={handleReach}
         handleMoveDirection={handleMoveDirection}
@@ -203,7 +210,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
       )}
       {isOpen &&
         isTsumo &&
-        (currentDirection === 0 ? (
+        (selectedWinner === 0 ? (
           <InputWinPoint
             handleComplete={handleComplete}
             handleWinPointChange={handleWinPointChange(setWinnerInfo)}
