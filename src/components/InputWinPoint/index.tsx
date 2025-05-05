@@ -29,7 +29,6 @@ export const InputWinPoint: FC<InputWinPointProps> = ({
       <NumberInput.Root
         onValueChange={handleWinPointChange}
         w={"200px"}
-        min={300}
         max={48000}
       >
         <NumberInput.Control />

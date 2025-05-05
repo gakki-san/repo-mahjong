@@ -154,13 +154,8 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   };
 
   if (!score) return;
-  console.log("currentDirection", currentDirection);
-  console.log("selectedReachPlayer", selectedReachPlayer);
 
-  const handleComplete = () => {
-    handleApplyScore(winnerInfo, setScore.set, players, score);
-    closeAllModal(setWinnerInfo, setIsOpen.off, setIsShowInputScore.off);
-  };
+  console.log("handleLoser", winnerInfo.loser);
 
   const handleParentPoint: ComponentProps<
     typeof NumberInput.Root
@@ -182,13 +177,34 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
         winnerInfo.winner,
         score,
         currentDirection,
+        reachFlags,
       ) as ScoreMap,
     );
 
-    closeAllModal(setWinnerInfo, setIsOpen.off, setIsShowInputScore.off);
+    closeAllModal(
+      setWinnerInfo,
+      setIsOpen.off,
+      setIsShowInputScore.off,
+      setReachFlags.replace,
+    );
   };
 
-  console.log("winnerInfo.winner ", winnerInfo.winner);
+  const handleComplete = () => {
+    handleApplyScore(
+      winnerInfo,
+      setScore.set,
+      players,
+      score,
+      reachFlags,
+      genaratedArrayDirection,
+    );
+    closeAllModal(
+      setWinnerInfo,
+      setIsOpen.off,
+      setIsShowInputScore.off,
+      setReachFlags.replace,
+    );
+  };
 
   return (
     <>
@@ -232,7 +248,6 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
               onValueChange={handleChildrenPoint}
               w={"200px"}
               margin={"10px 0px 40px 0px"}
-              min={300}
               max={48000}
             >
               <NumberInput.Control />
@@ -242,7 +257,6 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
             <NumberInput.Root
               onValueChange={handleParentPoint}
               w={"200px"}
-              min={500}
               max={48000}
               mt={"20px"}
             >
@@ -262,7 +276,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
         ))}
       {isOpen && isRon && (
         <InputLoser
-          winnerInfo={winnerInfo}
+          selectedWinner={selectedWinner}
           setWinnerInfo={setWinnerInfo}
           ShowInputScore={setIsShowInputScore.on}
           setIsOpen={setIsOpen.off}

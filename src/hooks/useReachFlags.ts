@@ -7,7 +7,7 @@ export type ReachFlagsProps = {
   3: boolean;
 };
 
-const initialReachFlags: ReachFlagsProps = {
+export const initialReachFlags: ReachFlagsProps = {
   0: false,
   1: false,
   2: false,
