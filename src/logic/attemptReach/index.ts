@@ -6,6 +6,7 @@ export const playReachAudio = (player: Player, setIsPopupClose: () => void) => {
     setIsPopupClose();
     console.log("動いている");
   });
+  console.log("ここにはきてる");
 
   if (player !== 1) {
     audio.play();
