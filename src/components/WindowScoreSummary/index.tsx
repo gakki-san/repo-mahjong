@@ -28,7 +28,7 @@ export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
 
   return (
     <Grid
-      justifyContent="end"
+      justifyContent="center"
       templateRows="repeat(3, 1fr)"
       templateColumns="repeat(5, 1fr)"
       overflow={"hidden"}
