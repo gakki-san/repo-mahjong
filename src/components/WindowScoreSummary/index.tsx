@@ -19,38 +19,6 @@ export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
   handleMoveDirection,
   gameMasterOrder,
 }) => {
-  const players = [
-    {
-      key: gameMasterOrder[0]["key"],
-      label: gameMasterOrder[0]["label"],
-      gridColumn: 2,
-      gridRow: 1,
-      transform: "rotate(180deg)",
-    },
-    {
-      key: gameMasterOrder[1]["key"],
-      label: gameMasterOrder[1]["label"],
-      gridColumn: 3,
-      gridRow: 2,
-      transform: "rotate(-90deg)",
-    },
-    {
-      key: gameMasterOrder[2]["key"],
-      label: gameMasterOrder[2]["label"],
-      gridColumn: 2,
-      gridRow: 3,
-    },
-    {
-      key: gameMasterOrder[3]["key"],
-      label: gameMasterOrder[3]["label"],
-      gridColumn: 1,
-      gridRow: 2,
-      transform: "rotate(90deg)",
-    },
-  ];
-
-  console.log(players);
-
   const uiPositions = [
     { gridColumn: 2, gridRow: 1, transform: "rotate(180deg)" },
     { gridColumn: 3, gridRow: 2, transform: "rotate(-90deg)" },
@@ -60,7 +28,7 @@ export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
 
   return (
     <Grid
-      justifyContent="start"
+      justifyContent="end"
       templateRows="repeat(3, 1fr)"
       templateColumns="repeat(5, 1fr)"
       overflow={"hidden"}

@@ -1,3 +1,4 @@
+import { ReachFlagsProps } from "@/hooks/useReachFlags";
 import { ScoreMap } from "@/hooks/useScore";
 
 export const childrenTsumo = (
@@ -6,11 +7,12 @@ export const childrenTsumo = (
   winner: number | null,
   prevScore: ScoreMap,
   currentDirection: number,
+  reachPlayer: ReachFlagsProps,
 ) => {
-  if (currentDirection === 0) {
-    alert("親があがってるよー。最初に押すボタン間違えた？");
-  }
   if (winner === null) return;
+  const countReachPlayer = Object.values(reachPlayer).filter(
+    (item) => item === true,
+  ).length;
   const twoPerson = 2;
   const winnerPoint = childrenPoint * twoPerson + parentPoint;
   const parentIndex = (4 - currentDirection) % 4;
@@ -19,7 +21,7 @@ export const childrenTsumo = (
 
   newScore.map((_, index) => {
     if (winner === index) {
-      newScore[index] += winnerPoint;
+      newScore[index] += winnerPoint + countReachPlayer * 1000;
     } else if (parentIndex === index) {
       newScore[index] -= parentPoint;
     } else {

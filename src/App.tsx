@@ -8,7 +8,6 @@ function App() {
   const [score, action] = useScore();
 
   const players = score ? Object.keys(score) : [];
-  console.log("players", players);
 
   return (
     <>

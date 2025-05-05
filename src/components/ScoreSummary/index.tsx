@@ -48,6 +48,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   const [isPopupOpen, setIsPopupOpen] = useIsBoolean();
   const [isShowReachModal, setIsShowReachModal] = useIsBoolean();
   const [selectedReachPlayer, setSelectedReachPlayer] = useState(0);
+  const [selectedWinner, setSelectedWinner] = useState(0);
   const [isClickedWinner, setIsClickedWinner] = useIsBoolean();
 
   const gameMaster = [
@@ -138,7 +139,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   const isTsumo = winnerInfo.winType === "tsumo";
   const isRon = winnerInfo.winType === "ron";
 
-  const selectedWinner: React.MouseEventHandler<HTMLButtonElement> = (
+  const handleSelectedWinner: React.MouseEventHandler<HTMLButtonElement> = (
     event,
   ) => {
     const winner = Number(event.currentTarget.value) as Player;
@@ -146,16 +147,15 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
       genaratedArrayDirection,
       winner,
     ) as Player;
+
     setIsClickedWinner.on();
+    setSelectedWinner(winner);
     setWinnerInfo({ winner: regenarateWinner });
   };
 
   if (!score) return;
 
-  const handleComplete = () => {
-    handleApplyScore(winnerInfo, setScore.set, players, score);
-    closeAllModal(setWinnerInfo, setIsOpen.off, setIsShowInputScore.off);
-  };
+  console.log("handleLoser", winnerInfo.loser);
 
   const handleParentPoint: ComponentProps<
     typeof NumberInput.Root
@@ -177,16 +177,39 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
         winnerInfo.winner,
         score,
         currentDirection,
+        reachFlags,
       ) as ScoreMap,
     );
 
-    closeAllModal(setWinnerInfo, setIsOpen.off, setIsShowInputScore.off);
+    closeAllModal(
+      setWinnerInfo,
+      setIsOpen.off,
+      setIsShowInputScore.off,
+      setReachFlags.replace,
+    );
+  };
+
+  const handleComplete = () => {
+    handleApplyScore(
+      winnerInfo,
+      setScore.set,
+      players,
+      score,
+      reachFlags,
+      genaratedArrayDirection,
+    );
+    closeAllModal(
+      setWinnerInfo,
+      setIsOpen.off,
+      setIsShowInputScore.off,
+      setReachFlags.replace,
+    );
   };
 
   return (
     <>
       <WindowScoreSummary
-        selectedWinner={selectedWinner}
+        selectedWinner={handleSelectedWinner}
         score={score}
         handleReach={handleReach}
         handleMoveDirection={handleMoveDirection}
@@ -203,7 +226,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
       )}
       {isOpen &&
         isTsumo &&
-        (currentDirection === 0 ? (
+        (selectedWinner === 0 ? (
           <InputWinPoint
             handleComplete={handleComplete}
             handleWinPointChange={handleWinPointChange(setWinnerInfo)}
@@ -225,7 +248,6 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
               onValueChange={handleChildrenPoint}
               w={"200px"}
               margin={"10px 0px 40px 0px"}
-              min={300}
               max={48000}
             >
               <NumberInput.Control />
@@ -235,7 +257,6 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
             <NumberInput.Root
               onValueChange={handleParentPoint}
               w={"200px"}
-              min={500}
               max={48000}
               mt={"20px"}
             >
@@ -255,7 +276,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
         ))}
       {isOpen && isRon && (
         <InputLoser
-          winnerInfo={winnerInfo}
+          selectedWinner={selectedWinner}
           setWinnerInfo={setWinnerInfo}
           ShowInputScore={setIsShowInputScore.on}
           setIsOpen={setIsOpen.off}

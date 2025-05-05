@@ -5,14 +5,14 @@ import { Player } from "@/hooks/useScore";
 import { ComponentProps, FC } from "react";
 
 type InputLoserProps = {
-  winnerInfo: WinInfo;
+  selectedWinner: number;
   setWinnerInfo: (value: Partial<WinInfo>) => void;
   ShowInputScore: () => void;
   setIsOpen: () => void;
 };
 
 export const InputLoser: FC<InputLoserProps> = ({
-  winnerInfo,
+  selectedWinner,
   setWinnerInfo,
   ShowInputScore,
   setIsOpen,
@@ -23,21 +23,22 @@ export const InputLoser: FC<InputLoserProps> = ({
       value: "0",
     },
     {
-      label: "南家",
-      value: "3",
+      label: "北家",
+      value: "1",
     },
     {
       label: "西家",
       value: "2",
     },
+
     {
-      label: "北家",
-      value: "1",
+      label: "南家",
+      value: "3",
     },
   ];
 
   const loserCandidate = items.filter(
-    (item) => Number(item.value) !== winnerInfo.winner,
+    (item) => Number(item.value) !== selectedWinner,
   );
 
   const handleComplete = () => {
@@ -76,11 +77,7 @@ export const InputLoser: FC<InputLoserProps> = ({
         bg={COLOR.WHITE}
       >
         だれが放銃した？
-        <RadioGroup.Root
-          defaultValue="1"
-          mt={"20px"}
-          onValueChange={selectedLoser}
-        >
+        <RadioGroup.Root mt={"20px"} onValueChange={selectedLoser}>
           <HStack flexDir={"column"} gap="6" display={"flex"}>
             {loserCandidate.map((item) => (
               <RadioGroup.Item key={item.value} value={item.value}>
