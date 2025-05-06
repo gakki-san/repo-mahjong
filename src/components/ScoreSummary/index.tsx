@@ -9,13 +9,15 @@ import { InputWinPoint } from "../InputWinPoint";
 import { closeAllModal } from "@/logic/closeAllModal";
 import { handleApplyScore } from "@/logic/handleApplyScore";
 import { handleWinPointChange } from "@/logic/handleWinPointChange";
-import { Box, Button, Flex, NumberInput } from "@chakra-ui/react";
-import { COLOR } from "@/const/color";
+import { NumberInput } from "@chakra-ui/react";
 import { childrenTsumo } from "@/logic/childrenTsumo";
 import { useReachFlags } from "@/hooks/useReachFlags";
 import { usePlayerPoint } from "@/hooks/usePlayerPoint";
 import { playReachAudio } from "@/logic/attemptReach";
 import { useCurrentDirection } from "@/hooks/useCurrentDirection";
+import { InputPointChildrenTsumo } from "@/components/InputPointChildrenTsumo";
+import { AlreadyReachModal } from "../AlreadyReachModal";
+import { ReachVideo } from "../ReachVideo";
 
 type ScoreSummaryProps = {
   score: ScoreMap;
@@ -37,26 +39,37 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   setScore,
   players,
 }) => {
-  const [currentDirection, setCurrentDirection] = useCurrentDirection();
-  const [winnerInfo, setWinnerInfo] = useWinnerInfo();
+  // useBoolean。それぞれのモーダルの開閉を制御
   const [isShowInputScore, setIsShowInputScore] = useIsBoolean();
-  const [isOpen, setIsOpen] = useIsBoolean(false);
-  const [childrenPoint, setChildrenPoint] = usePlayerPoint();
-  const [parentPoint, setParentPoint] = usePlayerPoint();
-
-  const [reachFlags, setReachFlags] = useReachFlags();
+  const [isOpen, setIsOpen] = useIsBoolean();
   const [isPopupOpen, setIsPopupOpen] = useIsBoolean();
   const [isShowReachModal, setIsShowReachModal] = useIsBoolean();
-  const [selectedReachPlayer, setSelectedReachPlayer] = useState(0);
-  const [selectedWinner, setSelectedWinner] = useState(0);
   const [isClickedWinner, setIsClickedWinner] = useIsBoolean();
 
+  // 現在の上側にいるdirection(number)を示す。setでrotateする。
+  const [currentDirection, setCurrentDirection] = useCurrentDirection();
+  const [winnerInfo, setWinnerInfo] = useWinnerInfo();
+  const [childrenPoint, setChildrenPoint] = usePlayerPoint();
+  const [parentPoint, setParentPoint] = usePlayerPoint();
+  const [reachFlags, setReachFlags] = useReachFlags();
+
+  const [selectedReachPlayer, setSelectedReachPlayer] = useState(0);
+  const [selectedWinner, setSelectedWinner] = useState(0);
+
+  // todo: player名を入力させるならここと統合させて画面に描画あり？その場合は、親だけ別で表示させるようにする
   const gameMaster = [
     { key: 0, label: "東家" },
     { key: 1, label: "北家" },
     { key: 2, label: "西家" },
     { key: 3, label: "南家" },
   ] as GameMaster[];
+
+  // rotateされたkeyとlabelを定義
+  // todo: genarateArrayDirectionと統合できないかな
+  const rotatedGameMaster = [
+    ...gameMaster.slice(currentDirection),
+    ...gameMaster.slice(0, currentDirection),
+  ];
 
   // direction(number)を受け取り、引数が0番目にくる連番配列を返す
   const genarateArrayDirection = (
@@ -68,6 +81,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
       ...base.slice(0, currentDirection),
     ];
   };
+  const arrayDirection = genarateArrayDirection(currentDirection);
 
   // rotateされたcurrentDirectionとwinnerを受け取り、今回の勝者を示すnumberを返す
   const getWinnerIndexInRotateDirection = (
@@ -77,15 +91,19 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
     return rotateDirection.indexOf(winner);
   };
 
-  const genaratedArrayDirection = genarateArrayDirection(currentDirection);
+  const handleSelectedWinner: React.MouseEventHandler<HTMLButtonElement> = (
+    event,
+  ) => {
+    const tappedWinner = Number(event.currentTarget.value) as Player;
 
-  const rotatedGameMaster = [
-    ...gameMaster.slice(currentDirection),
-    ...gameMaster.slice(0, currentDirection),
-  ];
+    const winnerIndexForScore = getWinnerIndexInRotateDirection(
+      arrayDirection,
+      tappedWinner,
+    ) as Player;
 
-  const handleMoveDirection = () => {
-    setCurrentDirection();
+    setIsClickedWinner.on();
+    setSelectedWinner(tappedWinner);
+    setWinnerInfo({ winner: winnerIndexForScore });
   };
 
   const resetReach = () => {
@@ -123,51 +141,23 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
       audio.play();
       setIsShowReachModal.on();
     } else {
-      setReachFlags.update((prev) => ({
-        ...prev,
-        [eventReachPlayer]: true,
-      }));
-
       setIsPopupOpen.on();
-
-      playReachAudio(eventReachPlayer, setIsPopupOpen.off);
-
+      playReachAudio(
+        eventReachPlayer,
+        setIsPopupOpen.off,
+        setReachFlags.update,
+      );
       calculateReachScore("reach", eventReachPlayer);
     }
   };
 
-  const isTsumo = winnerInfo.winType === "tsumo";
-  const isRon = winnerInfo.winType === "ron";
-
-  const handleSelectedWinner: React.MouseEventHandler<HTMLButtonElement> = (
-    event,
-  ) => {
-    const winner = Number(event.currentTarget.value) as Player;
-    const regenarateWinner = getWinnerIndexInRotateDirection(
-      genaratedArrayDirection,
-      winner,
-    ) as Player;
-
-    setIsClickedWinner.on();
-    setSelectedWinner(winner);
-    setWinnerInfo({ winner: regenarateWinner });
-  };
-
-  if (!score) return;
-
-  console.log("handleLoser", winnerInfo.loser);
-
-  const handleParentPoint: ComponentProps<
-    typeof NumberInput.Root
-  >["onValueChange"] = (event) => {
-    setParentPoint(event.valueAsNumber);
-  };
-
-  const handleChildrenPoint: ComponentProps<
-    typeof NumberInput.Root
-  >["onValueChange"] = (event) => {
-    setChildrenPoint(event.valueAsNumber);
-  };
+  const makeOnPointChange =
+    (
+      setter: (value: number) => void,
+    ): ComponentProps<typeof NumberInput.Root>["onValueChange"] =>
+    (details) => {
+      setter(details.valueAsNumber);
+    };
 
   const handleSetScore = () => {
     setScore.set(
@@ -196,7 +186,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
       players,
       score,
       reachFlags,
-      genaratedArrayDirection,
+      arrayDirection,
     );
     closeAllModal(
       setWinnerInfo,
@@ -205,6 +195,14 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
       setReachFlags.replace,
     );
   };
+
+  const handleMoveDirection = () => {
+    setCurrentDirection();
+  };
+
+  const isTsumo = isOpen && winnerInfo.winType === "tsumo";
+  const isRon = isOpen && winnerInfo.winType === "ron";
+  const isParent = selectedWinner === 0;
 
   return (
     <>
@@ -224,57 +222,20 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
           setIsClickedWinner={setIsClickedWinner.off}
         />
       )}
-      {isOpen &&
-        isTsumo &&
-        (selectedWinner === 0 ? (
+      {isTsumo &&
+        (isParent ? (
           <InputWinPoint
             handleComplete={handleComplete}
             handleWinPointChange={handleWinPointChange(setWinnerInfo)}
           />
         ) : (
-          <Box
-            pos={"absolute"}
-            top={0}
-            alignItems={"center"}
-            justifyContent={"center"}
-            flexDir={"column"}
-            display={"flex"}
-            w={"100vw"}
-            h={"100vh"}
-            bg={COLOR.GREEN_PRIMARY}
-          >
-            子
-            <NumberInput.Root
-              onValueChange={handleChildrenPoint}
-              w={"200px"}
-              margin={"10px 0px 40px 0px"}
-              max={48000}
-            >
-              <NumberInput.Control />
-              <NumberInput.Input />
-            </NumberInput.Root>
-            親
-            <NumberInput.Root
-              onValueChange={handleParentPoint}
-              w={"200px"}
-              max={48000}
-              mt={"20px"}
-            >
-              <NumberInput.Control />
-              <NumberInput.Input />
-            </NumberInput.Root>
-            <Button
-              textStyle="1xl"
-              mt={"50px"}
-              fontWeight="bold"
-              onClick={handleSetScore}
-              paddingInline={"50px"}
-            >
-              決定
-            </Button>
-          </Box>
+          <InputPointChildrenTsumo
+            handleChildrenPoint={makeOnPointChange(setChildrenPoint)}
+            handleParentPoint={makeOnPointChange(setParentPoint)}
+            handleSetScore={handleSetScore}
+          />
         ))}
-      {isOpen && isRon && (
+      {isRon && (
         <InputLoser
           selectedWinner={selectedWinner}
           setWinnerInfo={setWinnerInfo}
@@ -289,95 +250,12 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
         />
       )}
       {isShowReachModal && (
-        <>
-          <Box
-            pos={"absolute"}
-            top={0}
-            alignItems={"center"}
-            justifyContent={"center"}
-            flexDir={"column"}
-            display={"flex"}
-            w={"100vw"}
-            h={"100vh"}
-            bg={COLOR.WHITE}
-          >
-            貴様、既に立直しているな？ 立直取り消す？
-            <Button
-              mt={"20px"}
-              color={COLOR.WHITE}
-              bg={COLOR.BLACK}
-              onClick={resetReach}
-            >
-              はい
-            </Button>
-            <Button
-              mt={"20px"}
-              color={COLOR.WHITE}
-              bg={COLOR.BLACK}
-              onClick={noResetReach}
-            >
-              いいえ
-            </Button>
-          </Box>
-        </>
+        <AlreadyReachModal
+          resetReach={resetReach}
+          noResetReach={noResetReach}
+        />
       )}
-
-      {isPopupOpen && (
-        <Flex
-          pos="absolute"
-          zIndex={1000}
-          top="0"
-          left="0"
-          align="center"
-          justify="center"
-          w="100vw"
-          h="100vh"
-          bg="rgba(0,0,0,0.5)"
-        >
-          <Box
-            pos="relative"
-            overflow="hidden"
-            w="90%"
-            maxW="600px"
-            bg="white"
-            borderRadius="md"
-          >
-            <Box pos="relative" pt="56.25%">
-              {selectedReachPlayer === 1 ? (
-                <video
-                  src="/atmic.mp4"
-                  autoPlay
-                  muted
-                  playsInline
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    width: "100%",
-                    height: "100%",
-                    border: "none",
-                  }}
-                />
-              ) : (
-                <video
-                  src="/reach.mp4"
-                  autoPlay
-                  muted
-                  playsInline
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    width: "100%",
-                    height: "100%",
-                    border: "none",
-                  }}
-                />
-              )}
-            </Box>
-          </Box>
-        </Flex>
-      )}
+      {isPopupOpen && <ReachVideo selectedReachPlayer={selectedReachPlayer} />}
     </>
   );
 };
