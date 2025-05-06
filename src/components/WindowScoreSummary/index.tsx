@@ -49,8 +49,9 @@ export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
               w="300px"
               h="50px"
               p="4"
-              color={COLOR.BLACK}
-              bg="white"
+              color={item.label === "東家" ? COLOR.WHITE : COLOR.BLACK}
+              fontWeight={"bold"}
+              bg={item.label === "東家" ? COLOR.RED : COLOR.WHITE}
               onClick={selectedWinner}
               value={item.key}
             >

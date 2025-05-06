@@ -344,10 +344,11 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
           >
             <Box pos="relative" pt="56.25%">
               {selectedReachPlayer === 1 ? (
-                <iframe
+                <video
                   src="/atmic.mp4"
-                  title="動画タイトル"
-                  allowFullScreen
+                  autoPlay
+                  muted
+                  playsInline
                   style={{
                     position: "absolute",
                     top: 0,
@@ -358,10 +359,11 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
                   }}
                 />
               ) : (
-                <iframe
+                <video
                   src="/reach.mp4"
-                  title="動画タイトル"
-                  allowFullScreen
+                  autoPlay
+                  muted
+                  playsInline
                   style={{
                     position: "absolute",
                     top: 0,

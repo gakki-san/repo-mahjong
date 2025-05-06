@@ -13,7 +13,5 @@ export const playReachAudio = (player: Player, setIsPopupClose: () => void) => {
 
   audio.addEventListener("ended", () => {
     setIsPopupClose();
-    console.log("動いている");
   });
-  console.log("ここにはきてる");
 };
