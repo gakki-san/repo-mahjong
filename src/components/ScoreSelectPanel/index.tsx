@@ -6,14 +6,16 @@ import { ScoreMap } from "@/hooks/useScore";
 
 type ScoreSelectPanelProps = {
   close: () => void;
-  score: ScoreMap | null;
+  score: ScoreMap;
   setScore: (value: ScoreMap) => void;
+  openScoreSummary: () => void;
 };
 
 export const ScoreSelectPanel: FC<ScoreSelectPanelProps> = ({
   close,
   score,
   setScore,
+  openScoreSummary,
 }) => {
   const handleSetScore = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectScore = Number(event.currentTarget.value);
@@ -31,10 +33,11 @@ export const ScoreSelectPanel: FC<ScoreSelectPanelProps> = ({
     alert("点数を選択してください");
   };
   const completeButton = () => {
-    if (score === null) {
+    if (score[0] === 0) {
       alertScoreNotSelected();
     } else {
       close();
+      openScoreSummary();
     }
   };
 
@@ -47,7 +50,7 @@ export const ScoreSelectPanel: FC<ScoreSelectPanelProps> = ({
           fontWeight="bold"
           textAlign={"center"}
         >
-          点数を入力してください
+          点数を選択してください
         </Text>
       </Box>
       <Flex justify="center" mt={"20px"}>

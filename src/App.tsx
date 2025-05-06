@@ -5,6 +5,7 @@ import { useScore } from "./hooks/useScore";
 
 function App() {
   const [boolean, { on: close }] = useIsBoolean();
+  const [isOpenScoreSummary, { on: open }] = useIsBoolean();
   const [score, action] = useScore();
 
   const players = score ? Object.keys(score) : [];
@@ -13,9 +14,14 @@ function App() {
     <>
       {/* ScoreSelectPanelは初期表示させるのでfalse時に表示。 */}
       {boolean || (
-        <ScoreSelectPanel close={close} score={score} setScore={action.set} />
+        <ScoreSelectPanel
+          close={close}
+          score={score}
+          setScore={action.set}
+          openScoreSummary={open}
+        />
       )}
-      {score && (
+      {isOpenScoreSummary && (
         <ScoreSummary score={score} setScore={action} players={players} />
       )}
     </>
