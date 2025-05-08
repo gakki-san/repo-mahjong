@@ -10,9 +10,7 @@ type WindowScoreSummaryProps = {
   handleReach: (event: React.MouseEvent<HTMLButtonElement>) => void;
   handleMoveDirection: () => void;
   currentDirectionArray: CurrentDirection[];
-  palyerName: {
-    name: string;
-  }[];
+  palyerName: string[];
 };
 
 export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
@@ -62,7 +60,7 @@ export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
                 textAlign="center"
                 bg={item === parent ? COLOR.RED : COLOR.WHITE}
               >
-                <Box fontWeight={"bold"}>{player.name}</Box>
+                <Box fontWeight={"bold"}>{player}</Box>
                 <Box textStyle={"5xl"}>{score[index]}</Box>
               </Box>
               <Flex direction={"column"}>

@@ -42,7 +42,7 @@ export const ScoreSelectPanel: FC<ScoreSelectPanelProps> = ({
   };
 
   return (
-    <Box w={"100vw"} h={"100vh"} bgColor={"#a4ffd0"}>
+    <Box w={"100vw"} h={"100vh"} bgColor={COLOR.GREEN_PRIMARY}>
       <Box>
         <Text
           textStyle="3xl"

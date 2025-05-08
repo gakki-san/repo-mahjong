@@ -26,6 +26,7 @@ type ScoreSummaryProps = {
   score: ScoreMap;
   setScore: UseScoreActionMap;
   players: string[];
+  playersName: string[];
 };
 
 export type IsShowType = {
@@ -37,6 +38,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   score,
   setScore,
   players,
+  playersName,
 }) => {
   // useBoolean。それぞれのモーダルの開閉を制御
   const [isShowInputScore, setIsShowInputScore] = useIsBoolean();
@@ -187,13 +189,6 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   const isRon = isOpen && winnerInfo.winType === "ron";
   const isParent = selectedWinner === 0;
 
-  const palyerName = [
-    { name: "てつ" },
-    { name: "いだしん" },
-    { name: "みくる" },
-    { name: "山田どっぴゅ" },
-  ];
-
   return (
     <>
       <WindowScoreSummary
@@ -202,7 +197,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
         handleReach={handleReach}
         handleMoveDirection={handleMoveDirection}
         currentDirectionArray={arrayDirection}
-        palyerName={palyerName}
+        palyerName={playersName}
       />
       {isClickedWinner && (
         <InputWinType
