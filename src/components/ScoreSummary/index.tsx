@@ -1,4 +1,4 @@
-import { ComponentProps, FC, useState } from "react";
+import { ComponentProps, FC } from "react";
 import { Player, ScoreMap, UseScoreActionMap } from "@/hooks/useScore";
 import { useWinnerInfo } from "@/hooks/useWinnerinfo";
 import { WindowScoreSummary } from "../WindowScoreSummary";
@@ -48,13 +48,12 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
 
   // 現在の上側にいるdirection(number)を示す。setでrotateする。
   const [currentDirection, setCurrentDirection] = useCurrentDirection();
+  const [selectedReachPlayer, setSelectedReachPlayer] = useCurrentDirection();
+  const [selectedWinner, setSelectedWinner] = useCurrentDirection();
   const [winnerInfo, setWinnerInfo] = useWinnerInfo();
   const [childrenPoint, setChildrenPoint] = usePlayerPoint();
   const [parentPoint, setParentPoint] = usePlayerPoint();
   const [reachFlags, setReachFlags] = useReachFlags();
-
-  const [selectedReachPlayer, setSelectedReachPlayer] = useState(0);
-  const [selectedWinner, setSelectedWinner] = useState(0);
 
   // todo: player名を入力させるならここと統合させて画面に描画あり？その場合は、親だけ別で表示させるようにする
   const gameMaster = [
@@ -102,7 +101,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
     ) as Player;
 
     setIsClickedWinner.on();
-    setSelectedWinner(tappedWinner);
+    setSelectedWinner.set(tappedWinner);
     setWinnerInfo({ winner: winnerIndexForScore });
   };
 
@@ -134,7 +133,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
 
   const handleReach = (event: React.MouseEvent<HTMLButtonElement>) => {
     const eventReachPlayer = Number(event.currentTarget.value) as Player;
-    setSelectedReachPlayer(eventReachPlayer);
+    setSelectedReachPlayer.set(eventReachPlayer);
 
     if (reachFlags[eventReachPlayer]) {
       const audio = new Audio("/dio.mp3");
@@ -197,7 +196,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   };
 
   const handleMoveDirection = () => {
-    setCurrentDirection();
+    setCurrentDirection.rotate();
   };
 
   const isTsumo = isOpen && winnerInfo.winType === "tsumo";
