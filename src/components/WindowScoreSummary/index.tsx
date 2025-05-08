@@ -2,14 +2,17 @@ import { FC } from "react";
 import { Box, Button, Flex, Grid, VStack } from "@chakra-ui/react";
 import { COLOR } from "@/const/color";
 import { ScoreMap } from "@/hooks/useScore";
-import { GameMaster } from "../ScoreSummary";
+import { CurrentDirection } from "@/hooks/useCurrentDirection";
 
 type WindowScoreSummaryProps = {
   selectedWinner: React.MouseEventHandler<HTMLButtonElement>;
   score: ScoreMap;
   handleReach: (event: React.MouseEvent<HTMLButtonElement>) => void;
   handleMoveDirection: () => void;
-  gameMasterOrder: GameMaster[];
+  currentDirectionArray: CurrentDirection[];
+  palyerName: {
+    name: string;
+  }[];
 };
 
 export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
@@ -17,7 +20,8 @@ export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
   score,
   handleReach,
   handleMoveDirection,
-  gameMasterOrder,
+  currentDirectionArray,
+  palyerName,
 }) => {
   const uiPositions = [
     { gridColumn: 2, gridRow: 1, transform: "rotate(180deg)" },
@@ -26,12 +30,7 @@ export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
     { gridColumn: 1, gridRow: 2, transform: "rotate(90deg)" },
   ];
 
-  const palyerName = [
-    { name: "east", value: "みくる" },
-    { name: "north", value: "てつ" },
-    { name: "west", value: "いだしん" },
-    { name: "south", value: "山田どっぴゅ" },
-  ];
+  const parent = 0;
 
   return (
     <Grid
@@ -43,38 +42,27 @@ export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
       h="100vh"
       bg={COLOR.GREEN_PRIMARY}
     >
-      {gameMasterOrder.map((item, index) => {
+      {currentDirectionArray.map((item, index) => {
         const directionPosition = uiPositions[index];
         const player = palyerName[index];
+
         return (
           <VStack
-            key={item.key}
+            key={item}
             gridColumn={directionPosition.gridColumn}
             gridRow={directionPosition.gridRow}
             transform={directionPosition.transform}
           >
-            {/* <Button
-              w="15px"
-              h="15px"
-              p="4"
-              color={item.label === "東家" ? COLOR.WHITE : COLOR.BLACK}
-              fontWeight={"bold"}
-              bg={item.label === "東家" ? COLOR.RED : COLOR.WHITE}
-              borderRadius={"50%"}
-              value={item.key}
-            >
-              親
-            </Button> */}
             <Flex gap="20px">
               <Box
                 w="200px"
                 h="auto"
                 p="2"
-                color={item.label === "東家" ? COLOR.WHITE : COLOR.BLACK}
+                color={item === parent ? COLOR.WHITE : COLOR.BLACK}
                 textAlign="center"
-                bg={item.label === "東家" ? COLOR.RED : COLOR.WHITE}
+                bg={item === parent ? COLOR.RED : COLOR.WHITE}
               >
-                <Box fontWeight={"bold"}>{player.value}</Box>
+                <Box fontWeight={"bold"}>{player.name}</Box>
                 <Box textStyle={"5xl"}>{score[index]}</Box>
               </Box>
               <Flex direction={"column"}>
@@ -87,7 +75,7 @@ export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
                   bg={COLOR.WHITE}
                   borderRadius="50%"
                   onClick={selectedWinner}
-                  value={item.key}
+                  value={item}
                 >
                   和了
                 </Button>

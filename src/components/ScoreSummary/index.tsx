@@ -14,7 +14,10 @@ import { childrenTsumo } from "@/logic/childrenTsumo";
 import { useReachFlags } from "@/hooks/useReachFlags";
 import { usePlayerPoint } from "@/hooks/usePlayerPoint";
 import { playReachAudio } from "@/logic/attemptReach";
-import { useCurrentDirection } from "@/hooks/useCurrentDirection";
+import {
+  CurrentDirection,
+  useCurrentDirection,
+} from "@/hooks/useCurrentDirection";
 import { InputPointChildrenTsumo } from "@/components/InputPointChildrenTsumo";
 import { AlreadyReachModal } from "../AlreadyReachModal";
 import { ReachVideo } from "../ReachVideo";
@@ -23,10 +26,6 @@ type ScoreSummaryProps = {
   score: ScoreMap;
   setScore: UseScoreActionMap;
   players: string[];
-};
-export type GameMaster = {
-  key: Player;
-  label: string;
 };
 
 export type IsShowType = {
@@ -55,36 +54,21 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   const [parentPoint, setParentPoint] = usePlayerPoint();
   const [reachFlags, setReachFlags] = useReachFlags();
 
-  // todo: player名を入力させるならここと統合させて画面に描画あり？その場合は、親だけ別で表示させるようにする
-  const gameMaster = [
-    { key: 0, label: "東家" },
-    { key: 1, label: "北家" },
-    { key: 2, label: "西家" },
-    { key: 3, label: "南家" },
-  ] as GameMaster[];
-
-  // rotateされたkeyとlabelを定義
-  // todo: genarateArrayDirectionと統合できないかな
-  const rotatedGameMaster = [
-    ...gameMaster.slice(currentDirection),
-    ...gameMaster.slice(0, currentDirection),
-  ];
-
   // direction(number)を受け取り、引数が0番目にくる連番配列を返す
   const genarateArrayDirection = (
     currentDirection: 0 | 1 | 2 | 3,
-  ): number[] => {
+  ): CurrentDirection[] => {
     const base = [0, 1, 2, 3];
     return [
       ...base.slice(currentDirection),
       ...base.slice(0, currentDirection),
-    ];
+    ] as CurrentDirection[];
   };
   const arrayDirection = genarateArrayDirection(currentDirection);
 
   // rotateされたcurrentDirectionとwinnerを受け取り、今回の勝者を示すnumberを返す
   const getWinnerIndexInRotateDirection = (
-    rotateDirection: number[],
+    rotateDirection: CurrentDirection[],
     winner: Player,
   ) => {
     return rotateDirection.indexOf(winner);
@@ -118,7 +102,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
     setIsShowReachModal.off();
   };
 
-  const calculateReachScore = (type: string, player: number) => {
+  const calculateReachScore = (type: string, player: CurrentDirection) => {
     if (score === null) return;
     const reachPoint = 1000;
     const newScore = [...score] as ScoreMap;
@@ -203,6 +187,13 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   const isRon = isOpen && winnerInfo.winType === "ron";
   const isParent = selectedWinner === 0;
 
+  const palyerName = [
+    { name: "てつ" },
+    { name: "いだしん" },
+    { name: "みくる" },
+    { name: "山田どっぴゅ" },
+  ];
+
   return (
     <>
       <WindowScoreSummary
@@ -210,7 +201,8 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
         score={score}
         handleReach={handleReach}
         handleMoveDirection={handleMoveDirection}
-        gameMasterOrder={rotatedGameMaster}
+        currentDirectionArray={arrayDirection}
+        palyerName={palyerName}
       />
       {isClickedWinner && (
         <InputWinType
