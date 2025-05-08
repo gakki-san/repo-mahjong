@@ -26,6 +26,13 @@ export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
     { gridColumn: 1, gridRow: 2, transform: "rotate(90deg)" },
   ];
 
+  const palyerName = [
+    { name: "east", value: "みくる" },
+    { name: "north", value: "てつ" },
+    { name: "west", value: "いだしん" },
+    { name: "south", value: "山田どっぴゅ" },
+  ];
+
   return (
     <Grid
       justifyContent="center"
@@ -38,6 +45,7 @@ export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
     >
       {gameMasterOrder.map((item, index) => {
         const directionPosition = uiPositions[index];
+        const player = palyerName[index];
         return (
           <VStack
             key={item.key}
@@ -45,41 +53,57 @@ export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
             gridRow={directionPosition.gridRow}
             transform={directionPosition.transform}
           >
-            <Button
-              w="300px"
-              h="50px"
+            {/* <Button
+              w="15px"
+              h="15px"
               p="4"
               color={item.label === "東家" ? COLOR.WHITE : COLOR.BLACK}
               fontWeight={"bold"}
               bg={item.label === "東家" ? COLOR.RED : COLOR.WHITE}
-              onClick={selectedWinner}
+              borderRadius={"50%"}
               value={item.key}
             >
-              {item.label}
-            </Button>
+              親
+            </Button> */}
             <Flex gap="20px">
               <Box
                 w="200px"
-                h="50px"
+                h="auto"
                 p="2"
-                color="white"
+                color={item.label === "東家" ? COLOR.WHITE : COLOR.BLACK}
                 textAlign="center"
-                bg={COLOR.BLACK}
+                bg={item.label === "東家" ? COLOR.RED : COLOR.WHITE}
               >
-                {score[index]}
+                <Box fontWeight={"bold"}>{player.value}</Box>
+                <Box textStyle={"5xl"}>{score[index]}</Box>
               </Box>
-              <Button
-                w="40px"
-                h="40px"
-                m="auto"
-                fontWeight="bold"
-                bg={COLOR.RED}
-                borderRadius="50%"
-                onClick={handleReach}
-                value={index}
-              >
-                立直
-              </Button>
+              <Flex direction={"column"}>
+                <Button
+                  w="40px"
+                  h="40px"
+                  m="auto"
+                  color={COLOR.BLACK}
+                  fontWeight="bold"
+                  bg={COLOR.WHITE}
+                  borderRadius="50%"
+                  onClick={selectedWinner}
+                  value={item.key}
+                >
+                  和了
+                </Button>
+                <Button
+                  w="40px"
+                  h="40px"
+                  m="auto"
+                  fontWeight="bold"
+                  bg={COLOR.RED}
+                  borderRadius="50%"
+                  onClick={handleReach}
+                  value={index}
+                >
+                  立直
+                </Button>
+              </Flex>
             </Flex>
           </VStack>
         );
