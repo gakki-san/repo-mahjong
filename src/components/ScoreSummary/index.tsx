@@ -47,7 +47,6 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   const [isShowReachModal, setIsShowReachModal] = useIsBoolean();
   const [isClickedWinner, setIsClickedWinner] = useIsBoolean();
 
-  // 現在の上側にいるdirection(number)を示す。setでrotateする。
   const [currentDirection, setCurrentDirection] = useCurrentDirection();
   const [selectedReachPlayer, setSelectedReachPlayer] = useCurrentDirection();
   const [selectedWinner, setSelectedWinner] = useCurrentDirection();
