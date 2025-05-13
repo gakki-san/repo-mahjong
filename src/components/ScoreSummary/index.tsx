@@ -1,4 +1,4 @@
-import { ComponentProps, FC } from "react";
+import { FC } from "react";
 import { Player, ScoreMap, UseScoreActionMap } from "@/hooks/useScore";
 import { useWinnerInfo } from "@/hooks/useWinnerinfo";
 import { WindowScoreSummary } from "../WindowScoreSummary";
@@ -9,7 +9,6 @@ import { InputWinPoint } from "../InputWinPoint";
 import { closeAllModal } from "@/logic/closeAllModal";
 import { handleApplyScore } from "@/logic/handleApplyScore";
 import { handleWinPointChange } from "@/logic/handleWinPointChange";
-import { NumberInput } from "@chakra-ui/react";
 import { childrenTsumo } from "@/logic/childrenTsumo";
 import { useReachFlags } from "@/hooks/useReachFlags";
 import { usePlayerPoint } from "@/hooks/usePlayerPoint";
@@ -21,6 +20,7 @@ import { ReachVideo } from "../ReachVideo";
 import { genarateArrayDirection } from "@/logic/genarateArrayDirection";
 import { getWinnerIndexInRotateDirection } from "@/logic/getWinnerIndexInRotateDirection";
 import { calculateReachScore } from "@/logic/calculateReachScore";
+import { makeOnPointChange } from "@/logic/makeOnPointChange";
 
 type ScoreSummaryProps = {
   score: ScoreMap;
@@ -103,14 +103,6 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
       setScore.set(calculateReachScore(selectedReachPlayer, reachFlags, score));
     }
   };
-
-  const makeOnPointChange =
-    (
-      setter: (value: number) => void,
-    ): ComponentProps<typeof NumberInput.Root>["onValueChange"] =>
-    (details) => {
-      setter(details.valueAsNumber);
-    };
 
   const handleSetScore = () => {
     setScore.set(
