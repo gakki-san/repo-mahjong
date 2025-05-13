@@ -11,6 +11,7 @@ type WindowScoreSummaryProps = {
   handleMoveDirection: () => void;
   currentDirectionArray: CurrentDirection[];
   palyerName: string[];
+  countHonba: number;
 };
 
 export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
@@ -20,6 +21,7 @@ export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
   handleMoveDirection,
   currentDirectionArray,
   palyerName,
+  countHonba,
 }) => {
   const uiPositions = [
     { gridColumn: 2, gridRow: 1, transform: "rotate(180deg)" },
@@ -27,6 +29,8 @@ export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
     { gridColumn: 2, gridRow: 3 },
     { gridColumn: 1, gridRow: 2, transform: "rotate(90deg)" },
   ];
+
+  console.log(countHonba);
 
   const parent = 0;
 
@@ -81,6 +85,7 @@ export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
                   w="40px"
                   h="40px"
                   m="auto"
+                  color={COLOR.WHITE}
                   fontWeight="bold"
                   bg={COLOR.RED}
                   borderRadius="50%"
@@ -94,15 +99,32 @@ export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
           </VStack>
         );
       })}
-      <Button
+      <Flex
         pos={"absolute"}
         top={"50%"}
         left={"50%"}
+        align={"center"}
+        gap={"10px"}
         transform="translate(-50%, -50%)"
-        onClick={handleMoveDirection}
       >
-        親流し
-      </Button>
+        <Button
+          color={COLOR.WHITE}
+          fontWeight={"bold"}
+          bg={COLOR.RED}
+          onClick={handleMoveDirection}
+        >
+          流局
+        </Button>
+        <Box
+          p={"10px"}
+          color={COLOR.WHITE}
+          fontWeight={"bold"}
+          bg={COLOR.BLACK}
+          borderRadius={"5px"}
+        >
+          {countHonba}本場
+        </Box>
+      </Flex>
     </Grid>
   );
 };
