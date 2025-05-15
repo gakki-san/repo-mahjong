@@ -107,6 +107,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
         setIsPopupOpen.off,
         setReachFlags.update,
       );
+
       setScore.set(calculateReachScore(eventReachPlayer, reachFlags, score));
     }
   };
@@ -176,8 +177,11 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
 
   const calculatePenalty = () => {
     const penaltyPoint = 1000;
+
     const peneltySecondPoint = 1500;
+
     const currentScore = [...score];
+
     const tenpaiCount = Object.values(isTENPAI).filter(Boolean).length;
 
     if (tenpaiCount === 0 || tenpaiCount === 4) {
@@ -206,6 +210,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
       setCurrentDirection.rotate();
     }
     hideTENPAIModal();
+    setReachFlags.reset();
   };
 
   const isTsumo = isOpen && winnerInfo.winType === "tsumo";

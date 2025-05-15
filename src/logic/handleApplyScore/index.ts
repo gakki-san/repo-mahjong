@@ -19,10 +19,6 @@ export const handleApplyScore = (
   const loser = currentDirectionArrray.indexOf(
     winnerInfo.loser as Player,
   ) as Player;
-  console.log("currentDirectionArrray", currentDirectionArrray);
-  console.log("winnerInfo.loser", winnerInfo);
-
-  console.log("handleLoser", loser);
 
   if (winnerInfo.winType === "tsumo") {
     const newScore = handleTsumo(
