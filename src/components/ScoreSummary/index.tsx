@@ -62,6 +62,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   const [isTENPAI, setIsTENPAI] = useReachFlags();
   const [countHonba, { add: addHONBA, reset: resetHONBA }] = useCount();
 
+  console.log("countHonba", countHonba);
   const arrayDirection = genarateArrayDirection(currentDirection);
 
   const handleSelectedWinner: React.MouseEventHandler<HTMLButtonElement> = (
@@ -121,6 +122,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
         score,
         currentDirection,
         reachFlags,
+        countHonba,
       ) as ScoreMap,
     );
 
@@ -152,6 +154,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
       score,
       reachFlags,
       arrayDirection,
+      countHonba,
     );
     closeAllModal(
       setWinnerInfo,
