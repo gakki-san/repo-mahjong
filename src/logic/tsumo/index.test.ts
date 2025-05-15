@@ -22,6 +22,7 @@ describe("handleTsumo", () => {
       initialScore,
       reachFlags,
       /* countHonba */ 0,
+      0,
     );
     // 親が1000点を3人から得る → +3000
     // 他は1000点ずつ失う → -1000
@@ -46,6 +47,7 @@ describe("handleTsumo", () => {
       initialScore,
       reachFlags,
       honba,
+      0,
     );
     if (!result) return;
     const reachBonus = Object.values(reachFlags).filter(Boolean).length * 1000; // 立直ボーナス
@@ -61,13 +63,13 @@ describe("handleTsumo", () => {
     const initialScore: ScoreMap = [10000, 12000, 15000, 8000];
     // 全員立直
     const allReach: ReachFlagsProps = { 0: true, 1: true, 2: true, 3: true };
-    expect(handleTsumo(2, 500, players, initialScore, allReach, 2)).toEqual([
+    expect(handleTsumo(2, 500, players, initialScore, allReach, 2, 0)).toEqual([
       9300, 11300, 21100, 7300,
     ]);
 
     // 誰も立直なし
     const noReach: ReachFlagsProps = { 0: false, 1: false, 2: false, 3: false };
-    expect(handleTsumo(1, 500, players, initialScore, noReach, 3)).toEqual([
+    expect(handleTsumo(1, 500, players, initialScore, noReach, 3, 0)).toEqual([
       9200, 14400, 14200, 7200,
     ]);
   });

@@ -60,9 +60,9 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   const [parentPoint, setParentPoint] = usePlayerPoint();
   const [reachFlags, setReachFlags] = useReachFlags();
   const [isTENPAI, setIsTENPAI] = useReachFlags();
-  const [countHonba, { add: addHONBA, reset: resetHONBA }] = useCount();
+  const [countHonba, { increment: addHONBA, reset: resetHONBA }] = useCount();
+  const [countKyotaku, { add: addKyotaku, reset: resetKyotaku }] = useCount();
 
-  console.log("countHonba", countHonba);
   const arrayDirection = genarateArrayDirection(currentDirection);
 
   const handleSelectedWinner: React.MouseEventHandler<HTMLButtonElement> = (
@@ -123,6 +123,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
         currentDirection,
         reachFlags,
         countHonba,
+        countKyotaku,
       ) as ScoreMap,
     );
 
@@ -133,6 +134,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
       setReachFlags.replace,
     );
     resetHONBA();
+    resetKyotaku();
     setCurrentDirection.rotate();
   };
 
@@ -155,6 +157,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
       reachFlags,
       arrayDirection,
       countHonba,
+      countKyotaku,
     );
     closeAllModal(
       setWinnerInfo,
@@ -163,6 +166,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
       setReachFlags.replace,
     );
     handleHONBA(selectedWinner);
+    resetKyotaku();
   };
 
   const toggleTenpai = (player: Player) => {
@@ -206,6 +210,13 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
     return currentScore as ScoreMap;
   };
 
+  const currentCountKyotaku = () => {
+    const countReachPlayer = Object.values(reachFlags).filter(
+      (player) => player === true,
+    ).length;
+    return countReachPlayer;
+  };
+
   const handleCloseTENPAIModal = () => {
     const newScore = calculatePenalty();
     setScore.set(newScore);
@@ -214,6 +225,9 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
     }
     hideTENPAIModal();
     setReachFlags.reset();
+    addKyotaku(currentCountKyotaku());
+    console.log("関数", currentCountKyotaku());
+    console.log("countKyotaku", countKyotaku);
   };
 
   const isTsumo = isOpen && winnerInfo.winType === "tsumo";

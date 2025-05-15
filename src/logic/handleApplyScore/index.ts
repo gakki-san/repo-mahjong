@@ -12,6 +12,7 @@ export const handleApplyScore = (
   reachFlags: ReachFlagsProps,
   currentDirectionArrray: number[],
   countHonba: number,
+  countKyotaku: number,
 ) => {
   if (winnerInfo.winPoints === null) return;
   const winner = winnerInfo.winner as Player;
@@ -29,6 +30,7 @@ export const handleApplyScore = (
       score,
       reachFlags,
       countHonba,
+      countKyotaku,
     ) as ScoreMap;
     setScore(newScore);
   } else {
@@ -39,6 +41,7 @@ export const handleApplyScore = (
       score,
       reachFlags,
       countHonba,
+      countKyotaku,
     ) as ScoreMap;
     setScore(newScore);
   }
