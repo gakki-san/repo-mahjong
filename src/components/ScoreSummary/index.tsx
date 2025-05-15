@@ -107,7 +107,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
         setIsPopupOpen.off,
         setReachFlags.update,
       );
-      setScore.set(calculateReachScore(selectedReachPlayer, reachFlags, score));
+      setScore.set(calculateReachScore(eventReachPlayer, reachFlags, score));
     }
   };
 
@@ -168,11 +168,8 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   const isTempaiAndWinner = arrayDirection.findIndex(
     (item) => item === 0,
   ) as Player;
-  console.log("arrayDirection", arrayDirection);
 
   const handleMoveDirection = () => {
-    // setCurrentDirection.rotate();
-    console.log("isTENPAI", isTENPAI);
     showTENPAIModal();
     addHONBA(countHonba);
   };
@@ -181,10 +178,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
     const penaltyPoint = 1000;
     const peneltySecondPoint = 1500;
     const currentScore = [...score];
-    const array = Object.values(isTENPAI);
     const tenpaiCount = Object.values(isTENPAI).filter(Boolean).length;
-    console.log("currentScore", currentScore);
-    console.log("array", array);
 
     if (tenpaiCount === 0 || tenpaiCount === 4) {
       return currentScore as ScoreMap;

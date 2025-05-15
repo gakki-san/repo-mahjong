@@ -30,8 +30,6 @@ export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
     { gridColumn: 1, gridRow: 2, transform: "rotate(90deg)" },
   ];
 
-  console.log(countHonba);
-
   const parent = 0;
 
   return (

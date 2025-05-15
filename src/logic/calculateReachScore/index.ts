@@ -9,6 +9,7 @@ export const calculateReachScore = (
   const reachPoint = 1000;
   const isReach = reachFlags[player];
   const delta = isReach ? reachPoint : -reachPoint;
+
   return {
     ...score,
     [player]: score[player] + delta,
