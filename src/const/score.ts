@@ -4,4 +4,7 @@ export const SCORE = {
   THREE_RULR: 3,
   HONBA_100: 100,
   HONBA_300: 300,
+  SINGLE: 1000,
+  DOUBLE: 1500,
+  TRIPLE: 3000,
 };

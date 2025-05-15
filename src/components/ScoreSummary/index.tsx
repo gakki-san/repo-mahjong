@@ -23,6 +23,7 @@ import { calculateReachScore } from "@/logic/calculateReachScore";
 import { makeOnPointChange } from "@/logic/makeOnPointChange";
 import { useCount } from "@/hooks/useCount";
 import { SelectTempaiModal } from "../SelectTempaiModal";
+import { SCORE } from "@/const/score";
 
 type ScoreSummaryProps = {
   score: ScoreMap;
@@ -172,41 +173,35 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
     setTEMPAI((prev) => ({ ...prev, [player]: !prev[player] }));
   };
 
-  const isTempaiAndWinner = arrayDirection.findIndex(
-    (item) => item === 0,
-  ) as Player;
-
   const handleMoveDirection = () => {
     showTENPAIModal();
     addHONBA(countHonba);
   };
 
-  const calculatePenalty = () => {
-    const penaltyPoint = 1000;
+  const calculatePenalty = (score: ScoreMap, tempaiCount: number) => {
+    const PENALTY_ADJUSTMENTS: Record<1 | 2 | 3, [number, number]> = {
+      1: [SCORE.TRIPLE, -SCORE.SINGLE],
+      2: [SCORE.DOUBLE, -SCORE.DOUBLE],
+      3: [SCORE.SINGLE, -SCORE.TRIPLE],
+    };
+    if (tempaiCount === 0 || tempaiCount === 4) return [...score] as ScoreMap;
 
-    const peneltySecondPoint = 1500;
+    const [gain, loss] = PENALTY_ADJUSTMENTS[tempaiCount as 1 | 2 | 3];
 
-    const currentScore = [...score];
+    return score.map(
+      (point, index) => point + (isTENPAI[index as Player] ? gain : loss),
+    ) as ScoreMap;
+  };
+
+  const calculatedPenaltyScore = () => {
+    const currentScore = [...score] as ScoreMap;
 
     const tenpaiCount = Object.values(isTENPAI).filter(Boolean).length;
 
     if (tenpaiCount === 0 || tenpaiCount === 4) {
       return currentScore as ScoreMap;
     }
-    currentScore.forEach((_, index) => {
-      const isTenpai = isTENPAI[index as Player];
-      if (tenpaiCount === 1) {
-        currentScore[index] += isTenpai ? penaltyPoint * 3 : -penaltyPoint;
-      } else if (tenpaiCount === 2) {
-        currentScore[index] += isTenpai
-          ? peneltySecondPoint
-          : -peneltySecondPoint;
-      } else if (tenpaiCount === 3) {
-        currentScore[index] += isTenpai ? penaltyPoint : -penaltyPoint * 3;
-      }
-    });
-
-    return currentScore as ScoreMap;
+    return calculatePenalty(currentScore, tenpaiCount);
   };
 
   const currentCountKyotaku = () => {
@@ -215,12 +210,14 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
     ).length;
     return countReachPlayer;
   };
+  const isParentTEMPAI =
+    isTENPAI[arrayDirection.findIndex((item) => item === 0) as Player];
 
   const handleCloseTENPAIModal = () => {
-    if (!isTENPAI[isTempaiAndWinner]) {
+    if (!isParentTEMPAI) {
       setCurrentDirection.rotate();
     }
-    const newScore = calculatePenalty();
+    const newScore = calculatedPenaltyScore();
     setScore.set(newScore);
     hideTENPAIModal();
     setReachFlags.reset();
