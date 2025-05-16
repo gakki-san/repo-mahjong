@@ -9,7 +9,7 @@ import { InputPlayerName } from "./components/InputPlayerName";
 import { playerList } from "./const/playerList";
 
 function App() {
-  const [boolean, { on: close }] = useIsBoolean();
+  const [isSelectedScorePanel, { on: isOpen, off: close }] = useIsBoolean();
   const [isOpenScoreSummary, { on: open }] = useIsBoolean();
   const [playersName, setPlayersName] = usePlayerName();
   const [score, action] = useScore();
@@ -28,10 +28,12 @@ function App() {
 
   const closeModal = () => {
     closeInputModal();
+    isOpen();
   };
 
   return (
     <>
+      {/* InputPlayerNameは初期表示させるのでfalse時に表示 */}
       {isInputName || (
         <InputPlayerName
           playerList={playerList}
@@ -39,8 +41,7 @@ function App() {
           closeModal={closeModal}
         />
       )}
-      {/* ScoreSelectPanelは初期表示させるのでfalse時に表示。 */}
-      {boolean || (
+      {isSelectedScorePanel && (
         <ScoreSelectPanel
           close={close}
           score={score}

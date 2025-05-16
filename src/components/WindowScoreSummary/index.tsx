@@ -12,6 +12,7 @@ type WindowScoreSummaryProps = {
   currentDirectionArray: CurrentDirection[];
   palyerName: string[];
   countHonba: number;
+  countKyotaku: number;
 };
 
 export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
@@ -22,6 +23,7 @@ export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
   currentDirectionArray,
   palyerName,
   countHonba,
+  countKyotaku,
 }) => {
   const uiPositions = [
     { gridColumn: 2, gridRow: 1, transform: "rotate(180deg)" },
@@ -121,6 +123,15 @@ export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
           borderRadius={"5px"}
         >
           {countHonba}本場
+        </Box>
+        <Box
+          p={"10px"}
+          color={COLOR.WHITE}
+          fontWeight={"bold"}
+          bg={COLOR.BLACK}
+          borderRadius={"5px"}
+        >
+          供託{countKyotaku}本
         </Box>
       </Flex>
     </Grid>
