@@ -1,5 +1,10 @@
-import { FC } from "react";
-import { Player, ScoreMap, UseScoreActionMap } from "@/hooks/useScore";
+import { FC, useRef } from "react";
+import {
+  Player,
+  ScoreMap,
+  useScore,
+  UseScoreActionMap,
+} from "@/hooks/useScore";
 import { useWinnerInfo } from "@/hooks/useWinnerinfo";
 import { WindowScoreSummary } from "../WindowScoreSummary";
 import { InputWinType } from "../InputWinType";
@@ -25,6 +30,7 @@ import { useCount } from "@/hooks/useCount";
 import { SelectTempaiModal } from "../SelectTempaiModal";
 import { calculatePenalty } from "@/logic/calculatePenalty";
 import { countReachPlayers } from "@/logic/countReachPlayers";
+import { handleScoreDiff } from "@/logic/handleScoreDiff";
 
 type ScoreSummaryProps = {
   score: ScoreMap;
@@ -52,8 +58,11 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   const [isClickedWinner, setIsClickedWinner] = useIsBoolean();
   const [isTENPAIModal, { on: showTENPAIModal, off: hideTENPAIModal }] =
     useIsBoolean();
+  const [isAppearanceScoreDiff, { on: onScoreDiff, off: offScoreDiff }] =
+    useIsBoolean();
 
   const [currentDirection, setCurrentDirection] = useCurrentDirection();
+  const [scoreDiff, setScoreDiff] = useScore();
   const [selectedReachPlayer, setSelectedReachPlayer] = useCurrentDirection();
   const [selectedWinner, setSelectedWinner] = useCurrentDirection();
   const [winnerInfo, setWinnerInfo] = useWinnerInfo();
@@ -206,6 +215,25 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   const isRon = isOpen && winnerInfo.winType === "ron";
   const isParent = selectedWinner === 0;
 
+  const timerRef = useRef<number | null>(null);
+  const handlePressStart = (playerIndex: Player) => {
+    return () => {
+      onScoreDiff();
+      setScoreDiff.set(handleScoreDiff(playerIndex, score));
+      if (timerRef.current == null) {
+        timerRef.current = window.setInterval(() => {}, 1000);
+      }
+    };
+  };
+
+  const handlePressEnd = () => {
+    offScoreDiff();
+    if (timerRef.current !== null) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+  };
+
   return (
     <>
       <WindowScoreSummary
@@ -217,6 +245,10 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
         palyerName={playersName}
         countHonba={countHonba}
         countKyotaku={countKyotaku}
+        handlePressStart={handlePressStart}
+        handlePressEnd={handlePressEnd}
+        isAppearanceScoreDiff={isAppearanceScoreDiff}
+        scoreDiff={scoreDiff}
       />
       {isClickedWinner && (
         <InputWinType
