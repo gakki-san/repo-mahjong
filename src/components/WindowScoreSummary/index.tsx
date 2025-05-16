@@ -19,6 +19,8 @@ type WindowScoreSummaryProps = {
   handlePressEnd: () => void;
   isAppearanceScoreDiff: boolean;
   scoreDiff: ScoreMap;
+  dice: number[];
+  rollBoth: () => void;
 };
 
 export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
@@ -34,6 +36,8 @@ export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
   handlePressEnd,
   isAppearanceScoreDiff,
   scoreDiff,
+  dice,
+  rollBoth,
 }) => {
   const uiPositions = [
     { gridColumn: 2, gridRow: 1, transform: "rotate(180deg)" },
@@ -122,8 +126,12 @@ export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
         top={"50%"}
         left={"50%"}
         align={"center"}
+        justify={"center"}
+        wrap={"wrap"}
         gap={"10px"}
+        maxW={"250px"}
         transform="translate(-50%, -50%)"
+        whiteSpace={"pre-wrap"}
       >
         <Button
           color={COLOR.WHITE}
@@ -151,6 +159,14 @@ export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
         >
           供託{countKyotaku}本
         </Box>
+        <Button
+          color={COLOR.WHITE}
+          fontSize={"20px"}
+          bg={COLOR.BLACK}
+          onClick={rollBoth}
+        >
+          🎲 {dice[0]} 🎲 {dice[1]}
+        </Button>
       </Flex>
     </Grid>
   );
