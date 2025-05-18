@@ -282,6 +282,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
           setWinnerInfo={setWinnerInfo}
           ShowInputScore={setIsShowInputScore.on}
           setIsOpen={setIsOpen.off}
+          playerName={playersName}
         />
       )}
       {isShowInputScore && (

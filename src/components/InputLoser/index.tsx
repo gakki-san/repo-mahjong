@@ -9,6 +9,7 @@ type InputLoserProps = {
   setWinnerInfo: (value: Partial<WinInfo>) => void;
   ShowInputScore: () => void;
   setIsOpen: () => void;
+  playerName: string[];
 };
 
 export const InputLoser: FC<InputLoserProps> = ({
@@ -16,28 +17,18 @@ export const InputLoser: FC<InputLoserProps> = ({
   setWinnerInfo,
   ShowInputScore,
   setIsOpen,
+  playerName,
 }) => {
-  const items = [
-    {
-      label: "東家",
-      value: "0",
-    },
-    {
-      label: "北家",
-      value: "1",
-    },
-    {
-      label: "西家",
-      value: "2",
-    },
+  const playersName = playerName.map((name, index) => ({
+    label: name,
+    value: index.toString(),
+  }));
 
-    {
-      label: "南家",
-      value: "3",
-    },
-  ];
+  // const loserCandidate = playersName.filter(
+  //   (_, index) => index !== selectedWinner,
+  // );
 
-  const loserCandidate = items.filter(
+  const loserCandidate = playersName.filter(
     (item) => Number(item.value) !== selectedWinner,
   );
 
@@ -50,6 +41,8 @@ export const InputLoser: FC<InputLoserProps> = ({
     typeof RadioGroup.Root
   >["onValueChange"] = (event) => {
     const loser = Number(event.value) as Player;
+    console.log("loser", loser);
+
     setWinnerInfo({
       loser: loser,
     });
@@ -78,7 +71,12 @@ export const InputLoser: FC<InputLoserProps> = ({
       >
         だれが放銃した？
         <RadioGroup.Root mt={"20px"} onValueChange={selectedLoser}>
-          <HStack flexDir={"column"} gap="6" display={"flex"}>
+          <HStack
+            alignItems={"start"}
+            flexDir={"column"}
+            gap="6"
+            display={"flex"}
+          >
             {loserCandidate.map((item) => (
               <RadioGroup.Item key={item.value} value={item.value}>
                 <RadioGroup.ItemHiddenInput />
