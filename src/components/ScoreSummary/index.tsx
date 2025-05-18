@@ -278,7 +278,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
         ))}
       {isRon && (
         <InputLoser
-          selectedWinner={selectedWinner}
+          selectedWinner={arrayDirection.indexOf(selectedWinner)}
           setWinnerInfo={setWinnerInfo}
           ShowInputScore={setIsShowInputScore.on}
           setIsOpen={setIsOpen.off}

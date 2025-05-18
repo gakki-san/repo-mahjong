@@ -24,10 +24,6 @@ export const InputLoser: FC<InputLoserProps> = ({
     value: index.toString(),
   }));
 
-  // const loserCandidate = playersName.filter(
-  //   (_, index) => index !== selectedWinner,
-  // );
-
   const loserCandidate = playersName.filter(
     (item) => Number(item.value) !== selectedWinner,
   );
