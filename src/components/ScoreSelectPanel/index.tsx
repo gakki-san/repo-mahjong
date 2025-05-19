@@ -3,13 +3,14 @@ import { Box, Text, Flex, NativeSelect, Button } from "@chakra-ui/react";
 import { COLOR } from "@/const/color";
 import { SCORE } from "@/const/score";
 import { ScoreMap } from "@/hooks/useScore";
-import { useCount } from "@/hooks/useCount";
 
 type ScoreSelectPanelProps = {
   close: () => void;
   score: ScoreMap;
   setScore: (value: ScoreMap) => void;
   openScoreSummary: () => void;
+  setReturnPoint: (num: number) => void;
+  setUmaRule: (num: number) => void;
 };
 
 export const ScoreSelectPanel: FC<ScoreSelectPanelProps> = ({
@@ -17,9 +18,11 @@ export const ScoreSelectPanel: FC<ScoreSelectPanelProps> = ({
   score,
   setScore,
   openScoreSummary,
+  setReturnPoint,
+  setUmaRule,
 }) => {
-  const [returnPoint, setReturnPoint] = useCount();
-  const [umaRule, setUmaRule] = useCount();
+  // const [returnPoint, setReturnPoint] = useCount();
+  // const [umaRule, setUmaRule] = useCount();
   const handleSetScore = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectScore = Number(event.currentTarget.value);
     setScoreForAllPlayers(selectScore);
@@ -29,11 +32,11 @@ export const ScoreSelectPanel: FC<ScoreSelectPanelProps> = ({
     event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
     const selectedPoint = Number(event.currentTarget.value);
-    setReturnPoint.add(selectedPoint);
+    setReturnPoint(selectedPoint);
   };
   const handleSetUmaRule = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedRuleNumber = Number(event.currentTarget.value);
-    setUmaRule.add(selectedRuleNumber);
+    setUmaRule(selectedRuleNumber);
   };
 
   const setScoreForAllPlayers = (selectScore: number) => {
@@ -56,8 +59,8 @@ export const ScoreSelectPanel: FC<ScoreSelectPanelProps> = ({
     }
   };
 
-  console.log("返す点数", returnPoint);
-  console.log("uma", umaRule);
+  // console.log("返す点数", returnPoint);
+  // console.log("uma", umaRule);
 
   return (
     <Box w={"100vw"} h={"100vh"} bgColor={COLOR.GREEN_PRIMARY}>
