@@ -59,9 +59,6 @@ export const ScoreSelectPanel: FC<ScoreSelectPanelProps> = ({
     }
   };
 
-  // console.log("返す点数", returnPoint);
-  // console.log("uma", umaRule);
-
   return (
     <Box w={"100vw"} h={"100vh"} bgColor={COLOR.GREEN_PRIMARY}>
       <Box pt={"30px"}>

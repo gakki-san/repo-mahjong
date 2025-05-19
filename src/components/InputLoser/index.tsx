@@ -37,7 +37,6 @@ export const InputLoser: FC<InputLoserProps> = ({
     typeof RadioGroup.Root
   >["onValueChange"] = (event) => {
     const loser = Number(event.value) as Player;
-    console.log("loser", loser);
 
     setWinnerInfo({
       loser: loser,
