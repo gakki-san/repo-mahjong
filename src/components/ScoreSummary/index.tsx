@@ -32,6 +32,8 @@ import { calculatePenalty } from "@/logic/calculatePenalty";
 import { countReachPlayers } from "@/logic/countReachPlayers";
 import { handleScoreDiff } from "@/logic/handleScoreDiff";
 import { useDice } from "@/hooks/useDice";
+import { Box, Flex } from "@chakra-ui/react";
+import { COLOR } from "@/const/color";
 
 type ScoreSummaryProps = {
   score: ScoreMap;
@@ -57,6 +59,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   const [isPopupOpen, setIsPopupOpen] = useIsBoolean();
   const [isShowReachModal, setIsShowReachModal] = useIsBoolean();
   const [isClickedWinner, setIsClickedWinner] = useIsBoolean();
+  const [isFinishGame, { on: finishGame }] = useIsBoolean();
   const [isTENPAIModal, { on: showTENPAIModal, off: hideTENPAIModal }] =
     useIsBoolean();
   const [isAppearanceScoreDiff, { on: onScoreDiff, off: offScoreDiff }] =
@@ -201,6 +204,8 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   const isParentTEMPAI =
     isTENPAI[arrayDirection.findIndex((item) => item === 0) as Player];
 
+  const selectedLosers = arrayDirection.indexOf(selectedWinner);
+
   const handleCloseTENPAIModal = () => {
     if (!isParentTEMPAI) {
       setCurrentDirection.rotate();
@@ -236,6 +241,17 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
     }
   };
 
+  const handleFinishGame = () => {
+    finishGame();
+  };
+
+  const gameData = [
+    { id: "1", name: "Mikuru", score: "+100 " },
+    { id: "2", name: "Takuya", score: "-300" },
+    { id: "3", name: "Haruka", score: "+200" },
+    { id: "4", name: "Kenta", score: 0 },
+  ];
+
   return (
     <>
       <WindowScoreSummary
@@ -253,6 +269,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
         scoreDiff={scoreDiff}
         dice={dice}
         rollBoth={rollBoth}
+        handleFinishGame={handleFinishGame}
       />
       {isClickedWinner && (
         <InputWinType
@@ -278,7 +295,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
         ))}
       {isRon && (
         <InputLoser
-          selectedWinner={arrayDirection.indexOf(selectedWinner)}
+          selectedWinner={selectedLosers}
           setWinnerInfo={setWinnerInfo}
           ShowInputScore={setIsShowInputScore.on}
           setIsOpen={setIsOpen.off}
@@ -305,6 +322,33 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
           toggleTenpai={toggleTenpai}
           handleCloseTENPAIModal={handleCloseTENPAIModal}
         />
+      )}
+      {isFinishGame && (
+        <Box
+          pos={"absolute"}
+          top={0}
+          alignItems={"center"}
+          justifyContent={"center"}
+          flexDir={"column"}
+          display={"flex"}
+          w={"100vw"}
+          h={"100vh"}
+          p={"50px"}
+          bg={COLOR.WHITE}
+        >
+          {gameData.map((item) => (
+            <Flex
+              key={item.id}
+              justify={"left"}
+              gap={"10px"}
+              w={"100px"}
+              mt={"10px"}
+            >
+              <Box>{item.name}</Box>
+              <Box>{item.score}</Box>
+            </Flex>
+          ))}
+        </Box>
       )}
     </>
   );

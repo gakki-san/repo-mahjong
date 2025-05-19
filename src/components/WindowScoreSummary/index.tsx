@@ -21,6 +21,7 @@ type WindowScoreSummaryProps = {
   scoreDiff: ScoreMap;
   dice: number[];
   rollBoth: () => void;
+  handleFinishGame: () => void;
 };
 
 export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
@@ -38,6 +39,7 @@ export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
   scoreDiff,
   dice,
   rollBoth,
+  handleFinishGame,
 }) => {
   const uiPositions = [
     { gridColumn: 2, gridRow: 1, transform: "rotate(180deg)" },
@@ -159,6 +161,14 @@ export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
         >
           供託{countKyotaku}本
         </Box>
+        <Button
+          color={COLOR.WHITE}
+          fontWeight={"bold"}
+          bg={COLOR.RED}
+          onClick={handleFinishGame}
+        >
+          終局
+        </Button>
         <Button
           color={COLOR.WHITE}
           fontSize={"20px"}
