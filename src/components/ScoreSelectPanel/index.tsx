@@ -11,6 +11,7 @@ type ScoreSelectPanelProps = {
   openScoreSummary: () => void;
   setReturnPoint: (num: number) => void;
   setUmaRule: (num: number) => void;
+  returnPoint: number;
 };
 
 export const ScoreSelectPanel: FC<ScoreSelectPanelProps> = ({
@@ -20,9 +21,8 @@ export const ScoreSelectPanel: FC<ScoreSelectPanelProps> = ({
   openScoreSummary,
   setReturnPoint,
   setUmaRule,
+  returnPoint,
 }) => {
-  // const [returnPoint, setReturnPoint] = useCount();
-  // const [umaRule, setUmaRule] = useCount();
   const handleSetScore = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectScore = Number(event.currentTarget.value);
     setScoreForAllPlayers(selectScore);
@@ -34,6 +34,7 @@ export const ScoreSelectPanel: FC<ScoreSelectPanelProps> = ({
     const selectedPoint = Number(event.currentTarget.value);
     setReturnPoint(selectedPoint);
   };
+
   const handleSetUmaRule = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedRuleNumber = Number(event.currentTarget.value);
     setUmaRule(selectedRuleNumber);
@@ -52,6 +53,8 @@ export const ScoreSelectPanel: FC<ScoreSelectPanelProps> = ({
   };
   const completeButton = () => {
     if (score[0] === 0) {
+      alertScoreNotSelected();
+    } else if (returnPoint === 0) {
       alertScoreNotSelected();
     } else {
       close();
