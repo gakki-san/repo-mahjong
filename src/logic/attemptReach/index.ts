@@ -6,7 +6,6 @@ export const playReachAudio = (
   setIsPopupClose: () => void,
   setReachFlags: (updater: (prev: ReachFlagsProps) => ReachFlagsProps) => void,
 ) => {
-  // const audio = new Audio("/audio.mp3");
   const audio =
     player !== 1 ? new Audio("/audio.mp3") : new Audio("/atmic.mp3");
 
