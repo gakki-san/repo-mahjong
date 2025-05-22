@@ -158,8 +158,8 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
     setCurrentDirection.rotate();
   };
 
-  const handleHONBA = (selectedWinner: Player) => {
-    const isParent = selectedWinner === 0;
+  const isParent = selectedWinner === 0;
+  const handleHONBA = (isParent: boolean) => {
     if (isParent) {
       addHONBA(countHonba);
     } else {
@@ -184,7 +184,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
       setIsShowInputScore.off,
       setReachFlags.replace,
     );
-    handleHONBA(selectedWinner);
+    handleHONBA(isParent);
     resetKyotaku();
   };
 
@@ -224,7 +224,6 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
 
   const isTsumo = isOpen && winnerInfo.winType === "tsumo";
   const isRon = isOpen && winnerInfo.winType === "ron";
-  const isParent = selectedWinner === 0;
 
   const timerRef = useRef<number | null>(null);
   const handlePressStart = (playerIndex: Player) => {
