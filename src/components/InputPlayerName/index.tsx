@@ -1,5 +1,5 @@
 import { ChangeEventHandler, FC } from "react";
-import { Button, Field, Fieldset, Flex, Input } from "@chakra-ui/react";
+import { Box, Button, Field, Fieldset, Flex, Input } from "@chakra-ui/react";
 import { COLOR } from "@/const/color";
 
 type PlayerList = {
@@ -33,15 +33,15 @@ export const InputPlayerName: FC<InputPlayerNameProps> = ({
       <Fieldset.Root size="lg" maxW="md">
         <Fieldset.Content>
           <Field.Root>
-            {playerList.map((player) => (
-              <>
+            {playerList.map((player, index) => (
+              <Box key={index} w={"100%"}>
                 <Field.Label>{player.name}</Field.Label>
                 <Input
                   name={player.name}
                   onChange={handleSetPlayerName}
                   placeholder={player.placeHolder}
                 />
-              </>
+              </Box>
             ))}
           </Field.Root>
         </Fieldset.Content>
