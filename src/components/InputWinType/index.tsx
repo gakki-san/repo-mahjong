@@ -9,7 +9,7 @@ type InputWinTypeProps = {
   setWinnerInfo: (value: Partial<WinInfo>) => void;
   players: string[];
   setIsOpen: () => void;
-  setIsClickedWinner: () => void;
+  setFalseIsClickWinner: () => void;
 };
 
 export const InputWinType: FC<InputWinTypeProps> = ({
@@ -17,7 +17,7 @@ export const InputWinType: FC<InputWinTypeProps> = ({
   setWinnerInfo,
   players,
   setIsOpen,
-  setIsClickedWinner,
+  setFalseIsClickWinner,
 }) => {
   const winTypes = [
     {
@@ -50,7 +50,7 @@ export const InputWinType: FC<InputWinTypeProps> = ({
         loser: loser as Player,
       });
     }
-    setIsClickedWinner();
+    setFalseIsClickWinner();
 
     setIsOpen();
   };

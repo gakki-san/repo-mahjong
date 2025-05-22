@@ -295,7 +295,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
           setWinnerInfo={setWinnerInfo}
           players={players}
           setIsOpen={setIsOpen.on}
-          setIsClickedWinner={setIsClickedWinner.off}
+          setFalseIsClickWinner={setIsClickedWinner.off}
         />
       )}
       {isTsumo &&
