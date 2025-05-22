@@ -34,6 +34,8 @@ function App() {
     isOpen();
   };
 
+  console.log("app", score);
+
   return (
     <>
       {/* InputPlayerNameは初期表示させるのでfalse時に表示 */}
