@@ -24,7 +24,7 @@ export const InputSelectField: FC<InputSelectFieldProps> = ({
   placeholder,
   name,
 }) => {
-  const isOptionItemArray = (arr: number[] | Options[]): arr is Options[] => {
+  const isObjectInOptions = (arr: number[] | Options[]): arr is Options[] => {
     return (
       Array.isArray(arr) &&
       arr.length > 0 &&
@@ -40,7 +40,7 @@ export const InputSelectField: FC<InputSelectFieldProps> = ({
           {...register(name, { required: "必須です" })}
           placeholder={placeholder}
         >
-          {isOptionItemArray(options)
+          {isObjectInOptions(options)
             ? options.map(({ value, label }) => (
                 <option key={value} value={value}>
                   {label}

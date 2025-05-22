@@ -13,7 +13,7 @@ export const calculateFinishScore = (
   };
 
   const [smallUma, bigUma] = rule[umaRule];
-  const okaBonus = returnPoint === 30000 ? 20000 : 0;
+  const okaBonus = Number(returnPoint) === 30000 ? 20000 : 0;
 
   const base = [
     bigUma + okaBonus - returnPoint,
