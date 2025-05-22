@@ -1,7 +1,7 @@
 import { ComponentProps, FC } from "react";
 import { Box, Button, HStack, RadioGroup } from "@chakra-ui/react";
 import { COLOR } from "@/const/color";
-import { Player } from "@/hooks/useScore";
+// import { Player } from "@/hooks/useScore";
 import { WinInfo } from "@/hooks/useWinnerinfo";
 
 type InputWinTypeProps = {
@@ -15,7 +15,7 @@ type InputWinTypeProps = {
 export const InputWinType: FC<InputWinTypeProps> = ({
   winnerInfo,
   setWinnerInfo,
-  players,
+  // players,
   setIsOpen,
   setFalseIsClickWinner,
 }) => {
@@ -30,7 +30,7 @@ export const InputWinType: FC<InputWinTypeProps> = ({
     },
   ];
 
-  const isClickedWinner = winnerInfo.winner;
+  // const isClickedWinner = winnerInfo.winner;
 
   const handleWinTypeChange: ComponentProps<
     typeof RadioGroup.Root
@@ -42,17 +42,16 @@ export const InputWinType: FC<InputWinTypeProps> = ({
   };
 
   const handleDecideWinType = () => {
-    if (winnerInfo.winType === "tsumo") {
-      const loser = Number(
-        players.find((item) => Number(item) !== isClickedWinner),
-      );
-      setWinnerInfo({
-        loser: loser as Player,
-      });
-    }
     setFalseIsClickWinner();
-
     setIsOpen();
+    // if (winnerInfo.winType === "tsumo") {
+    //   const loser = Number(
+    //     players.find((item) => Number(item) !== isClickedWinner),
+    //   );
+    //   setWinnerInfo({
+    //     loser: loser as Player,
+    //   });
+    // }
   };
   return (
     <Box
