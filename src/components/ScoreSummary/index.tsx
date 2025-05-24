@@ -315,7 +315,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
           selectedWinner={selectedWinerPlayer}
           setWinnerInfo={setWinnerInfo}
           ShowInputScore={setIsShowInputScore.on}
-          setIsOpen={setIsOpen.off}
+          closeInputLoserModal={setIsOpen.off}
           playerName={playersName}
         />
       )}

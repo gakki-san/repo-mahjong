@@ -8,7 +8,7 @@ type InputLoserProps = {
   selectedWinner: number;
   setWinnerInfo: (value: Partial<WinInfo>) => void;
   ShowInputScore: () => void;
-  setIsOpen: () => void;
+  closeInputLoserModal: () => void;
   playerName: string[];
 };
 
@@ -16,7 +16,7 @@ export const InputLoser: FC<InputLoserProps> = ({
   selectedWinner,
   setWinnerInfo,
   ShowInputScore,
-  setIsOpen,
+  closeInputLoserModal,
   playerName,
 }) => {
   const playersName = playerName.map((name, index) => ({
@@ -29,7 +29,7 @@ export const InputLoser: FC<InputLoserProps> = ({
   );
 
   const handleComplete = () => {
-    setIsOpen();
+    closeInputLoserModal();
     ShowInputScore();
   };
 
@@ -37,7 +37,6 @@ export const InputLoser: FC<InputLoserProps> = ({
     typeof RadioGroup.Root
   >["onValueChange"] = (event) => {
     const loser = Number(event.value) as Player;
-
     setWinnerInfo({
       loser: loser,
     });
