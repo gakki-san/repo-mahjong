@@ -1,5 +1,5 @@
 import { ComponentProps, FC } from "react";
-import { Box, Button, HStack, RadioGroup } from "@chakra-ui/react";
+import { Box, Button, Flex, HStack, RadioGroup } from "@chakra-ui/react";
 import { COLOR } from "@/const/color";
 // import { Player } from "@/hooks/useScore";
 import { WinInfo } from "@/hooks/useWinnerinfo";
@@ -9,7 +9,7 @@ type InputWinTypeProps = {
   setWinnerInfo: (value: Partial<WinInfo>) => void;
   players: string[];
   setIsOpen: () => void;
-  setFalseIsClickWinner: () => void;
+  setOffIsClickWinner: () => void;
 };
 
 export const InputWinType: FC<InputWinTypeProps> = ({
@@ -17,7 +17,7 @@ export const InputWinType: FC<InputWinTypeProps> = ({
   setWinnerInfo,
   // players,
   setIsOpen,
-  setFalseIsClickWinner,
+  setOffIsClickWinner,
 }) => {
   const winTypes = [
     {
@@ -42,7 +42,7 @@ export const InputWinType: FC<InputWinTypeProps> = ({
   };
 
   const handleDecideWinType = () => {
-    setFalseIsClickWinner();
+    // setOffIsClickWinner();
     setIsOpen();
     // if (winnerInfo.winType === "tsumo") {
     //   const loser = Number(
@@ -52,6 +52,10 @@ export const InputWinType: FC<InputWinTypeProps> = ({
     //     loser: loser as Player,
     //   });
     // }
+  };
+
+  const handleBack = () => {
+    setOffIsClickWinner();
   };
   return (
     <Box
@@ -80,15 +84,27 @@ export const InputWinType: FC<InputWinTypeProps> = ({
           ))}
         </HStack>
       </RadioGroup.Root>
-      <Button
-        textStyle="1xl"
-        mt={"50px"}
-        fontWeight="bold"
-        onClick={handleDecideWinType}
-        paddingInline={"50px"}
-      >
-        決定
-      </Button>
+      <Flex gap={"20px"}>
+        <Button
+          textStyle="1xl"
+          mt={"50px"}
+          fontWeight="bold"
+          onClick={handleDecideWinType}
+          paddingInline={"50px"}
+        >
+          決定
+        </Button>
+        <Button
+          mt={"50px"}
+          color={COLOR.WHITE}
+          fontWeight={"bold"}
+          bg={COLOR.BLACK}
+          onClick={handleBack}
+          paddingInline={"50px"}
+        >
+          戻る
+        </Button>
+      </Flex>
     </Box>
   );
 };

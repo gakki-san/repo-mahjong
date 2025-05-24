@@ -152,6 +152,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
       setIsOpen.off,
       setIsShowInputScore.off,
       setReachFlags.replace,
+      setIsClickedWinner.off,
     );
     resetHONBA();
     resetKyotaku();
@@ -183,6 +184,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
       setIsOpen.off,
       setIsShowInputScore.off,
       setReachFlags.replace,
+      setIsClickedWinner.off,
     );
     handleHONBA(isParent);
     resetKyotaku();
@@ -294,7 +296,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
           setWinnerInfo={setWinnerInfo}
           players={players}
           setIsOpen={setIsOpen.on}
-          setFalseIsClickWinner={setIsClickedWinner.off}
+          setOffIsClickWinner={setIsClickedWinner.off}
         />
       )}
       {isTsumo &&
@@ -302,12 +304,14 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
           <InputWinPoint
             handleComplete={handleComplete}
             handleWinPointChange={handleWinPointChange(setWinnerInfo)}
+            closeInputWinnerPoint={setIsOpen.off}
           />
         ) : (
           <InputPointChildrenTsumo
             handleChildrenPoint={makeOnPointChange(setChildrenPoint)}
             handleParentPoint={makeOnPointChange(setParentPoint)}
             handleSetScore={handleSetScore}
+            closeInputChildrenTsumoModal={setIsOpen.off}
           />
         ))}
       {isRon && (
@@ -323,6 +327,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
         <InputWinPoint
           handleComplete={handleComplete}
           handleWinPointChange={handleWinPointChange(setWinnerInfo)}
+          closeInputWinnerPoint={setIsShowInputScore.off}
         />
       )}
       {isShowReachModal && (

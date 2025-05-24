@@ -1,5 +1,5 @@
 import { ComponentProps, FC } from "react";
-import { Box, Button, NumberInput } from "@chakra-ui/react";
+import { Box, Button, Flex, NumberInput } from "@chakra-ui/react";
 import { COLOR } from "@/const/color";
 
 type InputWinPointProps = {
@@ -7,12 +7,17 @@ type InputWinPointProps = {
   handleWinPointChange: ComponentProps<
     typeof NumberInput.Root
   >["onValueChange"];
+  closeInputWinnerPoint: () => void;
 };
 
 export const InputWinPoint: FC<InputWinPointProps> = ({
   handleComplete,
   handleWinPointChange,
+  closeInputWinnerPoint,
 }) => {
+  const handleBack = () => {
+    closeInputWinnerPoint();
+  };
   return (
     <Box
       pos={"absolute"}
@@ -34,15 +39,27 @@ export const InputWinPoint: FC<InputWinPointProps> = ({
         <NumberInput.Control />
         <NumberInput.Input />
       </NumberInput.Root>
-      <Button
-        textStyle="1xl"
-        mt={"50px"}
-        fontWeight="bold"
-        onClick={handleComplete}
-        paddingInline={"50px"}
-      >
-        決定
-      </Button>
+      <Flex gap={"20px"}>
+        <Button
+          textStyle="1xl"
+          mt={"50px"}
+          fontWeight="bold"
+          onClick={handleComplete}
+          paddingInline={"50px"}
+        >
+          決定
+        </Button>
+        <Button
+          mt={"50px"}
+          color={COLOR.WHITE}
+          fontWeight={"bold"}
+          bg={COLOR.BLACK}
+          onClick={handleBack}
+          paddingInline={"50px"}
+        >
+          戻る
+        </Button>
+      </Flex>
     </Box>
   );
 };
