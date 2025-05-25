@@ -5,21 +5,20 @@ import { COLOR } from "@/const/color";
 import { WinInfo } from "@/hooks/useWinnerinfo";
 import { DecisionButton } from "../DecisionButton";
 import { BackButton } from "../BackButton";
+import { ModalType } from "@/hooks/useModalStack";
 
 type InputWinTypeProps = {
   winnerInfo: WinInfo;
   setWinnerInfo: (value: Partial<WinInfo>) => void;
-  players: string[];
-  setIsOpen: () => void;
-  setOffIsClickWinner: () => void;
+  openModal: (type: Exclude<ModalType, null>) => void;
+  closeModal: () => void;
 };
 
 export const InputWinType: FC<InputWinTypeProps> = ({
   winnerInfo,
   setWinnerInfo,
-  // players,
-  setIsOpen,
-  setOffIsClickWinner,
+  openModal,
+  closeModal,
 }) => {
   const winTypes = [
     {
@@ -45,7 +44,8 @@ export const InputWinType: FC<InputWinTypeProps> = ({
 
   const handleDecideWinType = () => {
     // setOffIsClickWinner();
-    setIsOpen();
+    // setIsOpen();
+    openModal("winPoint");
     // if (winnerInfo.winType === "tsumo") {
     //   const loser = Number(
     //     players.find((item) => Number(item) !== isClickedWinner),
@@ -57,7 +57,8 @@ export const InputWinType: FC<InputWinTypeProps> = ({
   };
 
   const handleBack = () => {
-    setOffIsClickWinner();
+    // setOffIsClickWinner();
+    closeModal();
   };
   return (
     <Box

@@ -9,16 +9,16 @@ type InputWinPointProps = {
   handleWinPointChange: ComponentProps<
     typeof NumberInput.Root
   >["onValueChange"];
-  closeInputWinnerPoint: () => void;
+  closeModal: () => void;
 };
 
 export const InputWinPoint: FC<InputWinPointProps> = ({
   handleComplete,
   handleWinPointChange,
-  closeInputWinnerPoint,
+  closeModal,
 }) => {
   const handleBack = () => {
-    closeInputWinnerPoint();
+    closeModal();
   };
   return (
     <Box

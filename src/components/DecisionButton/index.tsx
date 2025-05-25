@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { Button } from "@chakra-ui/react";
+import { COLOR } from "@/const/color";
 
 type DecisionButtonProps = {
   handleDecisionButton: () => void;
@@ -12,7 +13,9 @@ export const DecisionButton: FC<DecisionButtonProps> = ({
     <Button
       textStyle="1xl"
       mt={"50px"}
+      color={COLOR.WHITE}
       fontWeight="bold"
+      bg={COLOR.BLACK}
       onClick={handleDecisionButton}
       paddingInline={"50px"}
     >

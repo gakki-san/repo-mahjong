@@ -5,21 +5,22 @@ import { Player } from "@/hooks/useScore";
 import { ComponentProps, FC } from "react";
 import { DecisionButton } from "../DecisionButton";
 import { BackButton } from "../BackButton";
+import { ModalType } from "@/hooks/useModalStack";
 
 type InputLoserProps = {
   selectedWinner: number;
   setWinnerInfo: (value: Partial<WinInfo>) => void;
-  ShowInputScore: () => void;
-  closeInputLoserModal: () => void;
   playerName: string[];
+  openModal: (type: Exclude<ModalType, null>) => void;
+  closeModal: () => void;
 };
 
 export const InputLoser: FC<InputLoserProps> = ({
   selectedWinner,
   setWinnerInfo,
-  ShowInputScore,
-  closeInputLoserModal,
   playerName,
+  openModal,
+  closeModal,
 }) => {
   const playersName = playerName.map((name, index) => ({
     label: name,
@@ -31,7 +32,7 @@ export const InputLoser: FC<InputLoserProps> = ({
   );
 
   const handleComplete = () => {
-    ShowInputScore();
+    openModal("loser");
   };
 
   const selectedLoser: ComponentProps<
@@ -44,7 +45,7 @@ export const InputLoser: FC<InputLoserProps> = ({
   };
 
   const handleBack = () => {
-    closeInputLoserModal();
+    closeModal();
   };
   return (
     <Box

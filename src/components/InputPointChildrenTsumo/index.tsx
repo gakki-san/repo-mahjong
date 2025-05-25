@@ -8,17 +8,17 @@ type InputChildrenTsumoProps = {
   handleChildrenPoint: ComponentProps<typeof NumberInput.Root>["onValueChange"];
   handleParentPoint: ComponentProps<typeof NumberInput.Root>["onValueChange"];
   handleSetScore: () => void;
-  closeInputChildrenTsumoModal: () => void;
+  closeModal: () => void;
 };
 
 export const InputPointChildrenTsumo: FC<InputChildrenTsumoProps> = ({
   handleChildrenPoint,
   handleParentPoint,
   handleSetScore,
-  closeInputChildrenTsumoModal,
+  closeModal,
 }) => {
   const handleBack = () => {
-    closeInputChildrenTsumoModal();
+    closeModal();
   };
   return (
     <Box

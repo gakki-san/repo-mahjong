@@ -34,6 +34,7 @@ import { handleScoreDiff } from "@/logic/handleScoreDiff";
 import { useDice } from "@/hooks/useDice";
 import { calculateFinishScore } from "@/logic/calculateFinishScore";
 import { FinishGameModal } from "../FinishGameModal";
+import { useModalStack } from "@/hooks/useModalStack";
 
 type ScoreSummaryProps = {
   score: ScoreMap;
@@ -57,16 +58,11 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   returnPoint,
   umaRule,
 }) => {
-  // useBoolean。それぞれのモーダルの開閉を制御
-  const [isShowInputScore, setIsShowInputScore] = useIsBoolean();
-  const [isOpen, setIsOpen] = useIsBoolean();
-  const [isPopupOpen, setIsPopupOpen] = useIsBoolean();
-  const [isShowReachModal, setIsShowReachModal] = useIsBoolean();
-  const [isClickedWinner, setIsClickedWinner] = useIsBoolean();
-  const [isFinishGame, { on: finishGame, off: closeFinishModal }] =
-    useIsBoolean();
-  const [isTENPAIModal, { on: showTENPAIModal, off: hideTENPAIModal }] =
-    useIsBoolean();
+  // それぞれのモーダルの開閉を制御
+  const [
+    currentModal,
+    { openModal: openModal, closeModal: closeModal, reset: resetModal },
+  ] = useModalStack();
   const [isAppearanceScoreDiff, { on: onScoreDiff, off: offScoreDiff }] =
     useIsBoolean();
 
@@ -83,6 +79,15 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   const [countKyotaku, { add: addKyotaku, reset: resetKyotaku }] = useCount();
   const [dice, rollBoth] = useDice();
 
+  const isTsumo = currentModal === "winPoint" && winnerInfo.winType === "tsumo";
+  const isRon = currentModal === "winPoint" && winnerInfo.winType === "ron";
+  const isWinnerTypeModal = currentModal === "winType";
+  const isInputWinPoint = currentModal === "loser";
+  const isAlreadyReachModal = currentModal === "reachConfirm";
+  const isReachVideoModal = currentModal === "reachVideo";
+  const isTempaiModal = currentModal === "tempai";
+  const isFinishGameModal = currentModal === "finish";
+
   const arrayDirection = genarateArrayDirection(currentDirection);
 
   const handleSelectedWinner: React.MouseEventHandler<HTMLButtonElement> = (
@@ -95,7 +100,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
       tappedWinner,
     );
 
-    setIsClickedWinner.on();
+    openModal("winType");
     setSelectedWinner.set(tappedWinner);
     setWinnerInfo({ winner: winnerIndexForScore });
   };
@@ -105,12 +110,12 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
       ...prev,
       [selectedReachPlayer]: false,
     }));
-    setIsShowReachModal.off();
+    resetModal();
     setScore.set(calculateReachScore(selectedReachPlayer, reachFlags, score));
   };
 
   const noResetReach = () => {
-    setIsShowReachModal.off();
+    resetModal();
   };
 
   const handleReach = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -120,14 +125,10 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
     if (reachFlags[eventReachPlayer]) {
       const audio = new Audio("/dio.mp3");
       audio.play();
-      setIsShowReachModal.on();
+      openModal("reachConfirm");
     } else {
-      setIsPopupOpen.on();
-      playReachAudio(
-        eventReachPlayer,
-        setIsPopupOpen.off,
-        setReachFlags.update,
-      );
+      openModal("reachVideo");
+      playReachAudio(eventReachPlayer, resetModal, setReachFlags.update);
 
       setScore.set(calculateReachScore(eventReachPlayer, reachFlags, score));
     }
@@ -147,13 +148,8 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
       ) as ScoreMap,
     );
 
-    closeAllModal(
-      setWinnerInfo,
-      setIsOpen.off,
-      setIsShowInputScore.off,
-      setReachFlags.replace,
-      setIsClickedWinner.off,
-    );
+    closeAllModal(setWinnerInfo, setReachFlags.replace);
+    resetModal();
     resetHONBA();
     resetKyotaku();
     setCurrentDirection.rotate();
@@ -179,13 +175,8 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
       countHonba,
       countKyotaku,
     );
-    closeAllModal(
-      setWinnerInfo,
-      setIsOpen.off,
-      setIsShowInputScore.off,
-      setReachFlags.replace,
-      setIsClickedWinner.off,
-    );
+    closeAllModal(setWinnerInfo, setReachFlags.replace);
+    resetModal();
     handleHONBA(isParent);
     resetKyotaku();
   };
@@ -195,7 +186,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   };
 
   const handleMoveDirection = () => {
-    showTENPAIModal();
+    openModal("tempai");
     addHONBA(countHonba);
   };
 
@@ -218,14 +209,11 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
     }
     const newScore = calculatedPenaltyScore();
     setScore.set(newScore);
-    hideTENPAIModal();
+    resetModal();
     setReachFlags.reset();
     addKyotaku(countReachPlayers(reachFlags));
     resetTEMPAI();
   };
-
-  const isTsumo = isOpen && winnerInfo.winType === "tsumo";
-  const isRon = isOpen && winnerInfo.winType === "ron";
 
   const timerRef = useRef<number | null>(null);
   const handlePressStart = (playerIndex: Player) => {
@@ -247,11 +235,11 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   };
 
   const handleFinishGame = () => {
-    finishGame();
+    openModal("finish");
   };
 
   const handleBack = () => {
-    closeFinishModal();
+    resetModal();
   };
 
   const newGameData = (playersName: string[], score: ScoreMap) => {
@@ -290,13 +278,12 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
         rollBoth={rollBoth}
         handleFinishGame={handleFinishGame}
       />
-      {isClickedWinner && (
+      {isWinnerTypeModal && (
         <InputWinType
           winnerInfo={winnerInfo}
           setWinnerInfo={setWinnerInfo}
-          players={players}
-          setIsOpen={setIsOpen.on}
-          setOffIsClickWinner={setIsClickedWinner.off}
+          openModal={openModal}
+          closeModal={closeModal}
         />
       )}
       {isTsumo &&
@@ -304,40 +291,42 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
           <InputWinPoint
             handleComplete={handleComplete}
             handleWinPointChange={handleWinPointChange(setWinnerInfo)}
-            closeInputWinnerPoint={setIsOpen.off}
+            closeModal={closeModal}
           />
         ) : (
           <InputPointChildrenTsumo
             handleChildrenPoint={makeOnPointChange(setChildrenPoint)}
             handleParentPoint={makeOnPointChange(setParentPoint)}
             handleSetScore={handleSetScore}
-            closeInputChildrenTsumoModal={setIsOpen.off}
+            closeModal={closeModal}
           />
         ))}
       {isRon && (
         <InputLoser
           selectedWinner={selectedWinerPlayer}
           setWinnerInfo={setWinnerInfo}
-          ShowInputScore={setIsShowInputScore.on}
-          closeInputLoserModal={setIsOpen.off}
           playerName={playersName}
+          openModal={openModal}
+          closeModal={closeModal}
         />
       )}
-      {isShowInputScore && (
+      {isInputWinPoint && (
         <InputWinPoint
           handleComplete={handleComplete}
           handleWinPointChange={handleWinPointChange(setWinnerInfo)}
-          closeInputWinnerPoint={setIsShowInputScore.off}
+          closeModal={closeModal}
         />
       )}
-      {isShowReachModal && (
+      {isAlreadyReachModal && (
         <AlreadyReachModal
           resetReach={resetReach}
           noResetReach={noResetReach}
         />
       )}
-      {isPopupOpen && <ReachVideo selectedReachPlayer={selectedReachPlayer} />}
-      {isTENPAIModal && (
+      {isReachVideoModal && (
+        <ReachVideo selectedReachPlayer={selectedReachPlayer} />
+      )}
+      {isTempaiModal && (
         <SelectTempaiModal
           playersName={playersName}
           isTENPAI={isTENPAI}
@@ -345,7 +334,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
           handleCloseTENPAIModal={handleCloseTENPAIModal}
         />
       )}
-      {isFinishGame && (
+      {isFinishGameModal && (
         <FinishGameModal gameData={gameData} handleBack={handleBack} />
       )}
     </>

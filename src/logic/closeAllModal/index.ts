@@ -3,10 +3,7 @@ import { WinInfo } from "@/hooks/useWinnerinfo";
 
 export const closeAllModal = (
   setWinnerInfo: (value: Partial<WinInfo>) => void,
-  setIsClose: () => void,
-  setIsShowInputScoreClose: () => void,
   resetReachFlags: (list: ReachFlagsProps) => void,
-  closeClickWinner: () => void,
 ) => {
   setWinnerInfo({
     winType: null,
@@ -14,8 +11,5 @@ export const closeAllModal = (
     loser: null,
     winPoints: null,
   });
-  setIsClose();
-  setIsShowInputScoreClose();
   resetReachFlags(initialReachFlags);
-  closeClickWinner();
 };

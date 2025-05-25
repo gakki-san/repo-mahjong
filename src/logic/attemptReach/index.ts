@@ -3,7 +3,7 @@ import { Player } from "@/hooks/useScore";
 
 export const playReachAudio = (
   player: Player,
-  setIsPopupClose: () => void,
+  resetModal: () => void,
   setReachFlags: (updater: (prev: ReachFlagsProps) => ReachFlagsProps) => void,
 ) => {
   const audio =
@@ -12,7 +12,7 @@ export const playReachAudio = (
   audio.play();
 
   audio.addEventListener("ended", () => {
-    setIsPopupClose();
+    resetModal();
   });
 
   setReachFlags((prev) => ({
