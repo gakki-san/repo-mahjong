@@ -1,8 +1,10 @@
 import { ComponentProps, FC } from "react";
-import { Box, Button, Flex, HStack, RadioGroup } from "@chakra-ui/react";
+import { Box, Flex, HStack, RadioGroup } from "@chakra-ui/react";
 import { COLOR } from "@/const/color";
 // import { Player } from "@/hooks/useScore";
 import { WinInfo } from "@/hooks/useWinnerinfo";
+import { DecisionButton } from "../DecisionButton";
+import { BackButton } from "../BackButton";
 
 type InputWinTypeProps = {
   winnerInfo: WinInfo;
@@ -85,25 +87,8 @@ export const InputWinType: FC<InputWinTypeProps> = ({
         </HStack>
       </RadioGroup.Root>
       <Flex gap={"20px"}>
-        <Button
-          textStyle="1xl"
-          mt={"50px"}
-          fontWeight="bold"
-          onClick={handleDecideWinType}
-          paddingInline={"50px"}
-        >
-          決定
-        </Button>
-        <Button
-          mt={"50px"}
-          color={COLOR.WHITE}
-          fontWeight={"bold"}
-          bg={COLOR.BLACK}
-          onClick={handleBack}
-          paddingInline={"50px"}
-        >
-          戻る
-        </Button>
+        <DecisionButton handleDecisionButton={handleDecideWinType} />
+        <BackButton handleBack={handleBack} />
       </Flex>
     </Box>
   );
