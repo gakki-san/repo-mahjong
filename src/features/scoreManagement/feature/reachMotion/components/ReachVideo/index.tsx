@@ -1,6 +1,6 @@
+import { COLOR } from "@/features/scoreManagement/const/color";
 import { Box, Flex } from "@chakra-ui/react";
 import { FC } from "react";
-import { COLOR } from "../../const/color";
 
 type ReachVideoProps = {
   selectedReachPlayer: number;

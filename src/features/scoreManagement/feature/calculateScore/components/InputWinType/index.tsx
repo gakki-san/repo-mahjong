@@ -1,10 +1,10 @@
 import { ComponentProps, FC } from "react";
 import { Box, Flex, HStack, RadioGroup } from "@chakra-ui/react";
-import { DecisionButton } from "../DecisionButton";
-import { BackButton } from "../BackButton";
-import { WinInfo } from "../../hooks/useWinnerinfo";
-import { ModalType } from "../../hooks/useModalStack";
-import { COLOR } from "../../const/color";
+import { WinInfo } from "@/features/scoreManagement/hooks/useWinnerinfo";
+import { ModalType } from "@/features/scoreManagement/hooks/useModalStack";
+import { COLOR } from "@/features/scoreManagement/const/color";
+import { DecisionButton } from "@/features/scoreManagement/components/DecisionButton";
+import { BackButton } from "@/features/scoreManagement/components/BackButton";
 
 type InputWinTypeProps = {
   winnerInfo: WinInfo;

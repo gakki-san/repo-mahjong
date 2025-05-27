@@ -2,7 +2,7 @@ import { COLOR } from "../../const/color";
 import { Field, NativeSelect } from "@chakra-ui/react";
 import { FC } from "react";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
-import { FormValues } from "../ScoreSelectPanel";
+import { FormValues } from "../../feature/inputSetUp/components/ScoreSelectPanel";
 
 type InputSelectFieldProps = {
   errors: FieldErrors<FormValues>;

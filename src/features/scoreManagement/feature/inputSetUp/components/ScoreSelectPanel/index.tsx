@@ -1,10 +1,10 @@
 import { FC } from "react";
 import { Box, Button } from "@chakra-ui/react";
-import { COLOR } from "../../const/color";
-import { SCORE } from "../../const/score";
-import { ScoreMap } from "../../hooks/useScore";
+import { SCORE } from "@/features/scoreManagement/const/score";
+import { ScoreMap } from "@/features/scoreManagement/hooks/useScore";
 import { useForm } from "react-hook-form";
-import { InputSelectField } from "../InputSelectField";
+import { COLOR } from "@/features/scoreManagement/const/color";
+import { InputSelectField } from "@/features/scoreManagement/components/InputSelectField";
 
 type ScoreSelectPanelProps = {
   close: () => void;

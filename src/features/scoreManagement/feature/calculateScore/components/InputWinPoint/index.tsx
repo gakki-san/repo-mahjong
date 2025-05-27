@@ -1,8 +1,8 @@
 import { ComponentProps, FC } from "react";
 import { Box, Flex, NumberInput } from "@chakra-ui/react";
-import { COLOR } from "../../const/color";
-import { DecisionButton } from "../DecisionButton";
-import { BackButton } from "../BackButton";
+import { COLOR } from "@/features/scoreManagement/const/color";
+import { DecisionButton } from "@/features/scoreManagement/components/DecisionButton";
+import { BackButton } from "@/features/scoreManagement/components/BackButton";
 
 type InputWinPointProps = {
   handleComplete: () => void;

@@ -1,6 +1,6 @@
-import { SCORE } from "../../const/score";
-import { ReachFlagsProps } from "../../hooks/useReachFlags";
-import { ScoreMap } from "../../hooks/useScore";
+import { SCORE } from "@/features/scoreManagement/const/score";
+import { ReachFlagsProps } from "@/features/scoreManagement/hooks/useReachFlags";
+import { ScoreMap } from "@/features/scoreManagement/hooks/useScore";
 
 export const childrenTsumo = (
   childrenPoint: number,

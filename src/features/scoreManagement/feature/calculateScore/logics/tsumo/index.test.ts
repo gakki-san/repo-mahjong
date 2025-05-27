@@ -1,8 +1,8 @@
 import { describe, it, expect } from "vitest";
-import { handleTsumo } from "../../logics/tsumo";
-import { SCORE } from "../../const/score";
-import type { ScoreMap } from "../../hooks/useScore";
-import type { ReachFlagsProps } from "../../hooks/useReachFlags";
+import { handleTsumo } from ".";
+import { SCORE } from "../../../../const/score";
+import type { ScoreMap } from "../../../../hooks/useScore";
+import type { ReachFlagsProps } from "../../../../hooks/useReachFlags";
 
 describe("handleTsumo", () => {
   const players = ["p1", "p2", "p3", "p4"];

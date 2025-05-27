@@ -1,6 +1,6 @@
-import { SCORE } from "../../const/score";
-import { ReachFlagsProps } from "../../hooks/useReachFlags";
-import { Player, ScoreMap } from "../../hooks/useScore";
+import { SCORE } from "../../../../const/score";
+import { ReachFlagsProps } from "../../../../hooks/useReachFlags";
+import { Player, ScoreMap } from "../../../../hooks/useScore";
 
 // todo: 既に計算済みのpoint(winnerPoint,loserPoint)を引数にする
 export const handleTsumo = (

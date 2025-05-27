@@ -4,10 +4,10 @@ import { useIsBoolean } from "../../hooks/useIsBoolean";
 import { PlayerNames, usePlayerName } from "../../hooks/usePlayerName";
 import { useScore } from "../../hooks/useScore";
 import { useCount } from "../../hooks/useCount";
-import { InputPlayerName } from "../InputPlayerName";
+import { InputPlayerName } from "./components/InputPlayerName";
 import { playerList } from "../../const/playerList";
-import { ScoreSelectPanel } from "../ScoreSelectPanel";
-import { ScoreSummary } from "../../layout";
+import { ScoreSelectPanel } from "./components/ScoreSelectPanel";
+import { ScoreSummary } from "./components/ScoreSummary";
 import { COLOR } from "../../const/color";
 
 export const InputSetUp = () => {

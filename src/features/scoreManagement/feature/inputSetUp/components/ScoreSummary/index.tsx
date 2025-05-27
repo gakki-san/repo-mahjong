@@ -1,12 +1,10 @@
-import { AlreadyReachModal } from "@/features/scoreManagement/components/AlreadyReachModal";
+import { AlreadyReachModal } from "@/features/scoreManagement/feature/reachMotion/components/AlreadyReachModal";
 import { FinishGameModal } from "@/features/scoreManagement/components/FinishGameModal";
-import { InputLoser } from "@/features/scoreManagement/components/InputLoser";
-import { InputPointChildrenTsumo } from "@/features/scoreManagement/components/InputPointChildrenTsumo";
-import { InputWinPoint } from "@/features/scoreManagement/components/InputWinPoint";
-import { InputWinType } from "@/features/scoreManagement/components/InputWinType";
-import { ReachVideo } from "@/features/scoreManagement/components/ReachVideo";
+import { InputLoser } from "@/features/scoreManagement/feature/calculateScore/components/InputLoser";
+import { InputPointChildrenTsumo } from "@/features/scoreManagement/feature/calculateScore/components/InputPointChildrenTsumo";
+import { ReachVideo } from "@/features/scoreManagement/feature/reachMotion/components/ReachVideo";
 import { SelectTempaiModal } from "@/features/scoreManagement/components/SelectTempaiModal";
-import { WindowScoreSummary } from "@/features/scoreManagement/components/WindowScoreSummary";
+import { WindowScoreSummary } from "@/features/scoreManagement/feature/layout";
 import { useCount } from "@/features/scoreManagement/hooks/useCount";
 import { useCurrentDirection } from "@/features/scoreManagement/hooks/useCurrentDirection";
 import { useIsBoolean } from "@/features/scoreManagement/hooks/useIsBoolean";
@@ -24,7 +22,7 @@ import { playReachAudio } from "@/features/scoreManagement/logics/attemptReach";
 import { calculateFinishScore } from "@/features/scoreManagement/logics/calculateFinishScore";
 import { calculatePenalty } from "@/features/scoreManagement/logics/calculatePenalty";
 import { calculateReachScore } from "@/features/scoreManagement/logics/calculateReachScore";
-import { childrenTsumo } from "@/features/scoreManagement/logics/childrenTsumo";
+import { childrenTsumo } from "@/features/scoreManagement/feature/calculateScore/logics/childrenTsumo";
 import { closeAllModal } from "@/features/scoreManagement/logics/closeAllModal";
 import { countReachPlayers } from "@/features/scoreManagement/logics/countReachPlayers";
 import { genarateArrayDirection } from "@/features/scoreManagement/logics/genarateArrayDirection";
@@ -34,7 +32,9 @@ import { handleScoreDiff } from "@/features/scoreManagement/logics/handleScoreDi
 import { handleWinPointChange } from "@/features/scoreManagement/logics/handleWinPointChange";
 import { makeOnPointChange } from "@/features/scoreManagement/logics/makeOnPointChange";
 import { FC, useRef } from "react";
-import { useDice } from "../hooks/useDice";
+import { useDice } from "@/features/scoreManagement/hooks/useDice";
+import { InputWinType } from "../../../calculateScore/components/InputWinType";
+import { InputWinPoint } from "../../../calculateScore/components/InputWinPoint";
 
 type ScoreSummaryProps = {
   score: ScoreMap;

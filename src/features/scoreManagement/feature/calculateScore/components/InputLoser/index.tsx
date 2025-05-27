@@ -1,11 +1,11 @@
+import { BackButton } from "@/features/scoreManagement/components/BackButton";
+import { DecisionButton } from "@/features/scoreManagement/components/DecisionButton";
+import { COLOR } from "@/features/scoreManagement/const/color";
+import { ModalType } from "@/features/scoreManagement/hooks/useModalStack";
+import { Player } from "@/features/scoreManagement/hooks/useScore";
+import { WinInfo } from "@/features/scoreManagement/hooks/useWinnerinfo";
 import { Box, Flex, HStack, RadioGroup } from "@chakra-ui/react";
 import { ComponentProps, FC } from "react";
-import { DecisionButton } from "../DecisionButton";
-import { BackButton } from "../BackButton";
-import { WinInfo } from "../../hooks/useWinnerinfo";
-import { ModalType } from "../../hooks/useModalStack";
-import { Player } from "../../hooks/useScore";
-import { COLOR } from "../../const/color";
 
 type InputLoserProps = {
   selectedWinner: number;

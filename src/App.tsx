@@ -1,7 +1,7 @@
 import { Button, Flex, Image } from "@chakra-ui/react";
 import { COLOR } from "./features/scoreManagement/const/color";
 import { useIsBoolean } from "./features/scoreManagement/hooks/useIsBoolean";
-import { InputSetUp } from "./features/scoreManagement/components/InputSetUp";
+import { InputSetUp } from "./features/scoreManagement/feature/inputSetUp";
 
 function App() {
   const [isScoreManagement, { on: openScoreManagement }] = useIsBoolean();
