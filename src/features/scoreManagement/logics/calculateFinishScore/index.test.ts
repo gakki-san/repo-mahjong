@@ -1,6 +1,6 @@
 // tests/calculateFinishScore.test.ts
 import { describe, it, expect } from "vitest";
-import { calculateFinishScore } from "../../logic/calculateFinishScore";
+import { calculateFinishScore } from "../../logics/calculateFinishScore";
 import type { ScoreMap } from "../../hooks/useScore";
 
 describe("calculateFinishScore (umaRule = 0, returnPoint = 30000)", () => {

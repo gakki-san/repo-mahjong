@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { calculatePenalty } from "../../logic/calculatePenalty";
+import { calculatePenalty } from "../../logics/calculatePenalty";
 import type { ScoreMap } from "../../hooks/useScore";
 import type { ReachFlagsProps } from "../../hooks/useReachFlags";
 import { SCORE } from "../../const/score";

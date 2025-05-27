@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { handleTsumo } from "../../logic/tsumo";
+import { handleTsumo } from "../../logics/tsumo";
 import { SCORE } from "../../const/score";
 import type { ScoreMap } from "../../hooks/useScore";
 import type { ReachFlagsProps } from "../../hooks/useReachFlags";

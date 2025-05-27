@@ -1,6 +1,6 @@
 // src/logic/countReachPlayers.spec.ts
 import { describe, it, expect } from "vitest";
-import { countReachPlayers } from "../../logic/countReachPlayers";
+import { countReachPlayers } from "../../logics/countReachPlayers";
 import type { ReachFlagsProps } from "../../hooks/useReachFlags";
 
 describe("countReachPlayers", () => {

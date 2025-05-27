@@ -9,7 +9,6 @@ import { SelectTempaiModal } from "@/features/scoreManagement/components/SelectT
 import { WindowScoreSummary } from "@/features/scoreManagement/components/WindowScoreSummary";
 import { useCount } from "@/features/scoreManagement/hooks/useCount";
 import { useCurrentDirection } from "@/features/scoreManagement/hooks/useCurrentDirection";
-import { useDice } from "@/features/scoreManagement/hooks/useDice";
 import { useIsBoolean } from "@/features/scoreManagement/hooks/useIsBoolean";
 import { useModalStack } from "@/features/scoreManagement/hooks/useModalStack";
 import { usePlayerPoint } from "@/features/scoreManagement/hooks/usePlayerPoint";
@@ -21,20 +20,21 @@ import {
   UseScoreActionMap,
 } from "@/features/scoreManagement/hooks/useScore";
 import { useWinnerInfo } from "@/features/scoreManagement/hooks/useWinnerinfo";
-import { playReachAudio } from "@/features/scoreManagement/logic/attemptReach";
-import { calculateFinishScore } from "@/features/scoreManagement/logic/calculateFinishScore";
-import { calculatePenalty } from "@/features/scoreManagement/logic/calculatePenalty";
-import { calculateReachScore } from "@/features/scoreManagement/logic/calculateReachScore";
-import { childrenTsumo } from "@/features/scoreManagement/logic/childrenTsumo";
-import { closeAllModal } from "@/features/scoreManagement/logic/closeAllModal";
-import { countReachPlayers } from "@/features/scoreManagement/logic/countReachPlayers";
-import { genarateArrayDirection } from "@/features/scoreManagement/logic/genarateArrayDirection";
-import { getWinnerIndexInRotateDirection } from "@/features/scoreManagement/logic/getWinnerIndexInRotateDirection";
-import { handleApplyScore } from "@/features/scoreManagement/logic/handleApplyScore";
-import { handleScoreDiff } from "@/features/scoreManagement/logic/handleScoreDiff";
-import { handleWinPointChange } from "@/features/scoreManagement/logic/handleWinPointChange";
-import { makeOnPointChange } from "@/features/scoreManagement/logic/makeOnPointChange";
+import { playReachAudio } from "@/features/scoreManagement/logics/attemptReach";
+import { calculateFinishScore } from "@/features/scoreManagement/logics/calculateFinishScore";
+import { calculatePenalty } from "@/features/scoreManagement/logics/calculatePenalty";
+import { calculateReachScore } from "@/features/scoreManagement/logics/calculateReachScore";
+import { childrenTsumo } from "@/features/scoreManagement/logics/childrenTsumo";
+import { closeAllModal } from "@/features/scoreManagement/logics/closeAllModal";
+import { countReachPlayers } from "@/features/scoreManagement/logics/countReachPlayers";
+import { genarateArrayDirection } from "@/features/scoreManagement/logics/genarateArrayDirection";
+import { getWinnerIndexInRotateDirection } from "@/features/scoreManagement/logics/getWinnerIndexInRotateDirection";
+import { handleApplyScore } from "@/features/scoreManagement/logics/handleApplyScore";
+import { handleScoreDiff } from "@/features/scoreManagement/logics/handleScoreDiff";
+import { handleWinPointChange } from "@/features/scoreManagement/logics/handleWinPointChange";
+import { makeOnPointChange } from "@/features/scoreManagement/logics/makeOnPointChange";
 import { FC, useRef } from "react";
+import { useDice } from "../hooks/useDice";
 
 type ScoreSummaryProps = {
   score: ScoreMap;
