@@ -1,6 +1,6 @@
 import { Player, ScoreMap } from "../../hooks/useScore";
-import { handleRon } from "../../feature/calculateScore/logics/ron";
-import { handleTsumo } from "../../feature/calculateScore/logics/tsumo";
+import { handleRon } from "../ron";
+import { handleTsumo } from "../tsumo";
 import { WinInfo } from "../../hooks/useWinnerinfo";
 import { ReachFlagsProps } from "../../hooks/useReachFlags";
 
