@@ -11,6 +11,7 @@ export const handleApplyScore = (
   score: ScoreMap,
   reachFlags: ReachFlagsProps,
   currentDirectionArrray: number[],
+  countHonba: number,
 ) => {
   if (winnerInfo.winPoints === null) return;
   const winner = winnerInfo.winner as Player;
@@ -19,10 +20,6 @@ export const handleApplyScore = (
   const loser = currentDirectionArrray.indexOf(
     winnerInfo.loser as Player,
   ) as Player;
-  console.log("currentDirectionArrray", currentDirectionArrray);
-  console.log("winnerInfo.loser", winnerInfo);
-
-  console.log("handleLoser", loser);
 
   if (winnerInfo.winType === "tsumo") {
     const newScore = handleTsumo(
@@ -31,6 +28,7 @@ export const handleApplyScore = (
       players,
       score,
       reachFlags,
+      countHonba,
     ) as ScoreMap;
     setScore(newScore);
   } else {
@@ -40,6 +38,7 @@ export const handleApplyScore = (
       point,
       score,
       reachFlags,
+      countHonba,
     ) as ScoreMap;
     setScore(newScore);
   }

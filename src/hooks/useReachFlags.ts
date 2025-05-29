@@ -17,6 +17,7 @@ export const initialReachFlags: ReachFlagsProps = {
 export type SetReachFlagsReturn = {
   update: (updater: (prev: ReachFlagsProps) => ReachFlagsProps) => void;
   replace: (list: ReachFlagsProps) => void;
+  reset: () => void;
 };
 
 export type useReachFlagsReturn = [
@@ -33,6 +34,7 @@ export const useReachFlags = (): useReachFlagsReturn => {
       setReachFlags(updater);
     },
     replace: (list: ReachFlagsProps) => setReachFlags(list),
+    reset: () => setReachFlags(initialReachFlags),
   };
 
   return [reachFlags, actions] as const;

@@ -21,6 +21,9 @@ import { genarateArrayDirection } from "@/logic/genarateArrayDirection";
 import { getWinnerIndexInRotateDirection } from "@/logic/getWinnerIndexInRotateDirection";
 import { calculateReachScore } from "@/logic/calculateReachScore";
 import { makeOnPointChange } from "@/logic/makeOnPointChange";
+import { useCount } from "@/hooks/useCount";
+import { Box, Button, Checkbox, Stack } from "@chakra-ui/react";
+import { COLOR } from "@/const/color";
 
 type ScoreSummaryProps = {
   score: ScoreMap;
@@ -46,6 +49,8 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   const [isPopupOpen, setIsPopupOpen] = useIsBoolean();
   const [isShowReachModal, setIsShowReachModal] = useIsBoolean();
   const [isClickedWinner, setIsClickedWinner] = useIsBoolean();
+  const [isTENPAIModal, { on: showTENPAIModal, off: hideTENPAIModal }] =
+    useIsBoolean();
 
   const [currentDirection, setCurrentDirection] = useCurrentDirection();
   const [selectedReachPlayer, setSelectedReachPlayer] = useCurrentDirection();
@@ -54,7 +59,10 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   const [childrenPoint, setChildrenPoint] = usePlayerPoint();
   const [parentPoint, setParentPoint] = usePlayerPoint();
   const [reachFlags, setReachFlags] = useReachFlags();
+  const [isTENPAI, setIsTENPAI] = useReachFlags();
+  const [countHonba, { add: addHONBA, reset: resetHONBA }] = useCount();
 
+  console.log("countHonba", countHonba);
   const arrayDirection = genarateArrayDirection(currentDirection);
 
   const handleSelectedWinner: React.MouseEventHandler<HTMLButtonElement> = (
@@ -100,7 +108,8 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
         setIsPopupOpen.off,
         setReachFlags.update,
       );
-      setScore.set(calculateReachScore(selectedReachPlayer, reachFlags, score));
+
+      setScore.set(calculateReachScore(eventReachPlayer, reachFlags, score));
     }
   };
 
@@ -113,6 +122,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
         score,
         currentDirection,
         reachFlags,
+        countHonba,
       ) as ScoreMap,
     );
 
@@ -122,6 +132,18 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
       setIsShowInputScore.off,
       setReachFlags.replace,
     );
+    resetHONBA();
+    setCurrentDirection.rotate();
+  };
+
+  const handleHONBA = (selectedWinner: Player) => {
+    const isParent = selectedWinner === 0;
+    if (isParent) {
+      addHONBA(countHonba);
+    } else {
+      resetHONBA();
+      setCurrentDirection.rotate();
+    }
   };
 
   const handleComplete = () => {
@@ -132,6 +154,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
       score,
       reachFlags,
       arrayDirection,
+      countHonba,
     );
     closeAllModal(
       setWinnerInfo,
@@ -139,10 +162,58 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
       setIsShowInputScore.off,
       setReachFlags.replace,
     );
+    handleHONBA(selectedWinner);
   };
 
+  const toggleTenpai = (player: Player) => {
+    setIsTENPAI.update((prev) => ({ ...prev, [player]: !prev[player] }));
+  };
+
+  const isTempaiAndWinner = arrayDirection.findIndex(
+    (item) => item === 0,
+  ) as Player;
+
   const handleMoveDirection = () => {
-    setCurrentDirection.rotate();
+    showTENPAIModal();
+    addHONBA(countHonba);
+  };
+
+  const calculatePenalty = () => {
+    const penaltyPoint = 1000;
+
+    const peneltySecondPoint = 1500;
+
+    const currentScore = [...score];
+
+    const tenpaiCount = Object.values(isTENPAI).filter(Boolean).length;
+
+    if (tenpaiCount === 0 || tenpaiCount === 4) {
+      return currentScore as ScoreMap;
+    }
+    currentScore.forEach((_, index) => {
+      const isTenpai = isTENPAI[index as Player];
+      if (tenpaiCount === 1) {
+        currentScore[index] += isTenpai ? penaltyPoint * 3 : -penaltyPoint;
+      } else if (tenpaiCount === 2) {
+        currentScore[index] += isTenpai
+          ? peneltySecondPoint
+          : -peneltySecondPoint;
+      } else if (tenpaiCount === 3) {
+        currentScore[index] += isTenpai ? penaltyPoint : -penaltyPoint * 3;
+      }
+    });
+
+    return currentScore as ScoreMap;
+  };
+
+  const handleCloseTENPAIModal = () => {
+    const newScore = calculatePenalty();
+    setScore.set(newScore);
+    if (!isTENPAI[isTempaiAndWinner]) {
+      setCurrentDirection.rotate();
+    }
+    hideTENPAIModal();
+    setReachFlags.reset();
   };
 
   const isTsumo = isOpen && winnerInfo.winType === "tsumo";
@@ -158,6 +229,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
         handleMoveDirection={handleMoveDirection}
         currentDirectionArray={arrayDirection}
         palyerName={playersName}
+        countHonba={countHonba}
       />
       {isClickedWinner && (
         <InputWinType
@@ -202,6 +274,47 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
         />
       )}
       {isPopupOpen && <ReachVideo selectedReachPlayer={selectedReachPlayer} />}
+      {isTENPAIModal && (
+        <Box
+          pos={"absolute"}
+          top={0}
+          alignItems={"center"}
+          justifyContent={"center"}
+          flexDir={"column"}
+          display={"flex"}
+          w={"100vw"}
+          h={"100vh"}
+          p={"50px"}
+          bg={COLOR.WHITE}
+        >
+          誰がテンパイ？
+          <Stack align="flex-start" flex="1" gap="4">
+            {playersName.map((name, index) => {
+              const player = index as Player;
+              return (
+                <Checkbox.Root
+                  mt={"20px"}
+                  key={index}
+                  checked={isTENPAI[player]}
+                  onChange={() => toggleTenpai(player)}
+                >
+                  <Checkbox.HiddenInput />
+                  <Checkbox.Control color={COLOR.BLACK} />
+                  <Checkbox.Label>{name}</Checkbox.Label>
+                </Checkbox.Root>
+              );
+            })}
+          </Stack>
+          <Button
+            color={COLOR.WHITE}
+            fontWeight={"bold"}
+            bg={COLOR.BLACK}
+            onClick={handleCloseTENPAIModal}
+          >
+            完了
+          </Button>
+        </Box>
+      )}
     </>
   );
 };

@@ -1,3 +1,4 @@
+import { SCORE } from "@/const/score";
 import { ReachFlagsProps } from "@/hooks/useReachFlags";
 import { ScoreMap } from "@/hooks/useScore";
 
@@ -8,6 +9,7 @@ export const childrenTsumo = (
   prevScore: ScoreMap,
   currentDirection: number,
   reachPlayer: ReachFlagsProps,
+  countHonba: number,
 ) => {
   if (winner === null) return;
   const countReachPlayer = Object.values(reachPlayer).filter(
@@ -21,11 +23,12 @@ export const childrenTsumo = (
 
   newScore.map((_, index) => {
     if (winner === index) {
-      newScore[index] += winnerPoint + countReachPlayer * 1000;
+      newScore[index] +=
+        winnerPoint + countReachPlayer * 1000 + countHonba * SCORE.HONBA_300;
     } else if (parentIndex === index) {
-      newScore[index] -= parentPoint;
+      newScore[index] -= parentPoint + countHonba * SCORE.HONBA_100;
     } else {
-      newScore[index] -= childrenPoint;
+      newScore[index] -= childrenPoint + countHonba * SCORE.HONBA_100;
     }
   });
 
