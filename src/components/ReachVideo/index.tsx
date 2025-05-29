@@ -1,3 +1,4 @@
+import { COLOR } from "@/const/color";
 import { Box, Flex } from "@chakra-ui/react";
 import { FC } from "react";
 
@@ -24,7 +25,7 @@ export const ReachVideo: FC<ReachVideoProps> = ({ selectedReachPlayer }) => {
         overflow="hidden"
         w="90%"
         maxW="600px"
-        bg="white"
+        bg={COLOR.WHITE}
         borderRadius="md"
       >
         <Box pos="relative" pt="56.25%">

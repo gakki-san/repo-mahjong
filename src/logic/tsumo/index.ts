@@ -10,6 +10,7 @@ export const handleTsumo = (
   score: ScoreMap,
   reachPlayer: ReachFlagsProps,
   countHonba: number,
+  countKyotaku: number,
 ) => {
   if (!score) return;
   const newScore = [...score];
@@ -22,7 +23,8 @@ export const handleTsumo = (
       newScore[index] +=
         points * losePointPerson +
         countReachPlayer * 1000 +
-        countHonba * SCORE.HONBA_300;
+        countHonba * SCORE.HONBA_300 +
+        countKyotaku * 1000;
     } else {
       newScore[index] -= points + countHonba * SCORE.HONBA_100;
     }

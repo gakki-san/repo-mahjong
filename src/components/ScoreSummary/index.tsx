@@ -22,8 +22,8 @@ import { getWinnerIndexInRotateDirection } from "@/logic/getWinnerIndexInRotateD
 import { calculateReachScore } from "@/logic/calculateReachScore";
 import { makeOnPointChange } from "@/logic/makeOnPointChange";
 import { useCount } from "@/hooks/useCount";
-import { Box, Button, Checkbox, Stack } from "@chakra-ui/react";
-import { COLOR } from "@/const/color";
+import { SelectTempaiModal } from "../SelectTempaiModal";
+import { SCORE } from "@/const/score";
 
 type ScoreSummaryProps = {
   score: ScoreMap;
@@ -59,10 +59,10 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   const [childrenPoint, setChildrenPoint] = usePlayerPoint();
   const [parentPoint, setParentPoint] = usePlayerPoint();
   const [reachFlags, setReachFlags] = useReachFlags();
-  const [isTENPAI, setIsTENPAI] = useReachFlags();
-  const [countHonba, { add: addHONBA, reset: resetHONBA }] = useCount();
+  const [isTENPAI, { update: setTEMPAI, reset: resetTEMPAI }] = useReachFlags();
+  const [countHonba, { increment: addHONBA, reset: resetHONBA }] = useCount();
+  const [countKyotaku, { add: addKyotaku, reset: resetKyotaku }] = useCount();
 
-  console.log("countHonba", countHonba);
   const arrayDirection = genarateArrayDirection(currentDirection);
 
   const handleSelectedWinner: React.MouseEventHandler<HTMLButtonElement> = (
@@ -123,6 +123,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
         currentDirection,
         reachFlags,
         countHonba,
+        countKyotaku,
       ) as ScoreMap,
     );
 
@@ -133,6 +134,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
       setReachFlags.replace,
     );
     resetHONBA();
+    resetKyotaku();
     setCurrentDirection.rotate();
   };
 
@@ -155,6 +157,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
       reachFlags,
       arrayDirection,
       countHonba,
+      countKyotaku,
     );
     closeAllModal(
       setWinnerInfo,
@@ -163,57 +166,63 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
       setReachFlags.replace,
     );
     handleHONBA(selectedWinner);
+    resetKyotaku();
   };
 
   const toggleTenpai = (player: Player) => {
-    setIsTENPAI.update((prev) => ({ ...prev, [player]: !prev[player] }));
+    setTEMPAI((prev) => ({ ...prev, [player]: !prev[player] }));
   };
-
-  const isTempaiAndWinner = arrayDirection.findIndex(
-    (item) => item === 0,
-  ) as Player;
 
   const handleMoveDirection = () => {
     showTENPAIModal();
     addHONBA(countHonba);
   };
 
-  const calculatePenalty = () => {
-    const penaltyPoint = 1000;
+  const calculatePenalty = (score: ScoreMap, tempaiCount: number) => {
+    const PENALTY_ADJUSTMENTS: Record<1 | 2 | 3, [number, number]> = {
+      1: [SCORE.TRIPLE, -SCORE.SINGLE],
+      2: [SCORE.DOUBLE, -SCORE.DOUBLE],
+      3: [SCORE.SINGLE, -SCORE.TRIPLE],
+    };
+    if (tempaiCount === 0 || tempaiCount === 4) return [...score] as ScoreMap;
 
-    const peneltySecondPoint = 1500;
+    const [gain, loss] = PENALTY_ADJUSTMENTS[tempaiCount as 1 | 2 | 3];
 
-    const currentScore = [...score];
+    return score.map(
+      (point, index) => point + (isTENPAI[index as Player] ? gain : loss),
+    ) as ScoreMap;
+  };
+
+  const calculatedPenaltyScore = () => {
+    const currentScore = [...score] as ScoreMap;
 
     const tenpaiCount = Object.values(isTENPAI).filter(Boolean).length;
 
     if (tenpaiCount === 0 || tenpaiCount === 4) {
       return currentScore as ScoreMap;
     }
-    currentScore.forEach((_, index) => {
-      const isTenpai = isTENPAI[index as Player];
-      if (tenpaiCount === 1) {
-        currentScore[index] += isTenpai ? penaltyPoint * 3 : -penaltyPoint;
-      } else if (tenpaiCount === 2) {
-        currentScore[index] += isTenpai
-          ? peneltySecondPoint
-          : -peneltySecondPoint;
-      } else if (tenpaiCount === 3) {
-        currentScore[index] += isTenpai ? penaltyPoint : -penaltyPoint * 3;
-      }
-    });
-
-    return currentScore as ScoreMap;
+    return calculatePenalty(currentScore, tenpaiCount);
   };
 
+  const currentCountKyotaku = () => {
+    const countReachPlayer = Object.values(reachFlags).filter(
+      (player) => player === true,
+    ).length;
+    return countReachPlayer;
+  };
+  const isParentTEMPAI =
+    isTENPAI[arrayDirection.findIndex((item) => item === 0) as Player];
+
   const handleCloseTENPAIModal = () => {
-    const newScore = calculatePenalty();
-    setScore.set(newScore);
-    if (!isTENPAI[isTempaiAndWinner]) {
+    if (!isParentTEMPAI) {
       setCurrentDirection.rotate();
     }
+    const newScore = calculatedPenaltyScore();
+    setScore.set(newScore);
     hideTENPAIModal();
     setReachFlags.reset();
+    addKyotaku(currentCountKyotaku());
+    resetTEMPAI();
   };
 
   const isTsumo = isOpen && winnerInfo.winType === "tsumo";
@@ -275,45 +284,12 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
       )}
       {isPopupOpen && <ReachVideo selectedReachPlayer={selectedReachPlayer} />}
       {isTENPAIModal && (
-        <Box
-          pos={"absolute"}
-          top={0}
-          alignItems={"center"}
-          justifyContent={"center"}
-          flexDir={"column"}
-          display={"flex"}
-          w={"100vw"}
-          h={"100vh"}
-          p={"50px"}
-          bg={COLOR.WHITE}
-        >
-          誰がテンパイ？
-          <Stack align="flex-start" flex="1" gap="4">
-            {playersName.map((name, index) => {
-              const player = index as Player;
-              return (
-                <Checkbox.Root
-                  mt={"20px"}
-                  key={index}
-                  checked={isTENPAI[player]}
-                  onChange={() => toggleTenpai(player)}
-                >
-                  <Checkbox.HiddenInput />
-                  <Checkbox.Control color={COLOR.BLACK} />
-                  <Checkbox.Label>{name}</Checkbox.Label>
-                </Checkbox.Root>
-              );
-            })}
-          </Stack>
-          <Button
-            color={COLOR.WHITE}
-            fontWeight={"bold"}
-            bg={COLOR.BLACK}
-            onClick={handleCloseTENPAIModal}
-          >
-            完了
-          </Button>
-        </Box>
+        <SelectTempaiModal
+          playersName={playersName}
+          isTENPAI={isTENPAI}
+          toggleTenpai={toggleTenpai}
+          handleCloseTENPAIModal={handleCloseTENPAIModal}
+        />
       )}
     </>
   );

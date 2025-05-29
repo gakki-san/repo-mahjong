@@ -10,6 +10,7 @@ export const childrenTsumo = (
   currentDirection: number,
   reachPlayer: ReachFlagsProps,
   countHonba: number,
+  countKyotaku: number,
 ) => {
   if (winner === null) return;
   const countReachPlayer = Object.values(reachPlayer).filter(
@@ -24,7 +25,10 @@ export const childrenTsumo = (
   newScore.map((_, index) => {
     if (winner === index) {
       newScore[index] +=
-        winnerPoint + countReachPlayer * 1000 + countHonba * SCORE.HONBA_300;
+        winnerPoint +
+        countReachPlayer * 1000 +
+        countHonba * SCORE.HONBA_300 +
+        countKyotaku * 1000;
     } else if (parentIndex === index) {
       newScore[index] -= parentPoint + countHonba * SCORE.HONBA_100;
     } else {
