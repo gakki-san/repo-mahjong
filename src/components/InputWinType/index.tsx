@@ -1,7 +1,7 @@
-import { FC } from "react";
-import { Box, Button, HStack, RadioGroup } from "@chakra-ui/react";
+import { ComponentProps, FC } from "react";
+import { Box, Button, Flex, HStack, RadioGroup } from "@chakra-ui/react";
 import { COLOR } from "@/const/color";
-import { Player } from "@/hooks/useScore";
+// import { Player } from "@/hooks/useScore";
 import { WinInfo } from "@/hooks/useWinnerinfo";
 
 type InputWinTypeProps = {
@@ -9,17 +9,17 @@ type InputWinTypeProps = {
   setWinnerInfo: (value: Partial<WinInfo>) => void;
   players: string[];
   setIsOpen: () => void;
-  setIsClickedWinner: () => void;
+  setOffIsClickWinner: () => void;
 };
 
 export const InputWinType: FC<InputWinTypeProps> = ({
   winnerInfo,
   setWinnerInfo,
-  players,
+  // players,
   setIsOpen,
-  setIsClickedWinner,
+  setOffIsClickWinner,
 }) => {
-  const items = [
+  const winTypes = [
     {
       label: "ロン",
       value: "ron",
@@ -30,20 +30,32 @@ export const InputWinType: FC<InputWinTypeProps> = ({
     },
   ];
 
-  const isClickedWinner = winnerInfo.winner;
+  // const isClickedWinner = winnerInfo.winner;
 
-  const handleDesideWinType = () => {
-    if (winnerInfo.winType === "tsumo") {
-      const loser = Number(
-        players.find((item) => Number(item) !== isClickedWinner),
-      );
-      setWinnerInfo({
-        loser: loser as Player,
-      });
-    }
-    setIsClickedWinner();
+  const handleWinTypeChange: ComponentProps<
+    typeof RadioGroup.Root
+  >["onValueChange"] = (event) => {
+    const winType = event.value as "tsumo" | "ron";
+    setWinnerInfo({
+      winType: winType,
+    });
+  };
 
+  const handleDecideWinType = () => {
+    // setOffIsClickWinner();
     setIsOpen();
+    // if (winnerInfo.winType === "tsumo") {
+    //   const loser = Number(
+    //     players.find((item) => Number(item) !== isClickedWinner),
+    //   );
+    //   setWinnerInfo({
+    //     loser: loser as Player,
+    //   });
+    // }
+  };
+
+  const handleBack = () => {
+    setOffIsClickWinner();
   };
   return (
     <Box
@@ -60,15 +72,10 @@ export const InputWinType: FC<InputWinTypeProps> = ({
       <RadioGroup.Root
         defaultValue="tsumo"
         value={winnerInfo.winType}
-        onValueChange={(event) => {
-          const winType = event.value as "tsumo" | "ron";
-          setWinnerInfo({
-            winType: winType,
-          });
-        }}
+        onValueChange={handleWinTypeChange}
       >
         <HStack flexDir={"column"} gap="6" display={"flex"}>
-          {items.map((item) => (
+          {winTypes.map((item) => (
             <RadioGroup.Item key={item.value} value={item.value}>
               <RadioGroup.ItemHiddenInput />
               <RadioGroup.ItemIndicator />
@@ -77,15 +84,27 @@ export const InputWinType: FC<InputWinTypeProps> = ({
           ))}
         </HStack>
       </RadioGroup.Root>
-      <Button
-        textStyle="1xl"
-        mt={"50px"}
-        fontWeight="bold"
-        onClick={handleDesideWinType}
-        paddingInline={"50px"}
-      >
-        決定
-      </Button>
+      <Flex gap={"20px"}>
+        <Button
+          textStyle="1xl"
+          mt={"50px"}
+          fontWeight="bold"
+          onClick={handleDecideWinType}
+          paddingInline={"50px"}
+        >
+          決定
+        </Button>
+        <Button
+          mt={"50px"}
+          color={COLOR.WHITE}
+          fontWeight={"bold"}
+          bg={COLOR.BLACK}
+          onClick={handleBack}
+          paddingInline={"50px"}
+        >
+          戻る
+        </Button>
+      </Flex>
     </Box>
   );
 };

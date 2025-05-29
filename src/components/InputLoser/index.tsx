@@ -1,4 +1,4 @@
-import { Box, Button, HStack, RadioGroup } from "@chakra-ui/react";
+import { Box, Button, Flex, HStack, RadioGroup } from "@chakra-ui/react";
 import { COLOR } from "@/const/color";
 import { WinInfo } from "@/hooks/useWinnerinfo";
 import { Player } from "@/hooks/useScore";
@@ -8,7 +8,7 @@ type InputLoserProps = {
   selectedWinner: number;
   setWinnerInfo: (value: Partial<WinInfo>) => void;
   ShowInputScore: () => void;
-  setIsOpen: () => void;
+  closeInputLoserModal: () => void;
   playerName: string[];
 };
 
@@ -16,7 +16,7 @@ export const InputLoser: FC<InputLoserProps> = ({
   selectedWinner,
   setWinnerInfo,
   ShowInputScore,
-  setIsOpen,
+  closeInputLoserModal,
   playerName,
 }) => {
   const playersName = playerName.map((name, index) => ({
@@ -29,7 +29,6 @@ export const InputLoser: FC<InputLoserProps> = ({
   );
 
   const handleComplete = () => {
-    setIsOpen();
     ShowInputScore();
   };
 
@@ -37,12 +36,14 @@ export const InputLoser: FC<InputLoserProps> = ({
     typeof RadioGroup.Root
   >["onValueChange"] = (event) => {
     const loser = Number(event.value) as Player;
-
     setWinnerInfo({
       loser: loser,
     });
   };
 
+  const handleBack = () => {
+    closeInputLoserModal();
+  };
   return (
     <Box
       pos={"absolute"}
@@ -83,16 +84,28 @@ export const InputLoser: FC<InputLoserProps> = ({
             ))}
           </HStack>
         </RadioGroup.Root>
-        <Button
-          textStyle="1xl"
-          mt={"50px"}
-          fontWeight="bold"
-          border={"solid"}
-          onClick={handleComplete}
-          paddingInline={"50px"}
-        >
-          決定
-        </Button>
+        <Flex gap={"20px"}>
+          <Button
+            textStyle="1xl"
+            mt={"50px"}
+            fontWeight="bold"
+            border={"solid"}
+            onClick={handleComplete}
+            paddingInline={"50px"}
+          >
+            決定
+          </Button>
+          <Button
+            mt={"50px"}
+            color={COLOR.WHITE}
+            fontWeight={"bold"}
+            bg={COLOR.BLACK}
+            onClick={handleBack}
+            paddingInline={"50px"}
+          >
+            戻る
+          </Button>
+        </Flex>
       </Box>
     </Box>
   );

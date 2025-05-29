@@ -6,6 +6,7 @@ export const closeAllModal = (
   setIsClose: () => void,
   setIsShowInputScoreClose: () => void,
   resetReachFlags: (list: ReachFlagsProps) => void,
+  closeClickWinner: () => void,
 ) => {
   setWinnerInfo({
     winType: null,
@@ -16,4 +17,5 @@ export const closeAllModal = (
   setIsClose();
   setIsShowInputScoreClose();
   resetReachFlags(initialReachFlags);
+  closeClickWinner();
 };

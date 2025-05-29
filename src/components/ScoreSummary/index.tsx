@@ -152,14 +152,15 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
       setIsOpen.off,
       setIsShowInputScore.off,
       setReachFlags.replace,
+      setIsClickedWinner.off,
     );
     resetHONBA();
     resetKyotaku();
     setCurrentDirection.rotate();
   };
 
-  const handleHONBA = (selectedWinner: Player) => {
-    const isParent = selectedWinner === 0;
+  const isParent = selectedWinner === 0;
+  const handleHONBA = (isParent: boolean) => {
     if (isParent) {
       addHONBA(countHonba);
     } else {
@@ -183,8 +184,9 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
       setIsOpen.off,
       setIsShowInputScore.off,
       setReachFlags.replace,
+      setIsClickedWinner.off,
     );
-    handleHONBA(selectedWinner);
+    handleHONBA(isParent);
     resetKyotaku();
   };
 
@@ -224,7 +226,6 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
 
   const isTsumo = isOpen && winnerInfo.winType === "tsumo";
   const isRon = isOpen && winnerInfo.winType === "ron";
-  const isParent = selectedWinner === 0;
 
   const timerRef = useRef<number | null>(null);
   const handlePressStart = (playerIndex: Player) => {
@@ -295,7 +296,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
           setWinnerInfo={setWinnerInfo}
           players={players}
           setIsOpen={setIsOpen.on}
-          setIsClickedWinner={setIsClickedWinner.off}
+          setOffIsClickWinner={setIsClickedWinner.off}
         />
       )}
       {isTsumo &&
@@ -303,12 +304,14 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
           <InputWinPoint
             handleComplete={handleComplete}
             handleWinPointChange={handleWinPointChange(setWinnerInfo)}
+            closeInputWinnerPoint={setIsOpen.off}
           />
         ) : (
           <InputPointChildrenTsumo
             handleChildrenPoint={makeOnPointChange(setChildrenPoint)}
             handleParentPoint={makeOnPointChange(setParentPoint)}
             handleSetScore={handleSetScore}
+            closeInputChildrenTsumoModal={setIsOpen.off}
           />
         ))}
       {isRon && (
@@ -316,7 +319,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
           selectedWinner={selectedWinerPlayer}
           setWinnerInfo={setWinnerInfo}
           ShowInputScore={setIsShowInputScore.on}
-          setIsOpen={setIsOpen.off}
+          closeInputLoserModal={setIsOpen.off}
           playerName={playersName}
         />
       )}
@@ -324,6 +327,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
         <InputWinPoint
           handleComplete={handleComplete}
           handleWinPointChange={handleWinPointChange(setWinnerInfo)}
+          closeInputWinnerPoint={setIsShowInputScore.off}
         />
       )}
       {isShowReachModal && (
