@@ -1,4 +1,4 @@
-import { ComponentProps, FC } from "react";
+import { FC } from "react";
 import { Player, ScoreMap, UseScoreActionMap } from "@/hooks/useScore";
 import { useWinnerInfo } from "@/hooks/useWinnerinfo";
 import { WindowScoreSummary } from "../WindowScoreSummary";
@@ -9,18 +9,18 @@ import { InputWinPoint } from "../InputWinPoint";
 import { closeAllModal } from "@/logic/closeAllModal";
 import { handleApplyScore } from "@/logic/handleApplyScore";
 import { handleWinPointChange } from "@/logic/handleWinPointChange";
-import { NumberInput } from "@chakra-ui/react";
 import { childrenTsumo } from "@/logic/childrenTsumo";
 import { useReachFlags } from "@/hooks/useReachFlags";
 import { usePlayerPoint } from "@/hooks/usePlayerPoint";
 import { playReachAudio } from "@/logic/attemptReach";
-import {
-  CurrentDirection,
-  useCurrentDirection,
-} from "@/hooks/useCurrentDirection";
+import { useCurrentDirection } from "@/hooks/useCurrentDirection";
 import { InputPointChildrenTsumo } from "@/components/InputPointChildrenTsumo";
 import { AlreadyReachModal } from "../AlreadyReachModal";
 import { ReachVideo } from "../ReachVideo";
+import { genarateArrayDirection } from "@/logic/genarateArrayDirection";
+import { getWinnerIndexInRotateDirection } from "@/logic/getWinnerIndexInRotateDirection";
+import { calculateReachScore } from "@/logic/calculateReachScore";
+import { makeOnPointChange } from "@/logic/makeOnPointChange";
 
 type ScoreSummaryProps = {
   score: ScoreMap;
@@ -55,25 +55,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   const [parentPoint, setParentPoint] = usePlayerPoint();
   const [reachFlags, setReachFlags] = useReachFlags();
 
-  // direction(number)を受け取り、引数が0番目にくる連番配列を返す
-  const genarateArrayDirection = (
-    currentDirection: 0 | 1 | 2 | 3,
-  ): CurrentDirection[] => {
-    const base = [0, 1, 2, 3];
-    return [
-      ...base.slice(currentDirection),
-      ...base.slice(0, currentDirection),
-    ] as CurrentDirection[];
-  };
   const arrayDirection = genarateArrayDirection(currentDirection);
-
-  // rotateされたcurrentDirectionとwinnerを受け取り、今回の勝者を示すnumberを返す
-  const getWinnerIndexInRotateDirection = (
-    rotateDirection: CurrentDirection[],
-    winner: Player,
-  ) => {
-    return rotateDirection.indexOf(winner);
-  };
 
   const handleSelectedWinner: React.MouseEventHandler<HTMLButtonElement> = (
     event,
@@ -83,7 +65,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
     const winnerIndexForScore = getWinnerIndexInRotateDirection(
       arrayDirection,
       tappedWinner,
-    ) as Player;
+    );
 
     setIsClickedWinner.on();
     setSelectedWinner.set(tappedWinner);
@@ -96,24 +78,11 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
       [selectedReachPlayer]: false,
     }));
     setIsShowReachModal.off();
-    calculateReachScore("unreach", selectedReachPlayer);
+    setScore.set(calculateReachScore(selectedReachPlayer, reachFlags, score));
   };
 
   const noResetReach = () => {
     setIsShowReachModal.off();
-  };
-
-  const calculateReachScore = (type: string, player: CurrentDirection) => {
-    if (score === null) return;
-    const reachPoint = 1000;
-    const newScore = [...score] as ScoreMap;
-    if (type === "reach") {
-      newScore[player] -= reachPoint;
-      setScore.set(newScore);
-    } else {
-      newScore[player] += reachPoint;
-      setScore.set(newScore);
-    }
   };
 
   const handleReach = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -131,17 +100,9 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
         setIsPopupOpen.off,
         setReachFlags.update,
       );
-      calculateReachScore("reach", eventReachPlayer);
+      setScore.set(calculateReachScore(selectedReachPlayer, reachFlags, score));
     }
   };
-
-  const makeOnPointChange =
-    (
-      setter: (value: number) => void,
-    ): ComponentProps<typeof NumberInput.Root>["onValueChange"] =>
-    (details) => {
-      setter(details.valueAsNumber);
-    };
 
   const handleSetScore = () => {
     setScore.set(
