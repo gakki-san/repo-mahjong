@@ -31,6 +31,7 @@ import { SelectTempaiModal } from "../SelectTempaiModal";
 import { calculatePenalty } from "@/logic/calculatePenalty";
 import { countReachPlayers } from "@/logic/countReachPlayers";
 import { handleScoreDiff } from "@/logic/handleScoreDiff";
+import { useDice } from "@/hooks/useDice";
 
 type ScoreSummaryProps = {
   score: ScoreMap;
@@ -72,6 +73,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   const [isTENPAI, { update: setTEMPAI, reset: resetTEMPAI }] = useReachFlags();
   const [countHonba, { increment: addHONBA, reset: resetHONBA }] = useCount();
   const [countKyotaku, { add: addKyotaku, reset: resetKyotaku }] = useCount();
+  const [dice, rollBoth] = useDice();
 
   const arrayDirection = genarateArrayDirection(currentDirection);
 
@@ -249,6 +251,8 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
         handlePressEnd={handlePressEnd}
         isAppearanceScoreDiff={isAppearanceScoreDiff}
         scoreDiff={scoreDiff}
+        dice={dice}
+        rollBoth={rollBoth}
       />
       {isClickedWinner && (
         <InputWinType
