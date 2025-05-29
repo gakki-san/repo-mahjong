@@ -52,6 +52,7 @@ function App() {
           openScoreSummary={open}
           setReturnPoint={setReturnPoint.add}
           setUmaRule={setUmaRule.add}
+          returnPoint={returnPoint}
         />
       )}
       {isOpenScoreSummary && (

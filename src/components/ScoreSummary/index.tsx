@@ -32,9 +32,8 @@ import { calculatePenalty } from "@/logic/calculatePenalty";
 import { countReachPlayers } from "@/logic/countReachPlayers";
 import { handleScoreDiff } from "@/logic/handleScoreDiff";
 import { useDice } from "@/hooks/useDice";
-import { Box, Button, Flex } from "@chakra-ui/react";
-import { COLOR } from "@/const/color";
 import { calculateFinishScore } from "@/logic/calculateFinishScore";
+import { FinishGameModal } from "../FinishGameModal";
 
 type ScoreSummaryProps = {
   score: ScoreMap;
@@ -257,7 +256,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   const newGameData = (playersName: string[], score: ScoreMap) => {
     return playersName.map((name, index) => {
       const raw = score[index] / 1000;
-      const scoreValue = raw === 0 ? 0 : `${raw > 0 ? "+" : ""}${raw}`;
+      const scoreValue = raw === 0 ? "0" : `${raw > 0 ? "+" : ""}${raw}`;
       return {
         id: (index + 1).toString(),
         name: name,
@@ -343,46 +342,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
         />
       )}
       {isFinishGame && (
-        <Box
-          pos={"absolute"}
-          top={0}
-          alignItems={"center"}
-          justifyContent={"center"}
-          flexDir={"column"}
-          display={"flex"}
-          w={"100vw"}
-          h={"100vh"}
-          p={"50px"}
-          bg={COLOR.WHITE}
-        >
-          <Box mb={"20px"} fontSize={"30px"} fontWeight={"bold"}>
-            終局結果
-          </Box>
-          {gameData.map((item) => (
-            <Flex
-              key={item.id}
-              justify={"space-between"}
-              gap={"10px"}
-              w={"150px"}
-              mt={"10px"}
-              fontSize={"20px"}
-              textAlign={"center"}
-            >
-              <Box>{item.name}</Box>
-              <Box>{item.score}</Box>
-            </Flex>
-          ))}
-          <Button
-            mt={"20px"}
-            color={COLOR.BLACK}
-            fontWeight={"bold"}
-            bg={"none"}
-            border={"solid"}
-            onClick={handleBack}
-          >
-            戻る
-          </Button>
-        </Box>
+        <FinishGameModal gameData={gameData} handleBack={handleBack} />
       )}
     </>
   );
