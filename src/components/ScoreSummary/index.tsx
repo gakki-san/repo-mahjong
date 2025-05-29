@@ -23,7 +23,8 @@ import { calculateReachScore } from "@/logic/calculateReachScore";
 import { makeOnPointChange } from "@/logic/makeOnPointChange";
 import { useCount } from "@/hooks/useCount";
 import { SelectTempaiModal } from "../SelectTempaiModal";
-import { SCORE } from "@/const/score";
+import { calculatePenalty } from "@/logic/calculatePenalty";
+import { countReachPlayers } from "@/logic/countReachPlayers";
 
 type ScoreSummaryProps = {
   score: ScoreMap;
@@ -178,38 +179,14 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
     addHONBA(countHonba);
   };
 
-  const calculatePenalty = (score: ScoreMap, tempaiCount: number) => {
-    const PENALTY_ADJUSTMENTS: Record<1 | 2 | 3, [number, number]> = {
-      1: [SCORE.TRIPLE, -SCORE.SINGLE],
-      2: [SCORE.DOUBLE, -SCORE.DOUBLE],
-      3: [SCORE.SINGLE, -SCORE.TRIPLE],
-    };
-    if (tempaiCount === 0 || tempaiCount === 4) return [...score] as ScoreMap;
-
-    const [gain, loss] = PENALTY_ADJUSTMENTS[tempaiCount as 1 | 2 | 3];
-
-    return score.map(
-      (point, index) => point + (isTENPAI[index as Player] ? gain : loss),
-    ) as ScoreMap;
-  };
-
   const calculatedPenaltyScore = () => {
     const currentScore = [...score] as ScoreMap;
 
     const tenpaiCount = Object.values(isTENPAI).filter(Boolean).length;
 
-    if (tenpaiCount === 0 || tenpaiCount === 4) {
-      return currentScore as ScoreMap;
-    }
-    return calculatePenalty(currentScore, tenpaiCount);
+    return calculatePenalty(currentScore, tenpaiCount, isTENPAI);
   };
 
-  const currentCountKyotaku = () => {
-    const countReachPlayer = Object.values(reachFlags).filter(
-      (player) => player === true,
-    ).length;
-    return countReachPlayer;
-  };
   const isParentTEMPAI =
     isTENPAI[arrayDirection.findIndex((item) => item === 0) as Player];
 
@@ -221,7 +198,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
     setScore.set(newScore);
     hideTENPAIModal();
     setReachFlags.reset();
-    addKyotaku(currentCountKyotaku());
+    addKyotaku(countReachPlayers(reachFlags));
     resetTEMPAI();
   };
 
@@ -239,6 +216,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
         currentDirectionArray={arrayDirection}
         palyerName={playersName}
         countHonba={countHonba}
+        countKyotaku={countKyotaku}
       />
       {isClickedWinner && (
         <InputWinType
