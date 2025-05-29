@@ -32,12 +32,17 @@ import { calculatePenalty } from "@/logic/calculatePenalty";
 import { countReachPlayers } from "@/logic/countReachPlayers";
 import { handleScoreDiff } from "@/logic/handleScoreDiff";
 import { useDice } from "@/hooks/useDice";
+import { Box, Button, Flex } from "@chakra-ui/react";
+import { COLOR } from "@/const/color";
+import { calculateFinishScore } from "@/logic/calculateFinishScore";
 
 type ScoreSummaryProps = {
   score: ScoreMap;
   setScore: UseScoreActionMap;
   players: string[];
   playersName: string[];
+  returnPoint: number;
+  umaRule: number;
 };
 
 export type IsShowType = {
@@ -50,6 +55,8 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   setScore,
   players,
   playersName,
+  returnPoint,
+  umaRule,
 }) => {
   // useBoolean。それぞれのモーダルの開閉を制御
   const [isShowInputScore, setIsShowInputScore] = useIsBoolean();
@@ -57,6 +64,8 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   const [isPopupOpen, setIsPopupOpen] = useIsBoolean();
   const [isShowReachModal, setIsShowReachModal] = useIsBoolean();
   const [isClickedWinner, setIsClickedWinner] = useIsBoolean();
+  const [isFinishGame, { on: finishGame, off: closeFinishModal }] =
+    useIsBoolean();
   const [isTENPAIModal, { on: showTENPAIModal, off: hideTENPAIModal }] =
     useIsBoolean();
   const [isAppearanceScoreDiff, { on: onScoreDiff, off: offScoreDiff }] =
@@ -201,6 +210,8 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   const isParentTEMPAI =
     isTENPAI[arrayDirection.findIndex((item) => item === 0) as Player];
 
+  const selectedLosers = arrayDirection.indexOf(selectedWinner);
+
   const handleCloseTENPAIModal = () => {
     if (!isParentTEMPAI) {
       setCurrentDirection.rotate();
@@ -236,6 +247,31 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
     }
   };
 
+  const handleFinishGame = () => {
+    finishGame();
+  };
+
+  const handleBack = () => {
+    closeFinishModal();
+  };
+
+  const newGameData = (playersName: string[], score: ScoreMap) => {
+    return playersName.map((name, index) => {
+      const raw = score[index] / 1000;
+      const scoreValue = raw === 0 ? 0 : `${raw > 0 ? "+" : ""}${raw}`;
+      return {
+        id: (index + 1).toString(),
+        name: name,
+        score: scoreValue,
+      };
+    });
+  };
+
+  const gameData = newGameData(
+    playersName,
+    calculateFinishScore(score, returnPoint, umaRule),
+  );
+
   return (
     <>
       <WindowScoreSummary
@@ -253,6 +289,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
         scoreDiff={scoreDiff}
         dice={dice}
         rollBoth={rollBoth}
+        handleFinishGame={handleFinishGame}
       />
       {isClickedWinner && (
         <InputWinType
@@ -278,10 +315,11 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
         ))}
       {isRon && (
         <InputLoser
-          selectedWinner={selectedWinner}
+          selectedWinner={selectedLosers}
           setWinnerInfo={setWinnerInfo}
           ShowInputScore={setIsShowInputScore.on}
           setIsOpen={setIsOpen.off}
+          playerName={playersName}
         />
       )}
       {isShowInputScore && (
@@ -304,6 +342,48 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
           toggleTenpai={toggleTenpai}
           handleCloseTENPAIModal={handleCloseTENPAIModal}
         />
+      )}
+      {isFinishGame && (
+        <Box
+          pos={"absolute"}
+          top={0}
+          alignItems={"center"}
+          justifyContent={"center"}
+          flexDir={"column"}
+          display={"flex"}
+          w={"100vw"}
+          h={"100vh"}
+          p={"50px"}
+          bg={COLOR.WHITE}
+        >
+          <Box mb={"20px"} fontSize={"30px"} fontWeight={"bold"}>
+            終局結果
+          </Box>
+          {gameData.map((item) => (
+            <Flex
+              key={item.id}
+              justify={"space-between"}
+              gap={"10px"}
+              w={"150px"}
+              mt={"10px"}
+              fontSize={"20px"}
+              textAlign={"center"}
+            >
+              <Box>{item.name}</Box>
+              <Box>{item.score}</Box>
+            </Flex>
+          ))}
+          <Button
+            mt={"20px"}
+            color={COLOR.BLACK}
+            fontWeight={"bold"}
+            bg={"none"}
+            border={"solid"}
+            onClick={handleBack}
+          >
+            戻る
+          </Button>
+        </Box>
       )}
     </>
   );

@@ -9,6 +9,8 @@ type ScoreSelectPanelProps = {
   score: ScoreMap;
   setScore: (value: ScoreMap) => void;
   openScoreSummary: () => void;
+  setReturnPoint: (num: number) => void;
+  setUmaRule: (num: number) => void;
 };
 
 export const ScoreSelectPanel: FC<ScoreSelectPanelProps> = ({
@@ -16,11 +18,27 @@ export const ScoreSelectPanel: FC<ScoreSelectPanelProps> = ({
   score,
   setScore,
   openScoreSummary,
+  setReturnPoint,
+  setUmaRule,
 }) => {
+  // const [returnPoint, setReturnPoint] = useCount();
+  // const [umaRule, setUmaRule] = useCount();
   const handleSetScore = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectScore = Number(event.currentTarget.value);
     setScoreForAllPlayers(selectScore);
   };
+
+  const handleSetReturnPoint = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    const selectedPoint = Number(event.currentTarget.value);
+    setReturnPoint(selectedPoint);
+  };
+  const handleSetUmaRule = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedRuleNumber = Number(event.currentTarget.value);
+    setUmaRule(selectedRuleNumber);
+  };
+
   const setScoreForAllPlayers = (selectScore: number) => {
     if (!selectScore) return;
     const isRuleFour = selectScore === SCORE.FOUR_PLAYER_RULE;
@@ -41,16 +59,14 @@ export const ScoreSelectPanel: FC<ScoreSelectPanelProps> = ({
     }
   };
 
+  // console.log("返す点数", returnPoint);
+  // console.log("uma", umaRule);
+
   return (
     <Box w={"100vw"} h={"100vh"} bgColor={COLOR.GREEN_PRIMARY}>
-      <Box>
-        <Text
-          textStyle="3xl"
-          pt={"50px"}
-          fontWeight="bold"
-          textAlign={"center"}
-        >
-          点数を選択してください
+      <Box pt={"30px"}>
+        <Text textStyle="1xl" fontWeight="bold" textAlign={"center"}>
+          持ち点を選択してください
         </Text>
       </Box>
       <Flex justify="center" mt={"20px"}>
@@ -69,6 +85,64 @@ export const ScoreSelectPanel: FC<ScoreSelectPanelProps> = ({
             </option>
             <option value="35000" style={{ fontSize: "20px" }}>
               35000
+            </option>
+          </NativeSelect.Field>
+          <NativeSelect.Indicator />
+        </NativeSelect.Root>
+      </Flex>
+      <Box mt={"30px"}>
+        <Text textStyle="1xl" fontWeight="bold" textAlign={"center"}>
+          返す点数(オカ)を選択
+        </Text>
+      </Box>
+      <Flex justify="center" mt={"10px"}>
+        <NativeSelect.Root
+          w="240px"
+          key={"num"}
+          size={"md"}
+          backgroundColor={COLOR.WHITE}
+        >
+          <NativeSelect.Field
+            onChange={handleSetReturnPoint}
+            placeholder="点数を選択してください"
+          >
+            <option value="25000" aria-setsize={20}>
+              25000
+            </option>
+            <option value="30000" style={{ fontSize: "20px" }}>
+              30000
+            </option>
+          </NativeSelect.Field>
+          <NativeSelect.Indicator />
+        </NativeSelect.Root>
+      </Flex>
+      <Box mt={"30px"}>
+        <Text textStyle="1xl" fontWeight="bold" textAlign={"center"}>
+          ウマを選択してください
+        </Text>
+      </Box>
+      <Flex justify="center" mt={"10px"}>
+        <NativeSelect.Root
+          w="240px"
+          key={"num"}
+          size={"md"}
+          backgroundColor={COLOR.WHITE}
+        >
+          <NativeSelect.Field
+            placeholder="点数を選択してください"
+            onChange={handleSetUmaRule}
+          >
+            <option value="0" aria-setsize={20}>
+              5-10
+            </option>
+            <option value="1" style={{ fontSize: "20px" }}>
+              10-20
+            </option>
+            <option value="2" style={{ fontSize: "20px" }}>
+              10-30
+            </option>
+            <option value="3" style={{ fontSize: "20px" }}>
+              20-30
             </option>
           </NativeSelect.Field>
           <NativeSelect.Indicator />

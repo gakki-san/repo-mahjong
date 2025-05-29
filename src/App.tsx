@@ -7,12 +7,15 @@ import { useScore } from "./hooks/useScore";
 import { ComponentProps } from "react";
 import { InputPlayerName } from "./components/InputPlayerName";
 import { playerList } from "./const/playerList";
+import { useCount } from "./hooks/useCount";
 
 function App() {
   const [isSelectedScorePanel, { on: isOpen, off: close }] = useIsBoolean();
   const [isOpenScoreSummary, { on: open }] = useIsBoolean();
   const [playersName, setPlayersName] = usePlayerName();
   const [score, action] = useScore();
+  const [returnPoint, setReturnPoint] = useCount();
+  const [umaRule, setUmaRule] = useCount();
   const [isInputName, { on: closeInputModal }] = useIsBoolean();
 
   const players = score ? Object.keys(score) : [];
@@ -47,6 +50,8 @@ function App() {
           score={score}
           setScore={action.set}
           openScoreSummary={open}
+          setReturnPoint={setReturnPoint.add}
+          setUmaRule={setUmaRule.add}
         />
       )}
       {isOpenScoreSummary && (
@@ -55,6 +60,8 @@ function App() {
           setScore={action}
           players={players}
           playersName={playerArray}
+          returnPoint={returnPoint}
+          umaRule={umaRule}
         />
       )}
     </>
