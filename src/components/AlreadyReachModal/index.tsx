@@ -12,17 +12,7 @@ export const AlreadyReachModal: FC<AlreadyReachModalProps> = ({
   noResetReach,
 }) => {
   return (
-    <Box
-      pos={"absolute"}
-      top={0}
-      alignItems={"center"}
-      justifyContent={"center"}
-      flexDir={"column"}
-      display={"flex"}
-      w={"100vw"}
-      h={"100vh"}
-      bg={COLOR.WHITE}
-    >
+    <Box>
       貴様、既に立直しているな？ 立直取り消す？
       <Button
         mt={"20px"}

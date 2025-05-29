@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Box, Button, Flex, Grid, VStack } from "@chakra-ui/react";
 import { COLOR } from "@/const/color";
-import { ScoreMap } from "@/hooks/useScore";
+import { Player, ScoreMap } from "@/hooks/useScore";
 import { CurrentDirection } from "@/hooks/useCurrentDirection";
 
 type WindowScoreSummaryProps = {
@@ -13,6 +13,12 @@ type WindowScoreSummaryProps = {
   palyerName: string[];
   countHonba: number;
   countKyotaku: number;
+  handlePressStart: (
+    playerIndex: Player,
+  ) => React.PointerEventHandler<HTMLButtonElement>;
+  handlePressEnd: () => void;
+  isAppearanceScoreDiff: boolean;
+  scoreDiff: ScoreMap;
 };
 
 export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
@@ -24,6 +30,10 @@ export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
   palyerName,
   countHonba,
   countKyotaku,
+  handlePressStart,
+  handlePressEnd,
+  isAppearanceScoreDiff,
+  scoreDiff,
 }) => {
   const uiPositions = [
     { gridColumn: 2, gridRow: 1, transform: "rotate(180deg)" },
@@ -38,7 +48,7 @@ export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
     <Grid
       justifyContent="center"
       templateRows="repeat(3, 1fr)"
-      templateColumns="repeat(5, 1fr)"
+      templateColumns="repeat(3, 1fr)"
       overflow={"hidden"}
       w="100vw"
       h="100vh"
@@ -56,16 +66,24 @@ export const WindowScoreSummary: FC<WindowScoreSummaryProps> = ({
             transform={directionPosition.transform}
           >
             <Flex gap="20px">
-              <Box
-                w="200px"
-                h="auto"
-                p="2"
-                color={item === parent ? COLOR.WHITE : COLOR.BLACK}
-                textAlign="center"
-                bg={item === parent ? COLOR.RED : COLOR.WHITE}
-              >
-                <Box fontWeight={"bold"}>{player}</Box>
-                <Box textStyle={"5xl"}>{score[index]}</Box>
+              <Box>
+                <Box mb={"5px"} fontWeight={"bold"} textAlign={"center"}>
+                  {player}
+                </Box>
+                <Button
+                  textStyle={"5xl"}
+                  w="200px"
+                  h="auto"
+                  p="2"
+                  color={item === parent ? COLOR.WHITE : COLOR.BLACK}
+                  textAlign="center"
+                  bg={item === parent ? COLOR.RED : COLOR.WHITE}
+                  onPointerDown={handlePressStart(index as Player)}
+                  onPointerLeave={handlePressEnd}
+                  onPointerUp={handlePressEnd}
+                >
+                  {isAppearanceScoreDiff ? scoreDiff[index] : score[index]}
+                </Button>
               </Box>
               <Flex direction={"column"}>
                 <Button
