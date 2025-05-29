@@ -1,8 +1,10 @@
-import { Box, Button, Flex, HStack, RadioGroup } from "@chakra-ui/react";
+import { Box, Flex, HStack, RadioGroup } from "@chakra-ui/react";
 import { COLOR } from "@/const/color";
 import { WinInfo } from "@/hooks/useWinnerinfo";
 import { Player } from "@/hooks/useScore";
 import { ComponentProps, FC } from "react";
+import { DecisionButton } from "../DecisionButton";
+import { BackButton } from "../BackButton";
 
 type InputLoserProps = {
   selectedWinner: number;
@@ -85,26 +87,8 @@ export const InputLoser: FC<InputLoserProps> = ({
           </HStack>
         </RadioGroup.Root>
         <Flex gap={"20px"}>
-          <Button
-            textStyle="1xl"
-            mt={"50px"}
-            fontWeight="bold"
-            border={"solid"}
-            onClick={handleComplete}
-            paddingInline={"50px"}
-          >
-            決定
-          </Button>
-          <Button
-            mt={"50px"}
-            color={COLOR.WHITE}
-            fontWeight={"bold"}
-            bg={COLOR.BLACK}
-            onClick={handleBack}
-            paddingInline={"50px"}
-          >
-            戻る
-          </Button>
+          <DecisionButton handleDecisionButton={handleComplete} />
+          <BackButton handleBack={handleBack} />
         </Flex>
       </Box>
     </Box>

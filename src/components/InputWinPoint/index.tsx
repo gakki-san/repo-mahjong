@@ -1,6 +1,8 @@
 import { ComponentProps, FC } from "react";
-import { Box, Button, Flex, NumberInput } from "@chakra-ui/react";
+import { Box, Flex, NumberInput } from "@chakra-ui/react";
 import { COLOR } from "@/const/color";
+import { DecisionButton } from "../DecisionButton";
+import { BackButton } from "../BackButton";
 
 type InputWinPointProps = {
   handleComplete: () => void;
@@ -40,36 +42,9 @@ export const InputWinPoint: FC<InputWinPointProps> = ({
         <NumberInput.Input />
       </NumberInput.Root>
       <Flex gap={"20px"}>
-        <Button
-          textStyle="1xl"
-          mt={"50px"}
-          fontWeight="bold"
-          onClick={handleComplete}
-          paddingInline={"50px"}
-        >
-          決定
-        </Button>
-        <Button
-          mt={"50px"}
-          color={COLOR.WHITE}
-          fontWeight={"bold"}
-          bg={COLOR.BLACK}
-          onClick={handleBack}
-          paddingInline={"50px"}
-        >
-          戻る
-        </Button>
+        <DecisionButton handleDecisionButton={handleComplete} />
+        <BackButton handleBack={handleBack} />
       </Flex>
     </Box>
   );
 };
-
-// const PLAYER = {
-//   EAST: "east",
-//   SOUTH: "south",
-// } as const;
-
-// type ValueOf<T> = T[keyof T]
-// type Player = ValueOf<typeof PLAYER>
-
-// const players = Object.values(PLAYER)
