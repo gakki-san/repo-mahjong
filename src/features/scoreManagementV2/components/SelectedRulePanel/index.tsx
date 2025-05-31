@@ -1,13 +1,13 @@
 import { FC } from "react";
 import { Box, Button } from "@chakra-ui/react";
 import { COLOR } from "@/features/scoreManagementV2/const/color.ts";
-import { SCORE } from "@/features/scoreManagementV2/const/score.ts";
 import { ScoreMap } from "@/features/scoreManagementV2/hooks/useScore.ts";
 import { RULE_OPTIONS } from "@/features/scoreManagementV2/const/rureOptions.ts";
 import { InputSelectPoint } from "@/features/scoreManagementV2/components/InputSelectPoint";
 import { useSetInputValue } from "@/features/scoreManagementV2/hooks/useSetInputValue.ts";
 import { useIsBoolean } from "@/features/scoreManagementV2/hooks/useIsBoolean.ts";
 import { InputSelectUmaRule } from "@/features/scoreManagementV2/components/InputSelectUmaRule";
+import { handleScoreSubmit } from "@/features/scoreManagementV2/hooks/useScoreHookForm.ts";
 
 type ScoreSelectPanelProps = {
   close: () => void;
@@ -29,27 +29,18 @@ export const SelectedRulePanel: FC<ScoreSelectPanelProps> = ({
   const [inputReturnPoint, handleReturnPoint] = useSetInputValue();
   const [inputUmaRule, handleUmaRule] = useSetInputValue();
 
-  const setScoreForAllPlayers = (selectScore: number) => {
-    if (!selectScore) return;
-    const isRuleFour = Number(selectScore) === SCORE.FOUR_PLAYER_RULE;
-    const seats = isRuleFour ? SCORE.FOUR_RULE : SCORE.THREE_RULR;
-    const newScore = new Array(seats).fill(selectScore);
-    setScore(newScore as ScoreMap);
-  };
-
-  const onSubmit = () => {
-    const isEmptyInputField =
-      inputStartPoint === "" || inputReturnPoint === "" || inputUmaRule === "";
-    if (isEmptyInputField) {
-      setIsSubmit.on();
-      return;
-    }
-    setScoreForAllPlayers(Number(inputStartPoint));
-    setReturnPoint(Number(inputReturnPoint));
-    setUmaRule(Number(inputUmaRule));
-    close();
-    openScoreSummary();
-  };
+  const onSubmit = () =>
+    handleScoreSubmit({
+      inputStartPoint,
+      inputReturnPoint,
+      inputUmaRule,
+      setScore,
+      setReturnPoint,
+      setUmaRule,
+      close,
+      openScoreSummary,
+      setIsSubmit,
+    });
 
   return (
     <Box
