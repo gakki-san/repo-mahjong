@@ -1,11 +1,13 @@
 import { FC } from "react";
 import { Box, Button } from "@chakra-ui/react";
 import { COLOR } from "@/features/scoreManagementV2/const/color.ts";
-import { useForm } from "react-hook-form";
 import { SCORE } from "@/features/scoreManagementV2/const/score.ts";
 import { ScoreMap } from "@/features/scoreManagementV2/hooks/useScore.ts";
-import { InputSelectField } from "@/features/scoreManagementV2/components/InputSelectField";
-import { SELECT_FIELDS_CONFIG } from "@/features/scoreManagementV2/const/rureOptions.ts";
+import { RULE_OPTIONS } from "@/features/scoreManagementV2/const/rureOptions.ts";
+import { InputSelectPoint } from "@/features/scoreManagementV2/components/InputSelectPoint";
+import { useSetInputValue } from "@/features/scoreManagementV2/hooks/useSetInputValue.ts";
+import { useIsBoolean } from "@/features/scoreManagementV2/hooks/useIsBoolean.ts";
+import { InputSelectUmaRule } from "@/features/scoreManagementV2/components/InputSelectUmaRule";
 
 type ScoreSelectPanelProps = {
   close: () => void;
@@ -15,12 +17,6 @@ type ScoreSelectPanelProps = {
   setUmaRule: (num: number) => void;
 };
 
-export type FormValues = {
-  startingScore: number;
-  returnPoint: number;
-  umaRule: number;
-};
-
 export const SelectedRulePanel: FC<ScoreSelectPanelProps> = ({
   close,
   setScore,
@@ -28,11 +24,10 @@ export const SelectedRulePanel: FC<ScoreSelectPanelProps> = ({
   setReturnPoint,
   setUmaRule,
 }) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormValues>();
+  const [isSubmit, setIsSubmit] = useIsBoolean();
+  const [inputStartPoint, handleStartPoint] = useSetInputValue();
+  const [inputReturnPoint, handleReturnPoint] = useSetInputValue();
+  const [inputUmaRule, handleUmaRule] = useSetInputValue();
 
   const setScoreForAllPlayers = (selectScore: number) => {
     if (!selectScore) return;
@@ -42,10 +37,16 @@ export const SelectedRulePanel: FC<ScoreSelectPanelProps> = ({
     setScore(newScore as ScoreMap);
   };
 
-  const onSubmit = (data: FormValues) => {
-    setScoreForAllPlayers(Number(data.startingScore));
-    setReturnPoint(data.returnPoint);
-    setUmaRule(data.umaRule);
+  const onSubmit = () => {
+    const isEmptyInputField =
+      inputStartPoint === "" || inputReturnPoint === "" || inputUmaRule === "";
+    if (isEmptyInputField) {
+      setIsSubmit.on();
+      return;
+    }
+    setScoreForAllPlayers(Number(inputStartPoint));
+    setReturnPoint(Number(inputReturnPoint));
+    setUmaRule(Number(inputUmaRule));
     close();
     openScoreSummary();
   };
@@ -61,20 +62,30 @@ export const SelectedRulePanel: FC<ScoreSelectPanelProps> = ({
       h={"100vh"}
       pt={"30px"}
       bgColor={COLOR.GREEN_PRIMARY}
-      onSubmit={handleSubmit(onSubmit)}
     >
-      {SELECT_FIELDS_CONFIG.map(({ id, options, placeholder, name }) => (
-        <InputSelectField
-          key={id}
-          errors={errors}
-          register={register}
-          options={options}
-          placeholder={placeholder}
-          name={name}
-        />
-      ))}
+      <InputSelectPoint
+        input={inputStartPoint}
+        handleInputValue={handleStartPoint}
+        option={RULE_OPTIONS.START_SCORE}
+        placeholder={"持ち点を選択してください"}
+        isSubmit={isSubmit}
+      />
+      <InputSelectPoint
+        input={inputReturnPoint}
+        handleInputValue={handleReturnPoint}
+        option={RULE_OPTIONS.RETURN_POINT}
+        placeholder={"返す点数を選択してください"}
+        isSubmit={isSubmit}
+      />
+      <InputSelectUmaRule
+        input={inputUmaRule}
+        handleInputValue={handleUmaRule}
+        option={RULE_OPTIONS.UMA_RULE}
+        placeholder={"ウマを選択してください"}
+        isSubmit={isSubmit}
+      />
 
-      <Button w={"100px"} mt="4" type="submit">
+      <Button w={"100px"} mt="4" onClick={onSubmit} type="button">
         完了
       </Button>
     </Box>
