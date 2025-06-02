@@ -1,13 +1,5 @@
-import React, { ComponentProps, FC } from "react";
-import {
-  Box,
-  Button,
-  Flex,
-  Grid,
-  HStack,
-  RadioGroup,
-  VStack,
-} from "@chakra-ui/react";
+import React, { FC } from "react";
+import { Box, Button, Flex, Grid, VStack } from "@chakra-ui/react";
 import { COLOR } from "@/features/scoreManagementV2/const/color.ts";
 import {
   Player,
@@ -17,6 +9,8 @@ import { useModalStack } from "@/features/scoreManagementV2/hooks/useModalStack.
 import { useWinnerInfo } from "@/features/scoreManagementV2/hooks/useWinnerinfo.ts";
 import { DecisionButton } from "@/features/scoreManagementV2/components/DecisionButton";
 import { BackButton } from "@/features/scoreManagementV2/components/BackButton";
+import { InputWinType } from "@/features/scoreManagementV2/components/InputWinType";
+import { SelectLoser } from "@/features/scoreManagementV2/components/SelectLoser";
 
 type ScoreSummaryProps = {
   score: ScoreMap;
@@ -44,41 +38,22 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({ score, playerName }) => {
     event: React.MouseEvent<HTMLButtonElement>,
     currentScore: number,
   ) => {
-    console.log("oya", event.currentTarget.value);
-    // const currentDirection = event.currentTarget.value;
+    const currentDirection = Number(event.currentTarget.value);
+    console.log("親？", currentDirection === 0);
     setWinnerInfo({ winner: currentScore as Player });
     openModal("winType");
   };
 
-  const handleWinTypeChange: ComponentProps<
-    typeof RadioGroup.Root
-  >["onValueChange"] = (event) => {
-    const winType = event.value as "tsumo" | "ron";
-    setWinnerInfo({
-      winType: winType,
-    });
-  };
-
-  const winTypes = [
-    {
-      label: "ロン",
-      value: "ron",
-    },
-    {
-      label: "ツモ",
-      value: "tsumo",
-    },
-  ];
-
-  const handleDesideWinType = () => {
-    openModal("afterWinType");
-  };
   const handleBack = () => {
     closeModal();
   };
 
   // const oyaichi = [0, 1, 2, 3];
   const oyanan = [3, 2, 1, 0];
+
+  const handleNextModal = () => {
+    openModal("loser");
+  };
 
   return (
     <>
@@ -214,56 +189,21 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({ score, playerName }) => {
         </Flex>
       </Grid>
       {WinType && (
-        <Box
-          pos={"absolute"}
-          top={0}
-          alignItems={"center"}
-          justifyContent={"center"}
-          flexDir={"column"}
-          display={"flex"}
-          w={"100vw"}
-          h={"100vh"}
-          bg={COLOR.GREEN_PRIMARY}
-        >
-          <RadioGroup.Root
-            defaultValue={"ron"}
-            value={winnerInfo.winType}
-            onValueChange={handleWinTypeChange}
-          >
-            <HStack flexDir={"column"} gap="6" display={"flex"}>
-              {winTypes.map((item) => (
-                <RadioGroup.Item key={item.value} value={item.value}>
-                  <RadioGroup.ItemHiddenInput />
-                  <RadioGroup.ItemIndicator />
-                  <RadioGroup.ItemText>{item.label}</RadioGroup.ItemText>
-                </RadioGroup.Item>
-              ))}
-            </HStack>
-          </RadioGroup.Root>
-          <Flex gap={"20px"}>
-            <DecisionButton handleDecisionButton={handleDesideWinType} />
-            <BackButton handleBack={handleBack} />
-          </Flex>
-        </Box>
+        <InputWinType
+          winnerInfo={winnerInfo}
+          setWinnerInfo={setWinnerInfo}
+          openModal={openModal}
+          handleBack={handleBack}
+        />
       )}
       {isRon && (
-        <Box
-          pos={"absolute"}
-          top={0}
-          alignItems={"center"}
-          justifyContent={"center"}
-          flexDir={"column"}
-          display={"flex"}
-          w={"100vw"}
-          h={"100vh"}
-          bg={COLOR.GREEN_PRIMARY}
-        >
-          ロンだえ
-          <Flex gap={"20px"}>
-            <DecisionButton handleDecisionButton={handleDesideWinType} />
-            <BackButton handleBack={handleBack} />
-          </Flex>
-        </Box>
+        <SelectLoser
+          winnerInfo={winnerInfo}
+          setWinnerInfo={setWinnerInfo}
+          playerName={playerName}
+          openModal={openModal}
+          handleBack={handleBack}
+        />
       )}
       {isTsumo && (
         <Box
@@ -279,7 +219,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({ score, playerName }) => {
         >
           ツモだえ
           <Flex gap={"20px"}>
-            <DecisionButton handleDecisionButton={handleDesideWinType} />
+            <DecisionButton handleDecisionButton={handleNextModal} />
             <BackButton handleBack={handleBack} />
           </Flex>
         </Box>
