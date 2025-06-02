@@ -3,6 +3,7 @@ import { useState } from "react";
 export type ModalType =
   | null
   | "winType"
+  | "afterWinType"
   | "winPoint"
   | "childrenTsumo"
   | "loser"
