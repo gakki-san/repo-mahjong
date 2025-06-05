@@ -7,10 +7,14 @@ import {
 } from "@/features/scoreManagementV2/hooks/useScore.ts";
 import { useModalStack } from "@/features/scoreManagementV2/hooks/useModalStack.ts";
 import { useWinnerInfo } from "@/features/scoreManagementV2/hooks/useWinnerinfo.ts";
-import { DecisionButton } from "@/features/scoreManagementV2/components/DecisionButton";
-import { BackButton } from "@/features/scoreManagementV2/components/BackButton";
 import { InputWinType } from "@/features/scoreManagementV2/components/InputWinType";
 import { SelectLoser } from "@/features/scoreManagementV2/components/SelectLoser";
+import {
+  CurrentDirection,
+  useCurrentDirection,
+} from "@/features/scoreManagementV2/hooks/useCurrentDirection.ts";
+import { InputParentPoint } from "@/features/scoreManagementV2/components/InputParentPoint";
+import { InputChildrenPoint } from "@/features/scoreManagementV2/components/InputChildrenPoint";
 
 type ScoreSummaryProps = {
   score: ScoreMap;
@@ -19,9 +23,16 @@ type ScoreSummaryProps = {
 
 export const ScoreSummary: FC<ScoreSummaryProps> = ({ score, playerName }) => {
   const [winnerInfo, setWinnerInfo] = useWinnerInfo();
-  const [currentModal, { openModal, closeModal }] = useModalStack();
+  const [currentModal, { openModal, closeModal, reset }] = useModalStack();
+  const [
+    currentDirection,
+    {
+      set: setCurrentDirection,
+      // rotate: rotateDirection
+    },
+  ] = useCurrentDirection();
   const WinType = currentModal === "winType";
-  const isAfterWinType = currentModal === "afterWinType";
+  const isAfterWinType = currentModal === "finishWinType";
   const isRon = isAfterWinType && winnerInfo.winType === "ron";
   const isTsumo = isAfterWinType && winnerInfo.winType === "tsumo";
 
@@ -33,13 +44,16 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({ score, playerName }) => {
   ];
 
   const parent = 0;
+  const isParent = parent === currentDirection;
 
   const handleWin = (
     event: React.MouseEvent<HTMLButtonElement>,
     currentScore: number,
   ) => {
-    const currentDirection = Number(event.currentTarget.value);
-    console.log("親？", currentDirection === 0);
+    const currentDirection = Number(
+      event.currentTarget.value,
+    ) as CurrentDirection;
+    setCurrentDirection(currentDirection);
     setWinnerInfo({ winner: currentScore as Player });
     openModal("winType");
   };
@@ -51,9 +65,15 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({ score, playerName }) => {
   // const oyaichi = [0, 1, 2, 3];
   const oyanan = [3, 2, 1, 0];
 
-  const handleNextModal = () => {
-    openModal("loser");
-  };
+  // const handleNextModal = () => {
+  //   openModal("loser");
+  // };
+
+  // const handleCloseInputPoint = () => {
+  //   reset();
+  // };
+
+  console.log("currentModal", currentModal);
 
   return (
     <>
@@ -205,25 +225,12 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({ score, playerName }) => {
           handleBack={handleBack}
         />
       )}
-      {isTsumo && (
-        <Box
-          pos={"absolute"}
-          top={0}
-          alignItems={"center"}
-          justifyContent={"center"}
-          flexDir={"column"}
-          display={"flex"}
-          w={"100vw"}
-          h={"100vh"}
-          bg={COLOR.GREEN_PRIMARY}
-        >
-          ツモだえ
-          <Flex gap={"20px"}>
-            <DecisionButton handleDecisionButton={handleNextModal} />
-            <BackButton handleBack={handleBack} />
-          </Flex>
-        </Box>
-      )}
+      {isTsumo &&
+        (isParent ? (
+          <InputParentPoint handleBack={handleBack} reset={reset} />
+        ) : (
+          <InputChildrenPoint handleBack={handleBack} reset={reset} />
+        ))}
     </>
   );
 };

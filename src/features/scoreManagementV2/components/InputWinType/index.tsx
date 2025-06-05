@@ -28,7 +28,7 @@ export const InputWinType: FC<InputWinTypeProps> = ({
     });
   };
   const handleDecideWinType = () => {
-    openModal("afterWinType");
+    openModal("finishWinType");
   };
 
   const winTypes = [
