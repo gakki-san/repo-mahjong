@@ -15,6 +15,7 @@ import {
 } from "@/features/scoreManagementV2/hooks/useCurrentDirection.ts";
 import { InputWinPoint } from "@/features/scoreManagementV2/components/InputParentPoint";
 import { InputChildrenPoint } from "@/features/scoreManagementV2/components/InputChildrenPoint";
+import { FinishGameModal } from "@/features/scoreManagementV2/components/FinishGameModal";
 
 type ScoreSummaryProps = {
   score: ScoreMap;
@@ -36,6 +37,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({ score, playerName }) => {
   const isRon = isAfterWinType && winnerInfo.winType === "ron";
   const isTsumo = isAfterWinType && winnerInfo.winType === "tsumo";
   const isWinPointForRon = currentModal === "winPoint";
+  const isFinishModal = currentModal === "finish";
 
   const uiPositions = [
     { gridColumn: 2, gridRow: 1, transform: "rotate(180deg)" },
@@ -66,13 +68,20 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({ score, playerName }) => {
   // const oyaichi = [0, 1, 2, 3];
   const oyanan = [3, 2, 1, 0];
 
-  // const handleNextModal = () => {
-  //   openModal("loser");
-  // };
+  const handleFinishGame = () => {
+    openModal("finish");
+  };
 
   // const handleCloseInputPoint = () => {
   //   reset();
   // };
+
+  const mockGameData = [
+    { id: "1", name: "Alpha", score: "20" },
+    { id: "2", name: "Bravo", score: "10" },
+    { id: "3", name: "Charlie", score: "0" },
+    { id: "4", name: "Delta", score: "-10" },
+  ];
 
   console.log("currentModal", currentModal);
 
@@ -195,7 +204,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({ score, playerName }) => {
             color={COLOR.WHITE}
             fontWeight={"bold"}
             bg={COLOR.RED}
-            // onClick={handleFinishGame}
+            onClick={handleFinishGame}
           >
             終局
           </Button>
@@ -234,6 +243,9 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({ score, playerName }) => {
         ))}
       {isWinPointForRon && (
         <InputWinPoint handleBack={handleBack} reset={reset} />
+      )}
+      {isFinishModal && (
+        <FinishGameModal gameData={mockGameData} handleBack={handleBack} />
       )}
     </>
   );
