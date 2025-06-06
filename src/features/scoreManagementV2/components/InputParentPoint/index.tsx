@@ -4,12 +4,12 @@ import { COLOR } from "@/features/scoreManagementV2/const/color.ts";
 import { DecisionButton } from "@/features/scoreManagementV2/components/DecisionButton";
 import { BackButton } from "@/features/scoreManagementV2/components/BackButton";
 
-type InputParentPointProps = {
+type InputWinPointProps = {
   handleBack: () => void;
   reset: () => void;
 };
 
-export const InputParentPoint: FC<InputParentPointProps> = ({
+export const InputWinPoint: FC<InputWinPointProps> = ({
   handleBack,
   reset,
 }) => {

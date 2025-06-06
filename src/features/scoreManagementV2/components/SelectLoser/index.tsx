@@ -41,7 +41,7 @@ export const SelectLoser: FC<SelectLoserProps> = ({
   );
 
   const handleNextModal = () => {
-    openModal("loser");
+    openModal("winPoint");
   };
 
   return (

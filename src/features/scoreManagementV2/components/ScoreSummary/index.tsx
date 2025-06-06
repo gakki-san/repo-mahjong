@@ -13,7 +13,7 @@ import {
   CurrentDirection,
   useCurrentDirection,
 } from "@/features/scoreManagementV2/hooks/useCurrentDirection.ts";
-import { InputParentPoint } from "@/features/scoreManagementV2/components/InputParentPoint";
+import { InputWinPoint } from "@/features/scoreManagementV2/components/InputParentPoint";
 import { InputChildrenPoint } from "@/features/scoreManagementV2/components/InputChildrenPoint";
 
 type ScoreSummaryProps = {
@@ -35,6 +35,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({ score, playerName }) => {
   const isAfterWinType = currentModal === "finishWinType";
   const isRon = isAfterWinType && winnerInfo.winType === "ron";
   const isTsumo = isAfterWinType && winnerInfo.winType === "tsumo";
+  const isWinPointForRon = currentModal === "winPoint";
 
   const uiPositions = [
     { gridColumn: 2, gridRow: 1, transform: "rotate(180deg)" },
@@ -227,10 +228,13 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({ score, playerName }) => {
       )}
       {isTsumo &&
         (isParent ? (
-          <InputParentPoint handleBack={handleBack} reset={reset} />
+          <InputWinPoint handleBack={handleBack} reset={reset} />
         ) : (
           <InputChildrenPoint handleBack={handleBack} reset={reset} />
         ))}
+      {isWinPointForRon && (
+        <InputWinPoint handleBack={handleBack} reset={reset} />
+      )}
     </>
   );
 };
