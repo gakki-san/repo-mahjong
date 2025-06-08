@@ -14,9 +14,12 @@ export const initialReachFlags: ReachFlagsProps = {
   3: false,
 };
 
+export type PlayerIndex = 0 | 1 | 2 | 3;
+
 export type SetReachFlagsReturn = {
   update: (updater: (prev: ReachFlagsProps) => ReachFlagsProps) => void;
   replace: (list: ReachFlagsProps) => void;
+  toggle: (player: PlayerIndex) => void;
   reset: () => void;
 };
 
@@ -34,6 +37,11 @@ export const useReachFlags = (): useReachFlagsReturn => {
       setReachFlags(updater);
     },
     replace: (list: ReachFlagsProps) => setReachFlags(list),
+    toggle: (player: PlayerIndex) =>
+      setReachFlags((prev) => ({
+        ...prev,
+        [player]: !prev[player],
+      })),
     reset: () => setReachFlags(initialReachFlags),
   };
 

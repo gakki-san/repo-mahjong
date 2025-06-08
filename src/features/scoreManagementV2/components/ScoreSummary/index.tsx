@@ -17,6 +17,12 @@ import { InputWinPoint } from "@/features/scoreManagementV2/components/InputPare
 import { InputChildrenPoint } from "@/features/scoreManagementV2/components/InputChildrenPoint";
 import { FinishGameModal } from "@/features/scoreManagementV2/components/FinishGameModal";
 import { SelectTempaiModal } from "@/features/scoreManagementV2/components/SelectTempaiModal";
+import {
+  PlayerIndex,
+  useReachFlags,
+} from "@/features/scoreManagementV2/hooks/useReachFlags.ts";
+import { ReachVideo } from "@/features/scoreManagementV2/components/ReachVideo";
+import { AlreadyReachModal } from "@/features/scoreManagementV2/components/AlreadyReachModal";
 
 type ScoreSummaryProps = {
   score: ScoreMap;
@@ -33,6 +39,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({ score, playerName }) => {
       // rotate: rotateDirection
     },
   ] = useCurrentDirection();
+  const [reachFlags, setReachFlags] = useReachFlags();
   const WinType = currentModal === "winType";
   const isAfterWinType = currentModal === "finishWinType";
   const isRon = isAfterWinType && winnerInfo.winType === "ron";
@@ -40,6 +47,8 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({ score, playerName }) => {
   const isWinPointForRon = currentModal === "winPoint";
   const isFinishModal = currentModal === "finish";
   const isTempaiModal = currentModal === "tempai";
+  const isReach = currentModal === "reachVideo";
+  const isAlreadyReach = currentModal === "reachConfirm";
 
   const uiPositions = [
     { gridColumn: 2, gridRow: 1, transform: "rotate(180deg)" },
@@ -81,6 +90,25 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({ score, playerName }) => {
   const handleCloseTempaiModal = () => {
     reset();
   };
+
+  const handleReach = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const reachPlayer = Number(event.currentTarget.value) as PlayerIndex;
+    if (reachFlags[reachPlayer]) {
+      const audio = new Audio("/dio.mp3");
+      audio.play();
+      openModal("reachConfirm");
+    } else {
+      openModal("reachVideo");
+      const audio = new Audio("/audio.mp3");
+      audio.play();
+      audio.addEventListener("ended", () => {
+        closeModal();
+        setReachFlags.toggle(reachPlayer);
+      });
+    }
+  };
+
+  console.log(reachFlags);
 
   const mockGameData = [
     { id: "1", name: "Alpha", score: "20" },
@@ -163,7 +191,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({ score, playerName }) => {
                     fontWeight="bold"
                     bg={COLOR.RED}
                     borderRadius="50%"
-                    // onClick={handleReach}
+                    onClick={handleReach}
                     value={index}
                   >
                     立直
@@ -266,6 +294,10 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({ score, playerName }) => {
           isTEMPAI={mockIsTempaiFlag}
           handleCloseTENPAIModal={handleCloseTempaiModal}
         />
+      )}
+      {isReach && <ReachVideo selectedReachPlayer={0} />}
+      {isAlreadyReach && (
+        <AlreadyReachModal noResetReach={handleCloseTempaiModal} />
       )}
     </>
   );
