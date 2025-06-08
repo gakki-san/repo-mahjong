@@ -201,7 +201,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
   const isParentTEMPAI =
     isTENPAI[arrayDirection.findIndex((item) => item === 0) as Player];
 
-  const selectedWinerPlayer = arrayDirection.indexOf(selectedWinner);
+  const selectedWinnerPlayer = arrayDirection.indexOf(selectedWinner);
 
   const handleCloseTENPAIModal = () => {
     if (!isParentTEMPAI) {
@@ -303,7 +303,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
         ))}
       {isRon && (
         <InputLoser
-          selectedWinner={selectedWinerPlayer}
+          selectedWinner={selectedWinnerPlayer}
           setWinnerInfo={setWinnerInfo}
           playerName={playersName}
           openModal={openModal}
