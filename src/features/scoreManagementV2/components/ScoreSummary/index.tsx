@@ -1,7 +1,11 @@
 import { FC } from "react";
 import { Box, Button, Flex, Grid, VStack } from "@chakra-ui/react";
 import { COLOR } from "@/features/scoreManagementV2/const/color.ts";
-import { ScoreMap } from "@/features/scoreManagementV2/hooks/useScore.ts";
+import {
+  Player,
+  ScoreMap,
+  useScore,
+} from "@/features/scoreManagementV2/hooks/useScore.ts";
 import { useModalStack } from "@/features/scoreManagementV2/hooks/useModalStack.ts";
 import { useWinnerInfo } from "@/features/scoreManagementV2/hooks/useWinnerinfo.ts";
 import { InputWinType } from "@/features/scoreManagementV2/components/InputWinType";
@@ -16,6 +20,7 @@ import { ReachVideo } from "@/features/scoreManagementV2/components/ReachVideo";
 import { AlreadyReachModal } from "@/features/scoreManagementV2/components/AlreadyReachModal";
 import { PlayerStatus } from "@/features/scoreManagementV2/components/PlayerStatus";
 import { useHandleReach } from "@/features/scoreManagementV2/hooks/useHandleReach.ts";
+import { useIsBoolean } from "@/features/scoreManagementV2/hooks/useIsBoolean.ts";
 
 type ScoreSummaryProps = {
   score: ScoreMap;
@@ -38,6 +43,9 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
     },
   ] = useCurrentDirection();
   const [reachFlags, setReachFlags] = useReachFlags();
+  const [isAppearanceScoreDiff, { on: onScoreDiff, off: offScoreDiff }] =
+    useIsBoolean();
+  const [scoreDiff, setScoreDiff] = useScore();
   const WinType = currentModal === "winType";
   const isAfterWinType = currentModal === "finishWinType";
   const isRon = isAfterWinType && winnerInfo.winType === "ron";
@@ -98,6 +106,25 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
     3: false,
   };
 
+  const handleScoreDiff = (playerIndex: Player, score: ScoreMap) => {
+    const currentScore = [...score];
+    return currentScore.map(
+      (playerScore) => playerScore - currentScore[playerIndex],
+    ) as ScoreMap;
+  };
+
+  const handlePressStart = (playerIndex: Player) => {
+    return () => {
+      const scoreDiff = handleScoreDiff(playerIndex, score);
+      setScoreDiff.set(scoreDiff);
+      onScoreDiff();
+    };
+  };
+
+  const handlePressEnd = () => {
+    offScoreDiff();
+  };
+
   return (
     <>
       <Grid
@@ -130,6 +157,10 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
                 setSelectedDirection={setSelectedDirection}
                 setWinnerInfo={setWinnerInfo}
                 openModal={openModal}
+                handlePressStart={handlePressStart}
+                handlePressEnd={handlePressEnd}
+                isAppearanceScoreDiff={isAppearanceScoreDiff}
+                scoreDiff={scoreDiff}
               />
             </VStack>
           );

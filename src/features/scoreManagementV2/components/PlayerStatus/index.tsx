@@ -5,6 +5,10 @@ import { CurrentDirection } from "@/features/scoreManagementV2/hooks/useCurrentD
 import { WinInfo } from "@/features/scoreManagementV2/hooks/useWinnerinfo.ts";
 import { ModalType } from "@/features/scoreManagementV2/hooks/useModalStack.ts";
 import { handleWinPlayer } from "@/features/scoreManagementV2/logics/handleWinPlayer";
+import {
+  Player,
+  ScoreMap,
+} from "@/features/scoreManagementV2/hooks/useScore.ts";
 
 type PlayerStatusProps = {
   player: string;
@@ -15,6 +19,12 @@ type PlayerStatusProps = {
   setSelectedDirection: (direction: CurrentDirection) => void;
   setWinnerInfo: (value: Partial<WinInfo>) => void;
   openModal: (type: Exclude<ModalType, null>) => void;
+  handlePressStart: (
+    playerIndex: Player,
+  ) => React.PointerEventHandler<HTMLButtonElement>;
+  handlePressEnd: () => void;
+  isAppearanceScoreDiff: boolean;
+  scoreDiff: ScoreMap;
 };
 
 export const PlayerStatus: FC<PlayerStatusProps> = ({
@@ -26,6 +36,10 @@ export const PlayerStatus: FC<PlayerStatusProps> = ({
   setSelectedDirection,
   setWinnerInfo,
   openModal,
+  handlePressStart,
+  handlePressEnd,
+  isAppearanceScoreDiff,
+  scoreDiff,
 }) => {
   const parent = 0;
   return (
@@ -42,12 +56,12 @@ export const PlayerStatus: FC<PlayerStatusProps> = ({
           color={direction === parent ? COLOR.WHITE : COLOR.BLACK}
           textAlign="center"
           bg={direction === parent ? COLOR.RED : COLOR.WHITE}
-          // onPointerDown={handlePressStart(index as Player)}
-          // onPointerLeave={handlePressEnd}
-          // onPointerUp={handlePressEnd}
+          onPointerDown={handlePressStart(index as Player)}
+          onPointerLeave={handlePressEnd}
+          onPointerUp={handlePressEnd}
         >
-          {/*{isAppearanceScoreDiff ? scoreDiff[index] : score[index]}*/}
-          {score}
+          {isAppearanceScoreDiff ? scoreDiff[index] : score}
+          {/*{score}*/}
         </Button>
       </Box>
       <Flex direction={"column"}>
