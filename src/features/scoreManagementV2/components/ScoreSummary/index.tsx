@@ -1,18 +1,12 @@
 import React, { FC } from "react";
 import { Box, Button, Flex, Grid, VStack } from "@chakra-ui/react";
 import { COLOR } from "@/features/scoreManagementV2/const/color.ts";
-import {
-  Player,
-  ScoreMap,
-} from "@/features/scoreManagementV2/hooks/useScore.ts";
+import { ScoreMap } from "@/features/scoreManagementV2/hooks/useScore.ts";
 import { useModalStack } from "@/features/scoreManagementV2/hooks/useModalStack.ts";
 import { useWinnerInfo } from "@/features/scoreManagementV2/hooks/useWinnerinfo.ts";
 import { InputWinType } from "@/features/scoreManagementV2/components/InputWinType";
 import { SelectLoser } from "@/features/scoreManagementV2/components/SelectLoser";
-import {
-  CurrentDirection,
-  useCurrentDirection,
-} from "@/features/scoreManagementV2/hooks/useCurrentDirection.ts";
+import { useCurrentDirection } from "@/features/scoreManagementV2/hooks/useCurrentDirection.ts";
 import { InputWinPoint } from "@/features/scoreManagementV2/components/InputParentPoint";
 import { InputChildrenPoint } from "@/features/scoreManagementV2/components/InputChildrenPoint";
 import { FinishGameModal } from "@/features/scoreManagementV2/components/FinishGameModal";
@@ -28,9 +22,14 @@ import { PlayerStatus } from "@/features/scoreManagementV2/components/PlayerStat
 type ScoreSummaryProps = {
   score: ScoreMap;
   playerName: string[];
+  // setScore: (score: ScoreMap) => void;
 };
 
-export const ScoreSummary: FC<ScoreSummaryProps> = ({ score, playerName }) => {
+export const ScoreSummary: FC<ScoreSummaryProps> = ({
+  score,
+  playerName,
+  // setScore,
+}) => {
   const [winnerInfo, setWinnerInfo] = useWinnerInfo();
   const [currentModal, { openModal, closeModal, reset }] = useModalStack();
   const [
@@ -60,18 +59,6 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({ score, playerName }) => {
 
   const parent = 0;
   const isParent = parent === selectedDirection;
-
-  const handleWin = (
-    event: React.MouseEvent<HTMLButtonElement>,
-    currentScore: number,
-  ) => {
-    const selectedDirection = Number(
-      event.currentTarget.value,
-    ) as CurrentDirection;
-    setSelectedDirection(selectedDirection);
-    setWinnerInfo({ winner: currentScore as Player });
-    openModal("winType");
-  };
 
   const handleBack = () => {
     closeModal();
@@ -109,8 +96,6 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({ score, playerName }) => {
     }
   };
 
-  console.log(reachFlags);
-
   const mockGameData = [
     { id: "1", name: "Alpha", score: "20" },
     { id: "2", name: "Bravo", score: "10" },
@@ -118,14 +103,13 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({ score, playerName }) => {
     { id: "4", name: "Delta", score: "-10" },
   ];
 
-  console.log("currentModal", currentModal);
-
   const mockIsTempaiFlag = {
     0: true,
     1: false,
     2: false,
     3: false,
   };
+  // setScore([10000, 20000, 30000, 34000]);
 
   return (
     <>
@@ -155,8 +139,10 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({ score, playerName }) => {
                 direction={item}
                 index={index}
                 score={score[index]}
-                handleWin={handleWin}
                 handleReach={handleReach}
+                setSelectedDirection={setSelectedDirection}
+                setWinnerInfo={setWinnerInfo}
+                openModal={openModal}
               />
             </VStack>
           );

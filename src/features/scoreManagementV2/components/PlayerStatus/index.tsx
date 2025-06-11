@@ -1,17 +1,20 @@
 import React, { FC } from "react";
 import { Box, Button, Flex } from "@chakra-ui/react";
 import { COLOR } from "@/features/scoreManagementV2/const/color.ts";
+import { CurrentDirection } from "@/features/scoreManagementV2/hooks/useCurrentDirection.ts";
+import { WinInfo } from "@/features/scoreManagementV2/hooks/useWinnerinfo.ts";
+import { ModalType } from "@/features/scoreManagementV2/hooks/useModalStack.ts";
+import { handleWinPlayer } from "@/features/scoreManagementV2/logics/handleWinPlayer";
 
 type PlayerStatusProps = {
   player: string;
   direction: number;
   index: number;
   score: number;
-  handleWin: (
-    event: React.MouseEvent<HTMLButtonElement>,
-    currentScore: number,
-  ) => void;
   handleReach: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  setSelectedDirection: (direction: CurrentDirection) => void;
+  setWinnerInfo: (value: Partial<WinInfo>) => void;
+  openModal: (type: Exclude<ModalType, null>) => void;
 };
 
 export const PlayerStatus: FC<PlayerStatusProps> = ({
@@ -19,8 +22,10 @@ export const PlayerStatus: FC<PlayerStatusProps> = ({
   direction,
   index,
   score,
-  handleWin,
   handleReach,
+  setSelectedDirection,
+  setWinnerInfo,
+  openModal,
 }) => {
   const parent = 0;
   return (
@@ -54,7 +59,15 @@ export const PlayerStatus: FC<PlayerStatusProps> = ({
           fontWeight="bold"
           bg={COLOR.WHITE}
           borderRadius="50%"
-          onClick={(event) => handleWin(event, index)}
+          onClick={(event) =>
+            handleWinPlayer(
+              event,
+              index,
+              setSelectedDirection,
+              setWinnerInfo,
+              openModal,
+            )
+          }
           value={direction}
         >
           和了

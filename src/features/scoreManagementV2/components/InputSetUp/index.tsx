@@ -55,7 +55,11 @@ export const InputSetUp = () => {
         />
       )}
       {isOpenScoreSummary && (
-        <ScoreSummary score={score} playerName={playerName} />
+        <ScoreSummary
+          score={score}
+          playerName={playerName}
+          // setScore={action.set}
+        />
       )}
     </Box>
   );
