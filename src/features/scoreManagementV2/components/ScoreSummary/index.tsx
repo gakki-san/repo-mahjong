@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import { Box, Button, Flex, Grid, VStack } from "@chakra-ui/react";
 import { COLOR } from "@/features/scoreManagementV2/const/color.ts";
 import { ScoreMap } from "@/features/scoreManagementV2/hooks/useScore.ts";
@@ -11,13 +11,11 @@ import { InputWinPoint } from "@/features/scoreManagementV2/components/InputPare
 import { InputChildrenPoint } from "@/features/scoreManagementV2/components/InputChildrenPoint";
 import { FinishGameModal } from "@/features/scoreManagementV2/components/FinishGameModal";
 import { SelectTempaiModal } from "@/features/scoreManagementV2/components/SelectTempaiModal";
-import {
-  PlayerIndex,
-  useReachFlags,
-} from "@/features/scoreManagementV2/hooks/useReachFlags.ts";
+import { useReachFlags } from "@/features/scoreManagementV2/hooks/useReachFlags.ts";
 import { ReachVideo } from "@/features/scoreManagementV2/components/ReachVideo";
 import { AlreadyReachModal } from "@/features/scoreManagementV2/components/AlreadyReachModal";
 import { PlayerStatus } from "@/features/scoreManagementV2/components/PlayerStatus";
+import { useHandleReach } from "@/features/scoreManagementV2/hooks/useHandleReach.ts";
 
 type ScoreSummaryProps = {
   score: ScoreMap;
@@ -79,22 +77,12 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
     reset();
   };
 
-  const handleReach = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const reachPlayer = Number(event.currentTarget.value) as PlayerIndex;
-    if (reachFlags[reachPlayer]) {
-      const audio = new Audio("/dio.mp3");
-      audio.play();
-      openModal("reachConfirm");
-    } else {
-      openModal("reachVideo");
-      const audio = new Audio("/audio.mp3");
-      audio.play();
-      audio.addEventListener("ended", () => {
-        closeModal();
-        setReachFlags.toggle(reachPlayer);
-      });
-    }
-  };
+  const { handleReach } = useHandleReach({
+    reachFlags,
+    setReachFlags,
+    openModal,
+    closeModal,
+  });
 
   const mockGameData = [
     { id: "1", name: "Alpha", score: "20" },
@@ -109,7 +97,6 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
     2: false,
     3: false,
   };
-  // setScore([10000, 20000, 30000, 34000]);
 
   return (
     <>
