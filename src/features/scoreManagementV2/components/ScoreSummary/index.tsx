@@ -23,6 +23,7 @@ import {
 } from "@/features/scoreManagementV2/hooks/useReachFlags.ts";
 import { ReachVideo } from "@/features/scoreManagementV2/components/ReachVideo";
 import { AlreadyReachModal } from "@/features/scoreManagementV2/components/AlreadyReachModal";
+import { PlayerStatus } from "@/features/scoreManagementV2/components/PlayerStatus";
 
 type ScoreSummaryProps = {
   score: ScoreMap;
@@ -33,9 +34,9 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({ score, playerName }) => {
   const [winnerInfo, setWinnerInfo] = useWinnerInfo();
   const [currentModal, { openModal, closeModal, reset }] = useModalStack();
   const [
-    currentDirection,
+    selectedDirection,
     {
-      set: setCurrentDirection,
+      set: setSelectedDirection,
       // rotate: rotateDirection
     },
   ] = useCurrentDirection();
@@ -58,16 +59,16 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({ score, playerName }) => {
   ];
 
   const parent = 0;
-  const isParent = parent === currentDirection;
+  const isParent = parent === selectedDirection;
 
   const handleWin = (
     event: React.MouseEvent<HTMLButtonElement>,
     currentScore: number,
   ) => {
-    const currentDirection = Number(
+    const selectedDirection = Number(
       event.currentTarget.value,
     ) as CurrentDirection;
-    setCurrentDirection(currentDirection);
+    setSelectedDirection(selectedDirection);
     setWinnerInfo({ winner: currentScore as Player });
     openModal("winType");
   };
@@ -148,56 +149,15 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({ score, playerName }) => {
               gridRow={directionPosition.gridRow}
               transform={directionPosition.transform}
             >
-              <Flex gap="20px">
-                <Box>
-                  <Box mb={"5px"} fontWeight={"bold"} textAlign={"center"}>
-                    {player}
-                  </Box>
-                  <Button
-                    textStyle={"5xl"}
-                    w="200px"
-                    h="auto"
-                    p="2"
-                    color={item === parent ? COLOR.WHITE : COLOR.BLACK}
-                    textAlign="center"
-                    bg={item === parent ? COLOR.RED : COLOR.WHITE}
-                    // onPointerDown={handlePressStart(index as Player)}
-                    // onPointerLeave={handlePressEnd}
-                    // onPointerUp={handlePressEnd}
-                  >
-                    {/*{isAppearanceScoreDiff ? scoreDiff[index] : score[index]}*/}
-                    {score[index]}
-                  </Button>
-                </Box>
-                <Flex direction={"column"}>
-                  <Button
-                    w="40px"
-                    h="40px"
-                    m="auto"
-                    color={COLOR.BLACK}
-                    fontWeight="bold"
-                    bg={COLOR.WHITE}
-                    borderRadius="50%"
-                    onClick={(event) => handleWin(event, index)}
-                    value={item}
-                  >
-                    和了
-                  </Button>
-                  <Button
-                    w="40px"
-                    h="40px"
-                    m="auto"
-                    color={COLOR.WHITE}
-                    fontWeight="bold"
-                    bg={COLOR.RED}
-                    borderRadius="50%"
-                    onClick={handleReach}
-                    value={index}
-                  >
-                    立直
-                  </Button>
-                </Flex>
-              </Flex>
+              <PlayerStatus
+                key={item}
+                player={player}
+                direction={item}
+                index={index}
+                score={score[index]}
+                handleWin={handleWin}
+                handleReach={handleReach}
+              />
             </VStack>
           );
         })}
