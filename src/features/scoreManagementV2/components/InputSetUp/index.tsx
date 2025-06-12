@@ -1,6 +1,5 @@
 import { COLOR } from "@/features/scoreManagementV2/const/color.ts";
 import { Box } from "@chakra-ui/react";
-import { usePlayerName } from "@/features/scoreManagementV2/hooks/usePlayerName.ts";
 import { useIsBoolean } from "@/features/scoreManagementV2/hooks/useIsBoolean.ts";
 import { InputPlayerName } from "@/features/scoreManagementV2/components/InputPlayerName";
 import { SelectedRulePanel } from "@/features/scoreManagementV2/components/SelectedRulePanel";
@@ -12,7 +11,7 @@ export const InputSetUp = () => {
   const [isSelectedScorePanel, { on: openRuleModal, off: closeRuleModal }] =
     useIsBoolean();
   const [isOpenScoreSummary, { on: open }] = useIsBoolean();
-  const [playersName, handleSetPlayerName] = usePlayerName();
+
   const [score, action] = useScore();
   const [returnPoint, setReturnPoint] = useCount();
   const [umaRule, setUmaRule] = useCount();
@@ -23,9 +22,7 @@ export const InputSetUp = () => {
     openRuleModal();
   };
 
-  console.log(returnPoint, umaRule);
-
-  const playerName = Object.values(playersName);
+  console.log(umaRule, returnPoint);
 
   return (
     <Box
@@ -39,12 +36,7 @@ export const InputSetUp = () => {
       h={"100vh"}
       bg={COLOR.GREEN_PRIMARY}
     >
-      {isInputName || (
-        <InputPlayerName
-          onPlayerNameChange={handleSetPlayerName}
-          closeModal={closeModal}
-        />
-      )}
+      {isInputName || <InputPlayerName closeModal={closeModal} />}
       {isSelectedScorePanel && (
         <SelectedRulePanel
           close={closeRuleModal}
@@ -57,7 +49,6 @@ export const InputSetUp = () => {
       {isOpenScoreSummary && (
         <ScoreSummary
           score={score}
-          playerName={playerName}
           // setScore={action.set}
         />
       )}

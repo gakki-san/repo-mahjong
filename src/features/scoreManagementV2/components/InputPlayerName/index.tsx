@@ -1,17 +1,19 @@
 import { COLOR } from "@/features/scoreManagementV2/const/color.ts";
 import { Box, Button, Field, Fieldset, Flex, Input } from "@chakra-ui/react";
 import { playerList } from "@/features/scoreManagementV2/const/playerList.ts";
-import React, { FC } from "react";
+import { FC } from "react";
+import { usePlayerName } from "@/features/scoreManagementV2/hooks/usePlayerName.ts";
 
 type InputPlayerNameProps = {
-  onPlayerNameChange: React.ChangeEventHandler<HTMLInputElement>;
+  // onPlayerNameChange: React.ChangeEventHandler<HTMLInputElement>;
   closeModal: () => void;
 };
 
 export const InputPlayerName: FC<InputPlayerNameProps> = ({
-  onPlayerNameChange,
+  // onPlayerNameChange,
   closeModal,
 }) => {
+  const [, onPlayerNameChange] = usePlayerName();
   return (
     <Flex
       align={"center"}

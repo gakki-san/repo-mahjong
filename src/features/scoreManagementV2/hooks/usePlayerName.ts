@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
+import { useAtom } from "jotai";
+import { playerNameAtom } from "@/globalState/playerNameAtom.ts";
 
 export type UsePlayerNameReturn = [
-  playersName: PlayerNames,
+  playersName: string[],
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
 ];
 
@@ -12,15 +14,8 @@ export type PlayerNames = {
   player4: string;
 };
 
-const initialName = {
-  player1: "東家",
-  player2: "北家",
-  player3: "西家",
-  player4: "南家",
-};
-
 export const usePlayerName = (): UsePlayerNameReturn => {
-  const [playersName, setPlayerName] = useState<PlayerNames>(initialName);
+  const [playersName, setPlayerName] = useAtom<PlayerNames>(playerNameAtom);
 
   const action = (name: keyof PlayerNames, value: string) => {
     setPlayerName((prev) => ({
@@ -34,5 +29,7 @@ export const usePlayerName = (): UsePlayerNameReturn => {
     action(name as keyof PlayerNames, value);
   };
 
-  return [playersName, handleChange];
+  const playerName = Object.values(playersName);
+
+  return [playerName, handleChange];
 };

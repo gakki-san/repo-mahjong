@@ -21,20 +21,22 @@ import { AlreadyReachModal } from "@/features/scoreManagementV2/components/Alrea
 import { PlayerStatus } from "@/features/scoreManagementV2/components/PlayerStatus";
 import { useHandleReach } from "@/features/scoreManagementV2/hooks/useHandleReach.ts";
 import { useIsBoolean } from "@/features/scoreManagementV2/hooks/useIsBoolean.ts";
+import { usePlayerName } from "@/features/scoreManagementV2/hooks/usePlayerName.ts";
 
 type ScoreSummaryProps = {
   score: ScoreMap;
-  playerName: string[];
+  // playerName: string[];
   // setScore: (score: ScoreMap) => void;
 };
 
 export const ScoreSummary: FC<ScoreSummaryProps> = ({
   score,
-  playerName,
+  // playerName,
   // setScore,
 }) => {
   const [winnerInfo, setWinnerInfo] = useWinnerInfo();
   const [currentModal, { openModal, closeModal, reset }] = useModalStack();
+  const [playerName] = usePlayerName();
   const [
     selectedDirection,
     {
