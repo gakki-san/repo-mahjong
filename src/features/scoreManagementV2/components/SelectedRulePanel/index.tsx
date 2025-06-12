@@ -1,7 +1,6 @@
 import { FC } from "react";
 import { Box, Button } from "@chakra-ui/react";
 import { COLOR } from "@/features/scoreManagementV2/const/color.ts";
-import { ScoreMap } from "@/features/scoreManagementV2/hooks/useScore.ts";
 import { RULE_OPTIONS } from "@/features/scoreManagementV2/const/rureOptions.ts";
 import { InputSelectPoint } from "@/features/scoreManagementV2/components/InputSelectPoint";
 import { useSetInputValue } from "@/features/scoreManagementV2/hooks/useSetInputValue.ts";
@@ -10,16 +9,15 @@ import { InputSelectUmaRule } from "@/features/scoreManagementV2/components/Inpu
 import { handleScoreSubmit } from "@/features/scoreManagementV2/hooks/useScoreHookForm.ts";
 import { usePlusScoreRule } from "@/features/scoreManagementV2/hooks/usePlusScoreRule.ts";
 import { useRankOrderRule } from "@/features/scoreManagementV2/hooks/useRankOrderRule.ts";
+import { useScoreAtom } from "@/globalState/scoreAtom.ts";
 
 type ScoreSelectPanelProps = {
   close: () => void;
-  setScore: (value: ScoreMap) => void;
   openScoreSummary: () => void;
 };
 
 export const SelectedRulePanel: FC<ScoreSelectPanelProps> = ({
   close,
-  setScore,
   openScoreSummary,
 }) => {
   const [isSubmit, setIsSubmit] = useIsBoolean();
@@ -28,6 +26,7 @@ export const SelectedRulePanel: FC<ScoreSelectPanelProps> = ({
   const [inputUmaRule, handleUmaRule] = useSetInputValue();
   const [, setRankOrderRule] = useRankOrderRule();
   const [, setPlusScoreRule] = usePlusScoreRule();
+  const [, { set: setScore }] = useScoreAtom();
 
   const onSubmit = () =>
     handleScoreSubmit({

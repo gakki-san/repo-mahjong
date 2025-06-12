@@ -22,12 +22,10 @@ import { PlayerStatus } from "@/features/scoreManagementV2/components/PlayerStat
 import { useHandleReach } from "@/features/scoreManagementV2/hooks/useHandleReach.ts";
 import { useIsBoolean } from "@/features/scoreManagementV2/hooks/useIsBoolean.ts";
 import { usePlayerName } from "@/features/scoreManagementV2/hooks/usePlayerName.ts";
+import { useScoreAtom } from "@/globalState/scoreAtom.ts";
 
-type ScoreSummaryProps = {
-  score: ScoreMap;
-};
-
-export const ScoreSummary: FC<ScoreSummaryProps> = ({ score }) => {
+export const ScoreSummary: FC = () => {
+  const [score] = useScoreAtom();
   const [winnerInfo, setWinnerInfo] = useWinnerInfo();
   const [currentModal, { openModal, closeModal, reset }] = useModalStack();
   const [playerName] = usePlayerName();

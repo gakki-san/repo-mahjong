@@ -3,14 +3,12 @@ import { Box } from "@chakra-ui/react";
 import { useIsBoolean } from "@/features/scoreManagementV2/hooks/useIsBoolean.ts";
 import { InputPlayerName } from "@/features/scoreManagementV2/components/InputPlayerName";
 import { SelectedRulePanel } from "@/features/scoreManagementV2/components/SelectedRulePanel";
-import { useScore } from "@/features/scoreManagementV2/hooks/useScore.ts";
 import { ScoreSummary } from "@/features/scoreManagementV2/components/ScoreSummary";
 
 export const InputSetUp = () => {
   const [isSelectedScorePanel, { on: openRuleModal, off: closeRuleModal }] =
     useIsBoolean();
   const [isOpenScoreSummary, { on: open }] = useIsBoolean();
-  const [score, action] = useScore();
   const [isInputName, { on: closeInputModal }] = useIsBoolean();
 
   const closeModal = () => {
@@ -32,18 +30,9 @@ export const InputSetUp = () => {
     >
       {isInputName || <InputPlayerName closeModal={closeModal} />}
       {isSelectedScorePanel && (
-        <SelectedRulePanel
-          close={closeRuleModal}
-          setScore={action.set}
-          openScoreSummary={open}
-        />
+        <SelectedRulePanel close={closeRuleModal} openScoreSummary={open} />
       )}
-      {isOpenScoreSummary && (
-        <ScoreSummary
-          score={score}
-          // setScore={action.set}
-        />
-      )}
+      {isOpenScoreSummary && <ScoreSummary />}
     </Box>
   );
 };
