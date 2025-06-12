@@ -1,14 +1,16 @@
 // hooks/useScoreForm.ts
 import { SCORE } from "@/features/scoreManagementV2/const/score.ts";
 import { ScoreMap } from "@/features/scoreManagementV2/hooks/useScore.ts";
+import { PlusScoreRule } from "@/features/scoreManagementV2/hooks/usePlusScoreRule.ts";
+import { RankOrderRuleAtom } from "@/globalState/rankOrderRuleAtom.ts";
 
 type Params = {
   inputStartPoint: string;
   inputReturnPoint: string;
   inputUmaRule: string;
   setScore: (value: ScoreMap) => void;
-  setReturnPoint: (num: number) => void;
-  setUmaRule: (num: number) => void;
+  setPlusScoreRule: (num: PlusScoreRule) => void;
+  setRankOrderRule: (num: RankOrderRuleAtom) => void;
   close: () => void;
   openScoreSummary: () => void;
   setIsSubmit: { on: () => void };
@@ -19,8 +21,8 @@ export const handleScoreSubmit = ({
   inputReturnPoint,
   inputUmaRule,
   setScore,
-  setReturnPoint,
-  setUmaRule,
+  setPlusScoreRule,
+  setRankOrderRule,
   close,
   openScoreSummary,
   setIsSubmit,
@@ -39,8 +41,8 @@ export const handleScoreSubmit = ({
   const newScore = new Array(seats).fill(selectScore);
 
   setScore(newScore as ScoreMap);
-  setReturnPoint(Number(inputReturnPoint));
-  setUmaRule(Number(inputUmaRule));
+  setPlusScoreRule(Number(inputReturnPoint) as PlusScoreRule);
+  setRankOrderRule(Number(inputUmaRule) as RankOrderRuleAtom);
   close();
   openScoreSummary();
 };

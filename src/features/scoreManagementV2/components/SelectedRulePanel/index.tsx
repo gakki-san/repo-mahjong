@@ -8,26 +8,26 @@ import { useSetInputValue } from "@/features/scoreManagementV2/hooks/useSetInput
 import { useIsBoolean } from "@/features/scoreManagementV2/hooks/useIsBoolean.ts";
 import { InputSelectUmaRule } from "@/features/scoreManagementV2/components/InputSelectUmaRule";
 import { handleScoreSubmit } from "@/features/scoreManagementV2/hooks/useScoreHookForm.ts";
+import { usePlusScoreRule } from "@/features/scoreManagementV2/hooks/usePlusScoreRule.ts";
+import { useRankOrderRule } from "@/features/scoreManagementV2/hooks/useRankOrderRule.ts";
 
 type ScoreSelectPanelProps = {
   close: () => void;
   setScore: (value: ScoreMap) => void;
   openScoreSummary: () => void;
-  setReturnPoint: (num: number) => void;
-  setUmaRule: (num: number) => void;
 };
 
 export const SelectedRulePanel: FC<ScoreSelectPanelProps> = ({
   close,
   setScore,
   openScoreSummary,
-  setReturnPoint,
-  setUmaRule,
 }) => {
   const [isSubmit, setIsSubmit] = useIsBoolean();
   const [inputStartPoint, handleStartPoint] = useSetInputValue();
   const [inputReturnPoint, handleReturnPoint] = useSetInputValue();
   const [inputUmaRule, handleUmaRule] = useSetInputValue();
+  const [, setRankOrderRule] = useRankOrderRule();
+  const [, setPlusScoreRule] = usePlusScoreRule();
 
   const onSubmit = () =>
     handleScoreSubmit({
@@ -35,8 +35,8 @@ export const SelectedRulePanel: FC<ScoreSelectPanelProps> = ({
       inputReturnPoint,
       inputUmaRule,
       setScore,
-      setReturnPoint,
-      setUmaRule,
+      setPlusScoreRule,
+      setRankOrderRule,
       close,
       openScoreSummary,
       setIsSubmit,

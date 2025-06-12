@@ -25,15 +25,9 @@ import { usePlayerName } from "@/features/scoreManagementV2/hooks/usePlayerName.
 
 type ScoreSummaryProps = {
   score: ScoreMap;
-  // playerName: string[];
-  // setScore: (score: ScoreMap) => void;
 };
 
-export const ScoreSummary: FC<ScoreSummaryProps> = ({
-  score,
-  // playerName,
-  // setScore,
-}) => {
+export const ScoreSummary: FC<ScoreSummaryProps> = ({ score }) => {
   const [winnerInfo, setWinnerInfo] = useWinnerInfo();
   const [currentModal, { openModal, closeModal, reset }] = useModalStack();
   const [playerName] = usePlayerName();
