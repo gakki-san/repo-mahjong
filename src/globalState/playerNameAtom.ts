@@ -1,4 +1,4 @@
-import { atom } from "jotai";
+import { atomWithStorage } from "jotai/utils";
 
 export type PlayerNames = {
   player1: string;
@@ -14,4 +14,7 @@ const initialName: PlayerNames = {
   player4: "南家",
 };
 
-export const playerNameAtom = atom<PlayerNames>(initialName);
+export const playerNameAtom = atomWithStorage<PlayerNames>(
+  "playerNames",
+  initialName,
+);

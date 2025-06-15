@@ -3,16 +3,9 @@ import { Box, Button, Field, Fieldset, Flex, Input } from "@chakra-ui/react";
 import { playerList } from "@/features/scoreManagementV2/const/playerList.ts";
 import { FC } from "react";
 import { usePlayerName } from "@/features/scoreManagementV2/hooks/usePlayerName.ts";
+import { NavLink } from "react-router";
 
-type InputPlayerNameProps = {
-  // onPlayerNameChange: React.ChangeEventHandler<HTMLInputElement>;
-  closeModal: () => void;
-};
-
-export const InputPlayerName: FC<InputPlayerNameProps> = ({
-  // onPlayerNameChange,
-  closeModal,
-}) => {
+export const InputPlayerName: FC = () => {
   const [, onPlayerNameChange] = usePlayerName();
   return (
     <Flex
@@ -42,9 +35,9 @@ export const InputPlayerName: FC<InputPlayerNameProps> = ({
           </Field.Root>
         </Fieldset.Content>
 
-        <Button onClick={closeModal} type="submit">
-          set
-        </Button>
+        <NavLink to={"/setup/inputrule"}>
+          <Button>次へ</Button>
+        </NavLink>
       </Fieldset.Root>
     </Flex>
   );

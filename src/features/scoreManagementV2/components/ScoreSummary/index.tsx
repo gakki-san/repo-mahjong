@@ -4,7 +4,7 @@ import { COLOR } from "@/features/scoreManagementV2/const/color.ts";
 import {
   Player,
   ScoreMap,
-  useScore,
+  useScoreAtom,
 } from "@/features/scoreManagementV2/hooks/useScore.ts";
 import { useModalStack } from "@/features/scoreManagementV2/hooks/useModalStack.ts";
 import { useWinnerInfo } from "@/features/scoreManagementV2/hooks/useWinnerinfo.ts";
@@ -22,13 +22,20 @@ import { PlayerStatus } from "@/features/scoreManagementV2/components/PlayerStat
 import { useHandleReach } from "@/features/scoreManagementV2/hooks/useHandleReach.ts";
 import { useIsBoolean } from "@/features/scoreManagementV2/hooks/useIsBoolean.ts";
 import { usePlayerName } from "@/features/scoreManagementV2/hooks/usePlayerName.ts";
-import { useScoreAtom } from "@/globalState/scoreAtom.ts";
+import { usePlusScoreRule } from "@/features/scoreManagementV2/hooks/usePlusScoreRule.ts";
+import { useRankOrderRule } from "@/features/scoreManagementV2/hooks/useRankOrderRule.ts";
 
 export const ScoreSummary: FC = () => {
   const [score] = useScoreAtom();
+  const [playerName] = usePlayerName();
+  const [rankOrderRule] = useRankOrderRule();
+  console.log(playerName);
+  console.log("rankOrderRule", rankOrderRule);
+  const [plusScoreRule] = usePlusScoreRule();
+  console.log("plusScoreRule", plusScoreRule);
+
   const [winnerInfo, setWinnerInfo] = useWinnerInfo();
   const [currentModal, { openModal, closeModal, reset }] = useModalStack();
-  const [playerName] = usePlayerName();
   const [
     selectedDirection,
     {
@@ -39,7 +46,7 @@ export const ScoreSummary: FC = () => {
   const [reachFlags, setReachFlags] = useReachFlags();
   const [isAppearanceScoreDiff, { on: onScoreDiff, off: offScoreDiff }] =
     useIsBoolean();
-  const [scoreDiff, setScoreDiff] = useScore();
+  const [scoreDiff, setScoreDiff] = useScoreAtom();
   const WinType = currentModal === "winType";
   const isAfterWinType = currentModal === "finishWinType";
   const isRon = isAfterWinType && winnerInfo.winType === "ron";

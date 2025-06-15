@@ -15,10 +15,10 @@ export type PlayerNames = {
 };
 
 export const usePlayerName = (): UsePlayerNameReturn => {
-  const [playersName, setPlayerName] = useAtom<PlayerNames>(playerNameAtom);
+  const [playersName, setPlayerName] = useAtom(playerNameAtom);
 
   const action = (name: keyof PlayerNames, value: string) => {
-    setPlayerName((prev) => ({
+    setPlayerName((prev: PlayerNames) => ({
       ...prev,
       [name]: value,
     }));

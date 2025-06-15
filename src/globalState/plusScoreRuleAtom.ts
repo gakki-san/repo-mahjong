@@ -1,5 +1,8 @@
-import { atom } from "jotai";
+import { atomWithStorage } from "jotai/utils";
 
 type PlusScoreRule = 25000 | 30000;
 
-export const plusScoreRuleAtom = atom<PlusScoreRule | null>(null);
+export const plusScoreRuleAtom = atomWithStorage<PlusScoreRule | null>(
+  "plusScoreRule",
+  null,
+);

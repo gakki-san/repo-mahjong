@@ -9,17 +9,10 @@ import { InputSelectUmaRule } from "@/features/scoreManagementV2/components/Inpu
 import { handleScoreSubmit } from "@/features/scoreManagementV2/hooks/useScoreHookForm.ts";
 import { usePlusScoreRule } from "@/features/scoreManagementV2/hooks/usePlusScoreRule.ts";
 import { useRankOrderRule } from "@/features/scoreManagementV2/hooks/useRankOrderRule.ts";
-import { useScoreAtom } from "@/globalState/scoreAtom.ts";
+import { useNavigate } from "react-router";
+import { useScoreAtom } from "@/features/scoreManagementV2/hooks/useScore.ts";
 
-type ScoreSelectPanelProps = {
-  close: () => void;
-  openScoreSummary: () => void;
-};
-
-export const SelectedRulePanel: FC<ScoreSelectPanelProps> = ({
-  close,
-  openScoreSummary,
-}) => {
+export const InputRulePanel: FC = () => {
   const [isSubmit, setIsSubmit] = useIsBoolean();
   const [inputStartPoint, handleStartPoint] = useSetInputValue();
   const [inputReturnPoint, handleReturnPoint] = useSetInputValue();
@@ -28,8 +21,10 @@ export const SelectedRulePanel: FC<ScoreSelectPanelProps> = ({
   const [, setPlusScoreRule] = usePlusScoreRule();
   const [, { set: setScore }] = useScoreAtom();
 
-  const onSubmit = () =>
-    handleScoreSubmit({
+  const navigate = useNavigate();
+
+  const onSubmit = () => {
+    const isSuccess = handleScoreSubmit({
       inputStartPoint,
       inputReturnPoint,
       inputUmaRule,
@@ -37,9 +32,12 @@ export const SelectedRulePanel: FC<ScoreSelectPanelProps> = ({
       setPlusScoreRule,
       setRankOrderRule,
       close,
-      openScoreSummary,
       setIsSubmit,
     });
+    if (!isSuccess) return;
+
+    navigate("/scoresummary");
+  };
 
   return (
     <Box
