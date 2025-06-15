@@ -16,7 +16,7 @@ function Home() {
       >
         <Image w={"100px"} h={"100px"} src={"/title.PNG"} />
         <Flex gap={"40px"}>
-          <NavLink to={"/setup/inputname"}>
+          <NavLink to={"/setup"}>
             <Button>点数管理V2</Button>
           </NavLink>
           <Button>点数計算</Button>

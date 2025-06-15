@@ -1,11 +1,14 @@
-import { COLOR } from "@/features/scoreManagementV2/const/color.ts";
-import { Box, Button, Field, Fieldset, Flex, Input } from "@chakra-ui/react";
-import { playerList } from "@/features/scoreManagementV2/const/playerList.ts";
 import { FC } from "react";
+import { Box, Button, Field, Fieldset, Flex, Input } from "@chakra-ui/react";
+import { COLOR } from "@/features/scoreManagementV2/const/color.ts";
+import { playerList } from "@/features/scoreManagementV2/const/playerList.ts";
 import { usePlayerName } from "@/features/scoreManagementV2/hooks/usePlayerName.ts";
-import { NavLink } from "react-router";
 
-export const InputPlayerName: FC = () => {
+type InputPlayerNameProps = {
+  onClick: () => void;
+};
+
+export const InputPlayerName: FC<InputPlayerNameProps> = ({ onClick }) => {
   const [, onPlayerNameChange] = usePlayerName();
   return (
     <Flex
@@ -34,10 +37,7 @@ export const InputPlayerName: FC = () => {
             ))}
           </Field.Root>
         </Fieldset.Content>
-
-        <NavLink to={"/setup/inputrule"}>
-          <Button>次へ</Button>
-        </NavLink>
+        <Button onClick={onClick}>次へ</Button>
       </Fieldset.Root>
     </Flex>
   );

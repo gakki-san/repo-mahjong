@@ -42,6 +42,8 @@ export const InputRulePanel: FC = () => {
   return (
     <Box
       as="form"
+      pos={"absolute"}
+      top={0}
       alignItems={"center"}
       flexDir={"column"}
       gap={"30px"}
