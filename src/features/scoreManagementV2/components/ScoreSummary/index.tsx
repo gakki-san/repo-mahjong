@@ -30,6 +30,7 @@ export const ScoreSummary: FC = () => {
   console.log(rankOrderRule, plusScoreRule);
 
   const [winnerInfo, setWinnerInfo] = useWinnerInfo();
+  console.log("勝利条件", winnerInfo);
   const [currentModal, { openModal, closeModal, reset }] = useModalStack();
   const [
     selectedDirection,
@@ -220,12 +221,24 @@ export const ScoreSummary: FC = () => {
       )}
       {isTsumo &&
         (isParent ? (
-          <InputWinPoint handleBack={handleBack} reset={reset} />
+          <InputWinPoint
+            handleBack={handleBack}
+            reset={reset}
+            setPoint={setWinnerInfo}
+          />
         ) : (
-          <InputChildrenPoint handleBack={handleBack} reset={reset} />
+          <InputChildrenPoint
+            handleBack={handleBack}
+            reset={reset}
+            setPoint={setWinnerInfo}
+          />
         ))}
       {isWinPointForRon && (
-        <InputWinPoint handleBack={handleBack} reset={reset} />
+        <InputWinPoint
+          handleBack={handleBack}
+          reset={reset}
+          setPoint={setWinnerInfo}
+        />
       )}
       {isFinishModal && (
         <FinishGameModal gameData={mockGameData} handleBack={handleBack} />
