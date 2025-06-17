@@ -9,22 +9,22 @@ import {
   Player,
   ScoreMap,
 } from "@/features/scoreManagementV2/hooks/useScore.ts";
+import { calculateScoreDiff } from "@/features/scoreManagementV2/logics/scoreDiff/calculateScoreDiff.ts";
 
 type PlayerStatusProps = {
   player: string;
   direction: number;
   index: number;
-  score: number;
+  score: ScoreMap;
   handleReach: (event: React.MouseEvent<HTMLButtonElement>) => void;
   setSelectedDirection: (direction: CurrentDirection) => void;
   setWinnerInfo: (value: Partial<WinInfo>) => void;
   openModal: (type: Exclude<ModalType, null>) => void;
-  handlePressStart: (
-    playerIndex: Player,
-  ) => React.PointerEventHandler<HTMLButtonElement>;
-  handlePressEnd: () => void;
   isAppearanceScoreDiff: boolean;
   scoreDiff: ScoreMap;
+  setScoreDiff: (value: ScoreMap) => void;
+  onScoreDiff: () => void;
+  offScoreDiff: () => void;
 };
 
 export const PlayerStatus: FC<PlayerStatusProps> = ({
@@ -36,11 +36,24 @@ export const PlayerStatus: FC<PlayerStatusProps> = ({
   setSelectedDirection,
   setWinnerInfo,
   openModal,
-  handlePressStart,
-  handlePressEnd,
   isAppearanceScoreDiff,
   scoreDiff,
+  setScoreDiff,
+  onScoreDiff,
+  offScoreDiff,
 }) => {
+  const handlePressStart = (playerIndex: Player) => {
+    return () => {
+      const scoreDiff = calculateScoreDiff(playerIndex, score);
+      setScoreDiff(scoreDiff);
+      onScoreDiff();
+    };
+  };
+
+  const handlePressEnd = () => {
+    offScoreDiff();
+  };
+
   const parent = 0;
   return (
     <Flex gap="20px">
@@ -60,7 +73,7 @@ export const PlayerStatus: FC<PlayerStatusProps> = ({
           onPointerLeave={handlePressEnd}
           onPointerUp={handlePressEnd}
         >
-          {isAppearanceScoreDiff ? scoreDiff[index] : score}
+          {isAppearanceScoreDiff ? scoreDiff[index] : score[index]}
           {/*{score}*/}
         </Button>
       </Box>

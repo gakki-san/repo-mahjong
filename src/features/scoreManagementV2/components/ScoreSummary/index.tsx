@@ -1,10 +1,7 @@
 import { FC } from "react";
 import { Box, Button, Flex, Grid, VStack } from "@chakra-ui/react";
 import { COLOR } from "@/features/scoreManagementV2/const/color.ts";
-import {
-  Player,
-  useScore,
-} from "@/features/scoreManagementV2/hooks/useScore.ts";
+import { useScore } from "@/features/scoreManagementV2/hooks/useScore.ts";
 import { useModalStack } from "@/features/scoreManagementV2/hooks/useModalStack.ts";
 import { useWinnerInfo } from "@/features/scoreManagementV2/hooks/useWinnerinfo.ts";
 import { InputWinType } from "@/features/scoreManagementV2/components/InputWinType";
@@ -23,7 +20,6 @@ import { useIsBoolean } from "@/features/scoreManagementV2/hooks/useIsBoolean.ts
 import { usePlayerName } from "@/features/scoreManagementV2/hooks/usePlayerName.ts";
 import { usePlusScoreRule } from "@/features/scoreManagementV2/hooks/usePlusScoreRule.ts";
 import { useRankOrderRule } from "@/features/scoreManagementV2/hooks/useRankOrderRule.ts";
-import { calculateScoreDiff } from "@/features/scoreManagementV2/logics/scoreDiff/calculateScoreDiff.ts";
 import { useScoreAtom } from "@/globalState/scoreAtom.ts";
 
 export const ScoreSummary: FC = () => {
@@ -31,6 +27,7 @@ export const ScoreSummary: FC = () => {
   const [playerName] = usePlayerName();
   const [rankOrderRule] = useRankOrderRule();
   const [plusScoreRule] = usePlusScoreRule();
+  console.log(rankOrderRule, plusScoreRule);
 
   const [winnerInfo, setWinnerInfo] = useWinnerInfo();
   const [currentModal, { openModal, closeModal, reset }] = useModalStack();
@@ -105,18 +102,6 @@ export const ScoreSummary: FC = () => {
     3: false,
   };
 
-  const handlePressStart = (playerIndex: Player) => {
-    return () => {
-      const scoreDiff = calculateScoreDiff(playerIndex, score);
-      setScoreDiff.set(scoreDiff);
-      onScoreDiff();
-    };
-  };
-
-  const handlePressEnd = () => {
-    offScoreDiff();
-  };
-
   return (
     <>
       <Grid
@@ -144,15 +129,16 @@ export const ScoreSummary: FC = () => {
                 player={player}
                 direction={item}
                 index={index}
-                score={score[index]}
+                score={score}
                 handleReach={handleReach}
                 setSelectedDirection={setSelectedDirection}
                 setWinnerInfo={setWinnerInfo}
                 openModal={openModal}
-                handlePressStart={handlePressStart}
-                handlePressEnd={handlePressEnd}
                 isAppearanceScoreDiff={isAppearanceScoreDiff}
                 scoreDiff={scoreDiff}
+                setScoreDiff={setScoreDiff.set}
+                onScoreDiff={onScoreDiff}
+                offScoreDiff={offScoreDiff}
               />
             </VStack>
           );
