@@ -10,7 +10,7 @@ import { handleScoreSubmit } from "@/features/scoreManagementV2/hooks/useScoreHo
 import { usePlusScoreRule } from "@/features/scoreManagementV2/hooks/usePlusScoreRule.ts";
 import { useRankOrderRule } from "@/features/scoreManagementV2/hooks/useRankOrderRule.ts";
 import { useNavigate } from "react-router";
-import { useScoreAtom } from "@/features/scoreManagementV2/hooks/useScore.ts";
+import { useScoreAtom } from "@/globalState/scoreAtom.ts";
 
 export const InputRulePanel: FC = () => {
   const [isSubmit, setIsSubmit] = useIsBoolean();

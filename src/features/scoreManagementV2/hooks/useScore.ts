@@ -1,5 +1,4 @@
-import { scoreAtom } from "@/globalState/scoreAtom.ts";
-import { useAtom } from "jotai";
+import { useState } from "react";
 
 export type Player = 0 | 1 | 2 | 3;
 
@@ -10,8 +9,10 @@ export type UseScoreActionMap = {
   reset: () => void;
 };
 
-export const useScoreAtom = () => {
-  const [score, setScore] = useAtom(scoreAtom);
+const initialScore = [0, 0, 0, 0] as ScoreMap;
+
+export const useScore = () => {
+  const [score, setScore] = useState<ScoreMap>(initialScore);
 
   const action = {
     set: (value: ScoreMap) => setScore(value),

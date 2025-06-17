@@ -3,8 +3,7 @@ import { Box, Button, Flex, Grid, VStack } from "@chakra-ui/react";
 import { COLOR } from "@/features/scoreManagementV2/const/color.ts";
 import {
   Player,
-  ScoreMap,
-  useScoreAtom,
+  useScore,
 } from "@/features/scoreManagementV2/hooks/useScore.ts";
 import { useModalStack } from "@/features/scoreManagementV2/hooks/useModalStack.ts";
 import { useWinnerInfo } from "@/features/scoreManagementV2/hooks/useWinnerinfo.ts";
@@ -24,15 +23,14 @@ import { useIsBoolean } from "@/features/scoreManagementV2/hooks/useIsBoolean.ts
 import { usePlayerName } from "@/features/scoreManagementV2/hooks/usePlayerName.ts";
 import { usePlusScoreRule } from "@/features/scoreManagementV2/hooks/usePlusScoreRule.ts";
 import { useRankOrderRule } from "@/features/scoreManagementV2/hooks/useRankOrderRule.ts";
+import { calculateScoreDiff } from "@/features/scoreManagementV2/logics/scoreDiff/calculateScoreDiff.ts";
+import { useScoreAtom } from "@/globalState/scoreAtom.ts";
 
 export const ScoreSummary: FC = () => {
   const [score] = useScoreAtom();
   const [playerName] = usePlayerName();
   const [rankOrderRule] = useRankOrderRule();
-  console.log(playerName);
-  console.log("rankOrderRule", rankOrderRule);
   const [plusScoreRule] = usePlusScoreRule();
-  console.log("plusScoreRule", plusScoreRule);
 
   const [winnerInfo, setWinnerInfo] = useWinnerInfo();
   const [currentModal, { openModal, closeModal, reset }] = useModalStack();
@@ -46,7 +44,7 @@ export const ScoreSummary: FC = () => {
   const [reachFlags, setReachFlags] = useReachFlags();
   const [isAppearanceScoreDiff, { on: onScoreDiff, off: offScoreDiff }] =
     useIsBoolean();
-  const [scoreDiff, setScoreDiff] = useScoreAtom();
+  const [scoreDiff, setScoreDiff] = useScore();
   const WinType = currentModal === "winType";
   const isAfterWinType = currentModal === "finishWinType";
   const isRon = isAfterWinType && winnerInfo.winType === "ron";
@@ -107,16 +105,9 @@ export const ScoreSummary: FC = () => {
     3: false,
   };
 
-  const handleScoreDiff = (playerIndex: Player, score: ScoreMap) => {
-    const currentScore = [...score];
-    return currentScore.map(
-      (playerScore) => playerScore - currentScore[playerIndex],
-    ) as ScoreMap;
-  };
-
   const handlePressStart = (playerIndex: Player) => {
     return () => {
-      const scoreDiff = handleScoreDiff(playerIndex, score);
+      const scoreDiff = calculateScoreDiff(playerIndex, score);
       setScoreDiff.set(scoreDiff);
       onScoreDiff();
     };
