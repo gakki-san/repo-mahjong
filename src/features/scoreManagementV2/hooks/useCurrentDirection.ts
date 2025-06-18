@@ -5,7 +5,7 @@ export type CurrentDirection = 0 | 1 | 2 | 3;
 type UseSetCurrentDirection = {
   set: (value: CurrentDirection) => void;
   rotate: () => void;
-  toArray: (currentDirection: CurrentDirection) => number[];
+  toArray: () => number[];
 };
 
 type UseCurrentDirection = [CurrentDirection, UseSetCurrentDirection];
@@ -22,7 +22,7 @@ export const useCurrentDirection = (): UseCurrentDirection => {
       setCurrentDirection((prev) =>
         prev === 3 ? 0 : ((prev + 1) as CurrentDirection),
       ),
-    toArray: (currentDirection: CurrentDirection) => {
+    toArray: () => {
       const base = [0, 1, 2, 3];
       return base
         .slice(currentDirection)

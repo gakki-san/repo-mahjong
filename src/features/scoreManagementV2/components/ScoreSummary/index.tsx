@@ -28,17 +28,13 @@ export const ScoreSummary: FC = () => {
   const [rankOrderRule] = useRankOrderRule();
   const [plusScoreRule] = usePlusScoreRule();
   console.log(rankOrderRule, plusScoreRule);
-
   const [winnerInfo, setWinnerInfo] = useWinnerInfo();
   console.log("勝利条件", winnerInfo);
   const [currentModal, { openModal, closeModal, reset }] = useModalStack();
-  const [
-    selectedDirection,
-    {
-      set: setSelectedDirection,
-      // rotate: rotateDirection
-    },
-  ] = useCurrentDirection();
+  const [selectedDirection, { set: setSelectedDirection }] =
+    useCurrentDirection();
+  const [, { rotate: rotateDirection, toArray: currentDirectionToArray }] =
+    useCurrentDirection();
   const [reachFlags, setReachFlags] = useReachFlags();
   const [isAppearanceScoreDiff, { on: onScoreDiff, off: offScoreDiff }] =
     useIsBoolean();
@@ -66,9 +62,6 @@ export const ScoreSummary: FC = () => {
   const handleBack = () => {
     closeModal();
   };
-
-  // const oyaichi = [0, 1, 2, 3];
-  const oyanan = [3, 2, 1, 0];
 
   const handleFinishGame = () => {
     openModal("finish");
@@ -114,7 +107,7 @@ export const ScoreSummary: FC = () => {
         h="100vh"
         bg={COLOR.GREEN_PRIMARY}
       >
-        {oyanan.map((item, index) => {
+        {currentDirectionToArray().map((item, index) => {
           const directionPosition = uiPositions[index];
           const player = playerName[index];
 
@@ -173,6 +166,17 @@ export const ScoreSummary: FC = () => {
           >
             {/*{countHonba}本場*/}
             0本場
+          </Box>
+          <Box
+            p={"10px"}
+            color={COLOR.WHITE}
+            fontWeight={"bold"}
+            bg={COLOR.BLACK}
+            borderRadius={"5px"}
+            onClick={rotateDirection}
+          >
+            {/*{countHonba}本場*/}
+            rotate
           </Box>
           <Box
             p={"10px"}
