@@ -13,6 +13,12 @@ importers:
       "@emotion/react":
         specifier: ^11.14.0
         version: 11.14.0(@types/react@19.1.2)(react@19.1.0)
+      add:
+        specifier: ^2.0.6
+        version: 2.0.6
+      jotai:
+        specifier: ^2.12.5
+        version: 2.12.5(@types/react@19.1.2)(react@19.1.0)
       next-themes:
         specifier: ^0.4.6
         version: 0.4.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -28,6 +34,9 @@ importers:
       react-icons:
         specifier: ^5.5.0
         version: 5.5.0(react@19.1.0)
+      react-router:
+        specifier: ^7.6.2
+        version: 7.6.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
     devDependencies:
       "@chakra-ui/cli":
         specifier: ^3.16.0
@@ -1930,6 +1939,12 @@ packages:
     engines: { node: ">=0.4.0" }
     hasBin: true
 
+  add@2.0.6:
+    resolution:
+      {
+        integrity: sha512-j5QzrmsokwWWp6kUcJQySpbG+xfOBqqKnup3OIk1pz+kB/80SLorZ9V8zHFLO92Lcd+hbvq8bT+zOGoPkmBV0Q==,
+      }
+
   agent-base@7.1.3:
     resolution:
       {
@@ -2546,6 +2561,13 @@ packages:
       {
         integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==,
       }
+
+  cookie@1.0.2:
+    resolution:
+      {
+        integrity: sha512-9Kr/j4O16ISv8zBBhJoi4bXOYNTkFLOqSL3UDB0njXxCXNezjeyVrJyGOWtgfs/q2km1gwBcfH8q1yEGoMYunA==,
+      }
+    engines: { node: ">=18" }
 
   cosmiconfig-typescript-loader@6.1.0:
     resolution:
@@ -4104,6 +4126,21 @@ packages:
       }
     hasBin: true
 
+  jotai@2.12.5:
+    resolution:
+      {
+        integrity: sha512-G8m32HW3lSmcz/4mbqx0hgJIQ0ekndKWiYP7kWVKi0p6saLXdSoye+FZiOFyonnd7Q482LCzm8sMDl7Ar1NWDw==,
+      }
+    engines: { node: ">=12.20.0" }
+    peerDependencies:
+      "@types/react": ">=17.0.0"
+      react: ">=17.0.0"
+    peerDependenciesMeta:
+      "@types/react":
+        optional: true
+      react:
+        optional: true
+
   js-tokens@4.0.0:
     resolution:
       {
@@ -5128,6 +5165,19 @@ packages:
       }
     engines: { node: ">=0.10.0" }
 
+  react-router@7.6.2:
+    resolution:
+      {
+        integrity: sha512-U7Nv3y+bMimgWjhlT5CRdzHPu2/KVmqPwKUCChW8en5P3znxUqwlYFlbmyj8Rgp1SF6zs5X4+77kBVknkg6a0w==,
+      }
+    engines: { node: ">=20.0.0" }
+    peerDependencies:
+      react: ">=18"
+      react-dom: ">=18"
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
+
   react@19.1.0:
     resolution:
       {
@@ -5401,6 +5451,12 @@ packages:
       }
     engines: { node: ">=10" }
     hasBin: true
+
+  set-cookie-parser@2.7.1:
+    resolution:
+      {
+        integrity: sha512-IOc8uWeOZgnb3ptbCURJWNjWUPcO3ZnTTdzsurqERrP6nPyv+paC55vJM0LpOlT2ne+Ix+9+CRG1MNLlyZ4GjQ==,
+      }
 
   set-function-length@1.2.2:
     resolution:
@@ -7788,6 +7844,8 @@ snapshots:
 
   acorn@8.14.1: {}
 
+  add@2.0.6: {}
+
   agent-base@7.1.3: {}
 
   ajv@6.12.6:
@@ -8165,6 +8223,8 @@ snapshots:
   convert-source-map@1.9.0: {}
 
   convert-source-map@2.0.0: {}
+
+  cookie@1.0.2: {}
 
   cosmiconfig-typescript-loader@6.1.0(@types/node@22.14.1)(cosmiconfig@9.0.0(typescript@5.7.3))(typescript@5.7.3):
     dependencies:
@@ -9230,6 +9290,11 @@ snapshots:
   jiti@2.4.2:
     optional: true
 
+  jotai@2.12.5(@types/react@19.1.2)(react@19.1.0):
+    optionalDependencies:
+      "@types/react": 19.1.2
+      react: 19.1.0
+
   js-tokens@4.0.0: {}
 
   js-yaml@3.14.1:
@@ -9846,6 +9911,14 @@ snapshots:
 
   react-refresh@0.14.2: {}
 
+  react-router@7.6.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+    dependencies:
+      cookie: 1.0.2
+      react: 19.1.0
+      set-cookie-parser: 2.7.1
+    optionalDependencies:
+      react-dom: 19.1.0(react@19.1.0)
+
   react@19.1.0: {}
 
   readable-stream@3.6.2:
@@ -10058,6 +10131,8 @@ snapshots:
   semver@6.3.1: {}
 
   semver@7.7.1: {}
+
+  set-cookie-parser@2.7.1: {}
 
   set-function-length@1.2.2:
     dependencies:
