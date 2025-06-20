@@ -33,8 +33,14 @@ export const ScoreSummary: FC = () => {
   const [currentModal, { openModal, closeModal, reset }] = useModalStack();
   const [selectedDirection, { set: setSelectedDirection }] =
     useCurrentDirection();
-  const [, { rotate: rotateDirection, toArray: currentDirectionToArray }] =
-    useCurrentDirection();
+  const [
+    ,
+    {
+      // rotate: rotateDirection,
+      toArray: currentDirectionToArray,
+      rotateByWinResult,
+    },
+  ] = useCurrentDirection();
   const [reachFlags, setReachFlags] = useReachFlags();
   const [isAppearanceScoreDiff, { on: onScoreDiff, off: offScoreDiff }] =
     useIsBoolean();
@@ -94,6 +100,11 @@ export const ScoreSummary: FC = () => {
     1: false,
     2: false,
     3: false,
+  };
+
+  const handleRotate = () => {
+    const winner = 0;
+    rotateByWinResult(winner);
   };
 
   return (
@@ -173,7 +184,7 @@ export const ScoreSummary: FC = () => {
             fontWeight={"bold"}
             bg={COLOR.BLACK}
             borderRadius={"5px"}
-            onClick={rotateDirection}
+            onClick={handleRotate}
           >
             {/*{countHonba}本場*/}
             rotate
