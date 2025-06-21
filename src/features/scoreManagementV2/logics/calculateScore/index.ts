@@ -14,7 +14,7 @@ export const calculateScore = (
     return;
   }
   const currentScore = [...score];
-  const fromEachPlayerWhenParentWins = point / 3;
+  const fromEachPlayerWhenParentWins = point;
   const fromParentWhenChildWins = point / 2;
   const fromOtherChildWhenChildWins = point / 4;
   const payments = currentScore.map((_, index) => {
@@ -29,7 +29,9 @@ export const calculateScore = (
   });
 
   return currentScore.map((score, index) => {
-    if (index === winner) {
+    if (index === parent && index === winner) {
+      return score + point * 3;
+    } else if (index === winner) {
       return score + point;
     } else {
       return score - payments[index];

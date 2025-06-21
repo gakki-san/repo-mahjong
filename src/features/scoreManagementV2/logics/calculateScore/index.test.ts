@@ -16,9 +16,9 @@ describe("calculateWinnerScore", () => {
   it("和了者と親が同じ", () => {
     const winner = 1;
     const score = [21000, 28000, 23000, 28000] as ScoreMap;
-    const point = 6000;
+    const point = 4000;
     expect(calculateScore(winner, score, point, parent)).toEqual([
-      19000, 34000, 21000, 26000,
+      17000, 40000, 19000, 24000,
     ]);
   });
 
