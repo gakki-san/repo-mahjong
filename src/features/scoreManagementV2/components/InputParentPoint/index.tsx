@@ -4,20 +4,36 @@ import { COLOR } from "@/features/scoreManagementV2/const/color.ts";
 import { DecisionButton } from "@/features/scoreManagementV2/components/DecisionButton";
 import { BackButton } from "@/features/scoreManagementV2/components/BackButton";
 import { WinInfo } from "@/features/scoreManagementV2/hooks/useWinnerinfo.ts";
+import { calculateScore } from "@/features/scoreManagementV2/logics/calculateScore";
+import {
+  Player,
+  ScoreMap,
+} from "@/features/scoreManagementV2/hooks/useScore.ts";
 
 type InputWinPointProps = {
   handleBack: () => void;
   reset: () => void;
   setPoint: (value: Partial<WinInfo>) => void;
+  setScore: (score: ScoreMap) => void;
+  winner: Player | null;
+  score: ScoreMap;
+  point: number | null;
+  parent: Player;
 };
 
 export const InputWinPoint: FC<InputWinPointProps> = ({
   handleBack,
   reset,
   setPoint,
+  setScore,
+  winner,
+  score,
+  point,
+  parent,
 }) => {
   const handleCloseInputPoint = () => {
     reset();
+    setScore(calculateScore(winner, score, point, parent) as ScoreMap);
   };
 
   const handleWinPointChange: ComponentProps<

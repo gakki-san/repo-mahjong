@@ -33,8 +33,6 @@ export const InputChildrenPoint: FC<InputChildrenPointProps> = ({
   const [childrenPoint, { add: setChildrenPoint }] = useCount();
   const [parentPoint, { add: setParentPoint }] = useCount();
 
-  console.log("childrenPoint", childrenPoint);
-  console.log("parentPoint", parentPoint);
   const handleCloseInputPoint = () => {
     reset();
     setPoint({ winPoints: childrenPoint * 2 + parentPoint });

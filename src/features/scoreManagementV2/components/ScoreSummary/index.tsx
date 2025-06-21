@@ -1,7 +1,10 @@
 import { FC } from "react";
 import { Box, Button, Flex, Grid, VStack } from "@chakra-ui/react";
 import { COLOR } from "@/features/scoreManagementV2/const/color.ts";
-import { useScore } from "@/features/scoreManagementV2/hooks/useScore.ts";
+import {
+  Player,
+  useScore,
+} from "@/features/scoreManagementV2/hooks/useScore.ts";
 import { useModalStack } from "@/features/scoreManagementV2/hooks/useModalStack.ts";
 import { useWinnerInfo } from "@/features/scoreManagementV2/hooks/useWinnerinfo.ts";
 import { InputWinType } from "@/features/scoreManagementV2/components/InputWinType";
@@ -240,6 +243,11 @@ export const ScoreSummary: FC = () => {
             handleBack={handleBack}
             reset={reset}
             setPoint={setWinnerInfo}
+            setScore={setScore.set}
+            winner={winnerInfo.winner}
+            score={score}
+            point={winnerInfo.winPoints}
+            parent={currentDirectionToArray().indexOf(0) as Player}
           />
         ) : (
           <InputChildrenPoint
@@ -257,6 +265,11 @@ export const ScoreSummary: FC = () => {
           handleBack={handleBack}
           reset={reset}
           setPoint={setWinnerInfo}
+          setScore={setScore.set}
+          winner={winnerInfo.winner}
+          score={score}
+          point={winnerInfo.winPoints}
+          parent={currentDirectionToArray().indexOf(0) as Player}
         />
       )}
       {isFinishModal && (
