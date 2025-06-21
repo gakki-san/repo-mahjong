@@ -20,6 +20,7 @@ type InputWinPointProps = {
   point: number | null;
   parent: Player;
   loser?: Player;
+  handleRoundBonus: (winner: Player | null, parent: Player) => void;
 };
 
 export const InputWinPoint: FC<InputWinPointProps> = ({
@@ -32,10 +33,13 @@ export const InputWinPoint: FC<InputWinPointProps> = ({
   point,
   parent,
   loser,
+  handleRoundBonus,
 }) => {
   const handleCloseInputPoint = () => {
     reset();
     setScore(calculateScore(winner, score, point, parent, loser));
+
+    handleRoundBonus(winner, parent);
   };
 
   const handleWinPointChange: ComponentProps<

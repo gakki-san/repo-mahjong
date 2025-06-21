@@ -24,6 +24,7 @@ import { usePlayerName } from "@/features/scoreManagementV2/hooks/usePlayerName.
 import { usePlusScoreRule } from "@/features/scoreManagementV2/hooks/usePlusScoreRule.ts";
 import { useRankOrderRule } from "@/features/scoreManagementV2/hooks/useRankOrderRule.ts";
 import { useScoreAtom } from "@/globalState/scoreAtom.ts";
+import { useCount } from "@/features/scoreManagementV2/hooks/useCount.ts";
 
 export const ScoreSummary: FC = () => {
   const [score, setScore] = useScoreAtom();
@@ -48,6 +49,10 @@ export const ScoreSummary: FC = () => {
   const [isAppearanceScoreDiff, { on: onScoreDiff, off: offScoreDiff }] =
     useIsBoolean();
   const [scoreDiff, setScoreDiff] = useScore();
+  const [
+    roundBonus,
+    { increment: incrementRoundBonus, reset: resetRoundBonus },
+  ] = useCount();
   const WinType = currentModal === "winType";
   const isAfterWinType = currentModal === "finishWinType";
   const isRon = isAfterWinType && winnerInfo.winType === "ron";
@@ -82,6 +87,7 @@ export const ScoreSummary: FC = () => {
 
   const handleCloseTempaiModal = () => {
     reset();
+    incrementRoundBonus();
   };
 
   const { handleReach } = useHandleReach({
@@ -108,6 +114,18 @@ export const ScoreSummary: FC = () => {
   const handleRotate = () => {
     const winner = 0;
     rotateByWinResult(winner);
+  };
+
+  const handleRoundBonus = (winner: Player | null, parent: Player) => {
+    if (winner === null) {
+      console.error("winnerが選択されていません。");
+      return;
+    }
+    if (winner === parent) {
+      incrementRoundBonus();
+    } else {
+      resetRoundBonus();
+    }
   };
 
   return (
@@ -178,8 +196,7 @@ export const ScoreSummary: FC = () => {
             bg={COLOR.BLACK}
             borderRadius={"5px"}
           >
-            {/*{countHonba}本場*/}
-            0本場
+            {roundBonus}本場
           </Box>
           <Box
             p={"10px"}
@@ -189,7 +206,6 @@ export const ScoreSummary: FC = () => {
             borderRadius={"5px"}
             onClick={handleRotate}
           >
-            {/*{countHonba}本場*/}
             rotate
           </Box>
           <Box
@@ -248,6 +264,7 @@ export const ScoreSummary: FC = () => {
             score={score}
             point={winnerInfo.winPoints}
             parent={currentDirectionToArray().indexOf(0) as Player}
+            handleRoundBonus={handleRoundBonus}
           />
         ) : (
           <InputChildrenPoint
@@ -258,6 +275,7 @@ export const ScoreSummary: FC = () => {
             score={score}
             winner={winnerInfo.winner}
             parent={currentDirectionToArray().indexOf(0) as Player}
+            resetRoundBonus={resetRoundBonus}
           />
         ))}
       {isWinPointForRon && (
@@ -271,6 +289,7 @@ export const ScoreSummary: FC = () => {
           point={winnerInfo.winPoints}
           parent={currentDirectionToArray().indexOf(0) as Player}
           loser={winnerInfo.loser as Player}
+          handleRoundBonus={handleRoundBonus}
         />
       )}
       {isFinishModal && (

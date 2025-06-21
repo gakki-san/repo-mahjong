@@ -19,6 +19,7 @@ type InputChildrenPointProps = {
   score: ScoreMap;
   winner: Player | null;
   parent: Player;
+  resetRoundBonus: () => void;
 };
 
 export const InputChildrenPoint: FC<InputChildrenPointProps> = ({
@@ -28,6 +29,7 @@ export const InputChildrenPoint: FC<InputChildrenPointProps> = ({
   score,
   winner,
   parent,
+  resetRoundBonus,
 }) => {
   const [childrenPoint, { add: setChildrenPoint }] = useCount();
   const [parentPoint, { add: setParentPoint }] = useCount();
@@ -42,6 +44,7 @@ export const InputChildrenPoint: FC<InputChildrenPointProps> = ({
       parent,
     );
     setScore(result);
+    resetRoundBonus();
   };
 
   const handlePointChange =
