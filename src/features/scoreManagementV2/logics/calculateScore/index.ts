@@ -8,7 +8,7 @@ export const calculateScore = (
   score: ScoreMap,
   point: number | null,
   parent: Player,
-  loser?: Player,
+  loser: Player | null,
 ): ScoreMap => {
   if (winner === null || point === null) {
     console.error("winnerかpointが入力されていないです。");
@@ -29,7 +29,7 @@ export const calculateScore = (
     }
   });
 
-  if (loser !== undefined) {
+  if (loser !== null) {
     currentScore[winner] += point;
     currentScore[loser] -= point;
     return currentScore as ScoreMap;

@@ -265,6 +265,8 @@ export const ScoreSummary: FC = () => {
             point={winnerInfo.winPoints}
             parent={currentDirectionToArray().indexOf(0) as Player}
             handleRoundBonus={handleRoundBonus}
+            roundBonus={roundBonus}
+            loser={winnerInfo.loser}
           />
         ) : (
           <InputChildrenPoint
@@ -276,6 +278,8 @@ export const ScoreSummary: FC = () => {
             winner={winnerInfo.winner}
             parent={currentDirectionToArray().indexOf(0) as Player}
             resetRoundBonus={resetRoundBonus}
+            roundBonus={roundBonus}
+            loser={winnerInfo.loser as Player}
           />
         ))}
       {isWinPointForRon && (
@@ -288,8 +292,9 @@ export const ScoreSummary: FC = () => {
           score={score}
           point={winnerInfo.winPoints}
           parent={currentDirectionToArray().indexOf(0) as Player}
-          loser={winnerInfo.loser as Player}
           handleRoundBonus={handleRoundBonus}
+          roundBonus={roundBonus}
+          loser={winnerInfo.loser}
         />
       )}
       {isFinishModal && (

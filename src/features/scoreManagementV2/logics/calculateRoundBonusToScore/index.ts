@@ -6,9 +6,12 @@ import {
 export const calculateRoundBonusToScore = (
   score: ScoreMap,
   roundBonus: number,
-  winner: Player,
+  winner: Player | null,
   loser: Player | null,
 ): ScoreMap => {
+  if (winner === null) {
+    console.error("winnerが選択されていません");
+  }
   const currentScore = [...score] as ScoreMap;
   if (roundBonus === 0) return currentScore;
 

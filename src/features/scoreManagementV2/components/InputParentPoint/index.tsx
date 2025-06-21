@@ -9,6 +9,7 @@ import {
   Player,
   ScoreMap,
 } from "@/features/scoreManagementV2/hooks/useScore.ts";
+import { calculateRoundBonusToScore } from "@/features/scoreManagementV2/logics/calculateRoundBonusToScore";
 
 type InputWinPointProps = {
   handleBack: () => void;
@@ -19,8 +20,9 @@ type InputWinPointProps = {
   score: ScoreMap;
   point: number | null;
   parent: Player;
-  loser?: Player;
   handleRoundBonus: (winner: Player | null, parent: Player) => void;
+  roundBonus: number;
+  loser: Player | null;
 };
 
 export const InputWinPoint: FC<InputWinPointProps> = ({
@@ -32,14 +34,24 @@ export const InputWinPoint: FC<InputWinPointProps> = ({
   score,
   point,
   parent,
-  loser,
   handleRoundBonus,
+  roundBonus,
+  loser,
 }) => {
   const handleCloseInputPoint = () => {
     reset();
-    setScore(calculateScore(winner, score, point, parent, loser));
+    const calculateWinScore = calculateScore(
+      winner,
+      score,
+      point,
+      parent,
+      loser,
+    );
 
     handleRoundBonus(winner, parent);
+    setScore(
+      calculateRoundBonusToScore(calculateWinScore, roundBonus, winner, loser),
+    );
   };
 
   const handleWinPointChange: ComponentProps<

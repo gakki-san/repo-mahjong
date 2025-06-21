@@ -23,7 +23,7 @@ describe("calculateRoundBonusToScore", () => {
     ).toEqual([25900, 24100, 25000, 25000]);
   });
 
-  it("loserがnullの時はwinner以外の全員から本場分を引く", () => {
+  it("loserがundefinedの時はwinner以外の全員から本場分を引く", () => {
     const roundBonus = 1;
     const winner = 0;
     const loser = null;
