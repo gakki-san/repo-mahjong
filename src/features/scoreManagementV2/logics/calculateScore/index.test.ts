@@ -39,4 +39,18 @@ describe("calculateWinnerScore", () => {
       27000, 14000, 22000, 37000,
     ]);
   });
+
+  it("winnerがnullのときはundefinedを返す", () => {
+    const winner = null;
+    const score = [25000, 25000, 25000, 25000] as ScoreMap;
+    const point = 8000;
+    expect(calculateScore(winner, score, point, parent)).toEqual(undefined);
+  });
+
+  it("pointがnullのときはundefinedを返す", () => {
+    const winner = 0;
+    const score = [25000, 25000, 25000, 25000] as ScoreMap;
+    const point = null;
+    expect(calculateScore(winner, score, point, parent)).toEqual(undefined);
+  });
 });

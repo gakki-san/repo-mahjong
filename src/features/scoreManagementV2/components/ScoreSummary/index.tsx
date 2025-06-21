@@ -23,7 +23,7 @@ import { useRankOrderRule } from "@/features/scoreManagementV2/hooks/useRankOrde
 import { useScoreAtom } from "@/globalState/scoreAtom.ts";
 
 export const ScoreSummary: FC = () => {
-  const [score] = useScoreAtom();
+  const [score, setScore] = useScoreAtom();
   const [playerName] = usePlayerName();
   const [rankOrderRule] = useRankOrderRule();
   const [plusScoreRule] = usePlusScoreRule();
@@ -246,6 +246,10 @@ export const ScoreSummary: FC = () => {
             handleBack={handleBack}
             reset={reset}
             setPoint={setWinnerInfo}
+            setScore={setScore.set}
+            score={score}
+            winner={winnerInfo.winner}
+            toArray={currentDirectionToArray}
           />
         ))}
       {isWinPointForRon && (
