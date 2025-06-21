@@ -8,10 +8,11 @@ export const calculateScore = (
   score: ScoreMap,
   point: number | null,
   parent: Player,
-): ScoreMap | undefined => {
+  loser?: Player,
+): ScoreMap => {
   if (winner === null || point === null) {
     console.error("winnerかpointが入力されていないです。");
-    return;
+    return score;
   }
   const currentScore = [...score];
   const fromEachPlayerWhenParentWins = point;
@@ -27,6 +28,12 @@ export const calculateScore = (
       return fromOtherChildWhenChildWins;
     }
   });
+
+  if (loser !== undefined) {
+    currentScore[winner] += point;
+    currentScore[loser] -= point;
+    return currentScore as ScoreMap;
+  }
 
   return currentScore.map((score, index) => {
     if (index === parent && index === winner) {

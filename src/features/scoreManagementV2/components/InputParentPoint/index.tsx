@@ -19,6 +19,7 @@ type InputWinPointProps = {
   score: ScoreMap;
   point: number | null;
   parent: Player;
+  loser?: Player;
 };
 
 export const InputWinPoint: FC<InputWinPointProps> = ({
@@ -30,10 +31,11 @@ export const InputWinPoint: FC<InputWinPointProps> = ({
   score,
   point,
   parent,
+  loser,
 }) => {
   const handleCloseInputPoint = () => {
     reset();
-    setScore(calculateScore(winner, score, point, parent) as ScoreMap);
+    setScore(calculateScore(winner, score, point, parent, loser));
   };
 
   const handleWinPointChange: ComponentProps<

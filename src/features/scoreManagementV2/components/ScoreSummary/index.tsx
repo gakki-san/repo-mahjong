@@ -257,7 +257,7 @@ export const ScoreSummary: FC = () => {
             setScore={setScore.set}
             score={score}
             winner={winnerInfo.winner}
-            toArray={currentDirectionToArray}
+            parent={currentDirectionToArray().indexOf(0) as Player}
           />
         ))}
       {isWinPointForRon && (
@@ -270,6 +270,7 @@ export const ScoreSummary: FC = () => {
           score={score}
           point={winnerInfo.winPoints}
           parent={currentDirectionToArray().indexOf(0) as Player}
+          loser={winnerInfo.loser as Player}
         />
       )}
       {isFinishModal && (
