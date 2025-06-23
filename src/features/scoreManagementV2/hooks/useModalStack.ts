@@ -18,7 +18,7 @@ type UseModalStackReturn = [currentModal: ModalType, actions: useModalActions];
 export type useModalActions = {
   openModal: (type: Exclude<ModalType, null>) => void;
   closeModal: () => void;
-  reset: () => void;
+  resetModal: () => void;
 };
 
 export const useModalStack = (): UseModalStackReturn => {
@@ -33,7 +33,7 @@ export const useModalStack = (): UseModalStackReturn => {
     closeModal: () => {
       setModalStack((current) => current.slice(0, -1));
     },
-    reset: () => {
+    resetModal: () => {
       setModalStack([]);
     },
   };

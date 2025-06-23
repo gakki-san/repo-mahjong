@@ -38,7 +38,7 @@ export const ScoreSummary: FC = () => {
   console.log(rankOrderRule, plusScoreRule);
   const [winnerInfo, setWinnerInfo] = useWinnerInfo();
   console.log("勝利条件", winnerInfo);
-  const [currentModal, { openModal, closeModal, reset }] = useModalStack();
+  const [currentModal, { openModal, closeModal, resetModal }] = useModalStack();
   const [selectedDirection, { set: setSelectedDirection }] =
     useCurrentDirection();
   const [
@@ -64,6 +64,7 @@ export const ScoreSummary: FC = () => {
       // reset: resetPoolBonus
     },
   ] = useCount();
+  const [reachPlayer, { add: setReachPlayer }] = useCount();
   const WinType = currentModal === "winType";
   const isAfterWinType = currentModal === "finishWinType";
   const isRon = isAfterWinType && winnerInfo.winType === "ron";
@@ -101,17 +102,21 @@ export const ScoreSummary: FC = () => {
     // そして、reachFlagのtrueを全てfalseにする
     // const countReach = Object.values(reachFlags).filter((item) => item).length;
     // console.log("立直のかず", countReach);
-    reset();
+    resetModal();
     addPoolBonus(2);
     console.log("poolBonus", poolBonus);
     incrementRoundBonus();
   };
 
-  const { handleReach } = useHandleReach({
+  console.log("reachFlags", reachFlags);
+
+  const { handleReach, handleResetReach } = useHandleReach({
     reachFlags,
     setReachFlags,
     openModal,
     closeModal,
+    setReachPlayer,
+    reachPlayer,
   });
 
   const mockGameData = [
@@ -178,7 +183,7 @@ export const ScoreSummary: FC = () => {
   };
 
   const handleCloseInputPoint = () => {
-    reset();
+    resetModal();
     const parent = currentDirectionToArray().indexOf(0);
     const isWinnerChildren = parent !== winnerInfo.winner;
     if (isWinnerChildren) {
@@ -195,7 +200,7 @@ export const ScoreSummary: FC = () => {
     childrenPoint: number,
     parentPoint: number,
   ) => {
-    reset();
+    resetModal();
     rotateDirection();
 
     const point = childrenPoint * 2 + parentPoint;
@@ -362,7 +367,10 @@ export const ScoreSummary: FC = () => {
       )}
       {isReach && <ReachVideo selectedReachPlayer={0} />}
       {isAlreadyReach && (
-        <AlreadyReachModal noResetReach={handleCloseTempaiModal} />
+        <AlreadyReachModal
+          resetReach={handleResetReach}
+          noResetReach={resetModal}
+        />
       )}
     </>
   );
