@@ -4,70 +4,18 @@ import { COLOR } from "@/features/scoreManagementV2/const/color.ts";
 import { DecisionButton } from "@/features/scoreManagementV2/components/DecisionButton";
 import { BackButton } from "@/features/scoreManagementV2/components/BackButton";
 import { WinInfo } from "@/features/scoreManagementV2/hooks/useWinnerinfo.ts";
-import { calculateScore } from "@/features/scoreManagementV2/logics/calculateScore";
-import {
-  Player,
-  ScoreMap,
-} from "@/features/scoreManagementV2/hooks/useScore.ts";
-import { calculateRoundBonusToScore } from "@/features/scoreManagementV2/logics/calculateRoundBonusToScore";
-import { calculatePoolBonus } from "@/features/scoreManagementV2/logics/calculatePoolBonus";
 
 type InputWinPointProps = {
   handleBack: () => void;
-  reset: () => void;
   setPoint: (value: Partial<WinInfo>) => void;
-  setScore: (score: ScoreMap) => void;
-  winner: Player | null;
-  score: ScoreMap;
-  point: number | null;
-  parent: Player;
-  handleRoundBonus: (winner: Player | null, parent: Player) => void;
-  roundBonus: number;
-  loser: Player | null;
-  poolBonus: number;
+  handleCloseInputPoint: () => void;
 };
 
 export const InputWinPoint: FC<InputWinPointProps> = ({
   handleBack,
-  reset,
   setPoint,
-  setScore,
-  winner,
-  score,
-  point,
-  parent,
-  handleRoundBonus,
-  roundBonus,
-  loser,
-  poolBonus,
+  handleCloseInputPoint,
 }) => {
-  const handleCloseInputPoint = () => {
-    reset();
-    const calculateWinScore = calculateScore(
-      winner,
-      score,
-      point,
-      parent,
-      loser,
-    );
-
-    const calculateRoundBonusScore = calculateRoundBonusToScore(
-      calculateWinScore,
-      roundBonus,
-      winner,
-      loser,
-    );
-
-    const calculatePoolBonusScore = calculatePoolBonus(
-      calculateRoundBonusScore,
-      poolBonus,
-      winner,
-    );
-
-    handleRoundBonus(winner, parent);
-    setScore(calculatePoolBonusScore);
-  };
-
   const handleWinPointChange: ComponentProps<
     typeof NumberInput.Root
   >["onValueChange"] = (event) => {
