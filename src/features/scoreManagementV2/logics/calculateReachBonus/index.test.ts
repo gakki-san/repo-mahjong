@@ -29,4 +29,13 @@ describe("calculateReachBonus", () => {
       25000, 25000, 25000, 25000,
     ]);
   });
+
+  it("全員立直していれば、点数が変動することはない", () => {
+    const score: ScoreMap = [25000, 25000, 25000, 25000];
+    const winner = 1;
+    const countReachPlayer = 4;
+    expect(calculateReachBonus(score, winner, countReachPlayer)).toEqual([
+      25000, 25000, 25000, 25000,
+    ]);
+  });
 });
