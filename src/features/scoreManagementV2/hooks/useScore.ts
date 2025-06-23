@@ -2,7 +2,7 @@ import { useState } from "react";
 
 export type Player = 0 | 1 | 2 | 3;
 
-export type ScoreMap = [number, number, number, number];
+export type ScoreMap = number[];
 
 export type UseScoreActionMap = {
   set: (value: ScoreMap) => void;

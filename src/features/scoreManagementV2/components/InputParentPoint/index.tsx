@@ -10,6 +10,7 @@ import {
   ScoreMap,
 } from "@/features/scoreManagementV2/hooks/useScore.ts";
 import { calculateRoundBonusToScore } from "@/features/scoreManagementV2/logics/calculateRoundBonusToScore";
+import { calculatePoolBonus } from "@/features/scoreManagementV2/logics/calculatePoolBonus";
 
 type InputWinPointProps = {
   handleBack: () => void;
@@ -23,6 +24,7 @@ type InputWinPointProps = {
   handleRoundBonus: (winner: Player | null, parent: Player) => void;
   roundBonus: number;
   loser: Player | null;
+  poolBonus: number;
 };
 
 export const InputWinPoint: FC<InputWinPointProps> = ({
@@ -37,6 +39,7 @@ export const InputWinPoint: FC<InputWinPointProps> = ({
   handleRoundBonus,
   roundBonus,
   loser,
+  poolBonus,
 }) => {
   const handleCloseInputPoint = () => {
     reset();
@@ -48,10 +51,21 @@ export const InputWinPoint: FC<InputWinPointProps> = ({
       loser,
     );
 
-    handleRoundBonus(winner, parent);
-    setScore(
-      calculateRoundBonusToScore(calculateWinScore, roundBonus, winner, loser),
+    const calculateRoundBonusScore = calculateRoundBonusToScore(
+      calculateWinScore,
+      roundBonus,
+      winner,
+      loser,
     );
+
+    const calculatePoolBonusScore = calculatePoolBonus(
+      calculateRoundBonusScore,
+      poolBonus,
+      winner,
+    );
+
+    handleRoundBonus(winner, parent);
+    setScore(calculatePoolBonusScore);
   };
 
   const handleWinPointChange: ComponentProps<

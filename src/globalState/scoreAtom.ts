@@ -1,7 +1,8 @@
 import { atomWithStorage } from "jotai/utils";
 import { useAtom } from "jotai/index";
 
-type ScoreMap = [number, number, number, number];
+// type ScoreMap = [number, number, number, number];
+export type ScoreMap = number[];
 
 const STORAGE_KEY = "score";
 

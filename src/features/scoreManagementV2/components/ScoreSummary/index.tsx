@@ -53,6 +53,13 @@ export const ScoreSummary: FC = () => {
     roundBonus,
     { increment: incrementRoundBonus, reset: resetRoundBonus },
   ] = useCount();
+  const [
+    poolBonus,
+    {
+      add: addPoolBonus,
+      // reset: resetPoolBonus
+    },
+  ] = useCount();
   const WinType = currentModal === "winType";
   const isAfterWinType = currentModal === "finishWinType";
   const isRon = isAfterWinType && winnerInfo.winType === "ron";
@@ -86,7 +93,13 @@ export const ScoreSummary: FC = () => {
   };
 
   const handleCloseTempaiModal = () => {
+    // reachFlagでtrueの数だけincrementかaddする
+    // そして、reachFlagのtrueを全てfalseにする
+    // const countReach = Object.values(reachFlags).filter((item) => item).length;
+    // console.log("立直のかず", countReach);
     reset();
+    addPoolBonus(2);
+    console.log("poolBonus", poolBonus);
     incrementRoundBonus();
   };
 
@@ -215,8 +228,7 @@ export const ScoreSummary: FC = () => {
             bg={COLOR.BLACK}
             borderRadius={"5px"}
           >
-            {/*供託{countKyotaku}本*/}
-            0本
+            供託{poolBonus}本
           </Box>
           <Button
             color={COLOR.WHITE}
@@ -267,6 +279,7 @@ export const ScoreSummary: FC = () => {
             handleRoundBonus={handleRoundBonus}
             roundBonus={roundBonus}
             loser={winnerInfo.loser}
+            poolBonus={poolBonus}
           />
         ) : (
           <InputChildrenPoint
@@ -280,6 +293,7 @@ export const ScoreSummary: FC = () => {
             resetRoundBonus={resetRoundBonus}
             roundBonus={roundBonus}
             loser={winnerInfo.loser as Player}
+            poolBonus={poolBonus}
           />
         ))}
       {isWinPointForRon && (
@@ -295,6 +309,7 @@ export const ScoreSummary: FC = () => {
           handleRoundBonus={handleRoundBonus}
           roundBonus={roundBonus}
           loser={winnerInfo.loser}
+          poolBonus={poolBonus}
         />
       )}
       {isFinishModal && (

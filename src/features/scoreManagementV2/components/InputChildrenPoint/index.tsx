@@ -11,6 +11,7 @@ import {
 } from "@/features/scoreManagementV2/hooks/useScore.ts";
 import { calculateScore } from "@/features/scoreManagementV2/logics/calculateScore";
 import { calculateRoundBonusToScore } from "@/features/scoreManagementV2/logics/calculateRoundBonusToScore";
+import { calculatePoolBonus } from "@/features/scoreManagementV2/logics/calculatePoolBonus";
 
 type InputChildrenPointProps = {
   handleBack: () => void;
@@ -23,6 +24,7 @@ type InputChildrenPointProps = {
   resetRoundBonus: () => void;
   roundBonus: number;
   loser: Player;
+  poolBonus: number;
 };
 
 export const InputChildrenPoint: FC<InputChildrenPointProps> = ({
@@ -35,6 +37,7 @@ export const InputChildrenPoint: FC<InputChildrenPointProps> = ({
   resetRoundBonus,
   roundBonus,
   loser,
+  poolBonus,
 }) => {
   const [childrenPoint, { add: setChildrenPoint }] = useCount();
   const [parentPoint, { add: setParentPoint }] = useCount();
@@ -49,9 +52,21 @@ export const InputChildrenPoint: FC<InputChildrenPointProps> = ({
       parent,
       loser,
     );
-    setScore(
-      calculateRoundBonusToScore(calculateWinScore, roundBonus, winner, loser),
+
+    const calculateRoundBonusScore = calculateRoundBonusToScore(
+      calculateWinScore,
+      roundBonus,
+      winner,
+      loser,
     );
+
+    const calculatePoolBonusScore = calculatePoolBonus(
+      calculateRoundBonusScore,
+      poolBonus,
+      winner,
+    );
+
+    setScore(calculatePoolBonusScore);
     resetRoundBonus();
   };
 

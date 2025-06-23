@@ -1,7 +1,5 @@
-import {
-  Player,
-  ScoreMap,
-} from "@/features/scoreManagementV2/hooks/useScore.ts";
+import { Player } from "@/features/scoreManagementV2/hooks/useScore.ts";
+import { ScoreMap } from "@/globalState/scoreAtom.ts";
 
 export const calculateScore = (
   winner: Player | null,
@@ -32,7 +30,7 @@ export const calculateScore = (
   if (loser !== null) {
     currentScore[winner] += point;
     currentScore[loser] -= point;
-    return currentScore as ScoreMap;
+    return currentScore;
   }
 
   return currentScore.map((score, index) => {
@@ -43,5 +41,5 @@ export const calculateScore = (
     } else {
       return score - payments[index];
     }
-  }) as ScoreMap;
+  });
 };
