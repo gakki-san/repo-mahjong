@@ -184,7 +184,7 @@ export const ScoreSummary: FC = () => {
 
   const handleCloseInputPoint = () => {
     resetModal();
-    const parent = currentDirectionToArray().indexOf(0);
+    const parent = currentDirectionToArray().indexOf(0) as Player;
     const isWinnerChildren = parent !== winnerInfo.winner;
     if (isWinnerChildren) {
       rotateDirection();
@@ -192,7 +192,7 @@ export const ScoreSummary: FC = () => {
 
     const calculatedScore = calculateTotalScore(winnerInfo.winPoints);
 
-    handleRoundBonus(winnerInfo.winner, parent as Player);
+    handleRoundBonus(winnerInfo.winner, parent);
     setScore.set(calculatedScore);
   };
 
@@ -238,7 +238,6 @@ export const ScoreSummary: FC = () => {
                 player={player}
                 direction={item}
                 index={index}
-                score={score}
                 handleReach={handleReach}
                 setSelectedDirection={setSelectedDirection}
                 setWinnerInfo={setWinnerInfo}
