@@ -1,11 +1,11 @@
 import { SCORE } from "../../const/score";
-import { ReachFlagsProps } from "../../hooks/useReachFlags";
+import { ReachFlags } from "../../hooks/useReachFlags";
 import { Player, ScoreMap } from "../../hooks/useScore";
 
 export const calculatePenalty = (
   score: ScoreMap,
   tempaiCount: number,
-  isTEMPAI: ReachFlagsProps,
+  isTEMPAI: ReachFlags,
 ) => {
   const calcScore = [...score];
   if (tempaiCount === 0 || tempaiCount === 4) {

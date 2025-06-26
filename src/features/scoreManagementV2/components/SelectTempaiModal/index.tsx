@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Box, Checkbox, Flex, Stack } from "@chakra-ui/react";
-import { ReachFlagsProps } from "../../hooks/useReachFlags";
+import { ReachFlags } from "../../hooks/useReachFlags";
 import { Player } from "../../hooks/useScore";
 import { COLOR } from "../../const/color";
 import { DecisionButton } from "@/features/scoreManagementV2/components/DecisionButton";
@@ -8,7 +8,7 @@ import { BackButton } from "@/features/scoreManagementV2/components/BackButton";
 
 type SelectTempaiModalProps = {
   playersName: string[];
-  isTEMPAI: ReachFlagsProps;
+  isTEMPAI: ReachFlags;
   toggle: (player: Player) => void;
   handleDecide: () => void;
   handleBack: () => void;

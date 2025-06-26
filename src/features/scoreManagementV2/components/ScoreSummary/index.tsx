@@ -107,12 +107,11 @@ export const ScoreSummary: FC = () => {
     const calcScore = calculatePenalty(score, countTEMPAI, isTEMPAI);
     setScore.set(calcScore);
 
-    // const parent = currentDirectionToArray().indexOf(0) as Player;
-    // const childrenWinner = winnerInfo.winner !== parent;
-    // console.log(childrenWinner);
-    // if (childrenWinner) {
-    //   rotateDirection();
-    // }
+    const parent = currentDirectionToArray().indexOf(0) as Player;
+    const shouldContinueParent = !isTEMPAI[parent];
+    if (shouldContinueParent) {
+      rotateDirection();
+    }
 
     resetModal();
     addPoolBonus(countReach);

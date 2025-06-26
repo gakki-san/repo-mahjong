@@ -1,13 +1,13 @@
 import { useState } from "react";
 
-export type ReachFlagsProps = {
+export type ReachFlags = {
   0: boolean;
   1: boolean;
   2: boolean;
   3: boolean;
 };
 
-export const initialReachFlags: ReachFlagsProps = {
+export const initialReachFlags: ReachFlags = {
   0: false,
   1: false,
   2: false,
@@ -17,26 +17,25 @@ export const initialReachFlags: ReachFlagsProps = {
 export type PlayerIndex = 0 | 1 | 2 | 3;
 
 export type SetReachFlagsReturn = {
-  update: (updater: (prev: ReachFlagsProps) => ReachFlagsProps) => void;
-  replace: (list: ReachFlagsProps) => void;
+  update: (updater: (prev: ReachFlags) => ReachFlags) => void;
+  replace: (list: ReachFlags) => void;
   toggle: (player: PlayerIndex) => void;
   reset: () => void;
 };
 
 export type useReachFlagsReturn = [
-  reachFlags: ReachFlagsProps,
+  reachFlags: ReachFlags,
   actions: SetReachFlagsReturn,
 ];
 
 export const useReachFlags = (): useReachFlagsReturn => {
-  const [reachFlags, setReachFlags] =
-    useState<ReachFlagsProps>(initialReachFlags);
+  const [reachFlags, setReachFlags] = useState<ReachFlags>(initialReachFlags);
 
   const actions = {
-    update: (updater: (prev: ReachFlagsProps) => ReachFlagsProps) => {
+    update: (updater: (prev: ReachFlags) => ReachFlags) => {
       setReachFlags(updater);
     },
-    replace: (list: ReachFlagsProps) => setReachFlags(list),
+    replace: (list: ReachFlags) => setReachFlags(list),
     toggle: (player: PlayerIndex) =>
       setReachFlags((prev) => ({
         ...prev,
