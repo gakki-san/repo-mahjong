@@ -30,6 +30,7 @@ import { calculateRoundBonusToScore } from "@/features/scoreManagementV2/logics/
 import { calculatePoolBonus } from "@/features/scoreManagementV2/logics/calculatePoolBonus";
 import { calculateReachBonus } from "@/features/scoreManagementV2/logics/calculateReachBonus";
 import { calculatePenalty } from "@/features/scoreManagementV2/logics/calculatePenalty";
+import { useDice } from "@/features/scoreManagementV2/hooks/useDice.ts";
 
 export const ScoreSummary: FC = () => {
   const [score, setScore] = useScoreAtom();
@@ -41,14 +42,9 @@ export const ScoreSummary: FC = () => {
   const [currentModal, { openModal, closeModal, resetModal }] = useModalStack();
   const [selectedDirection, { set: setSelectedDirection }] =
     useCurrentDirection();
-  const [
-    ,
-    {
-      rotate: rotateDirection,
-      toArray: currentDirectionToArray,
-      rotateByWinResult,
-    },
-  ] = useCurrentDirection();
+  const [dice, rollDice] = useDice();
+  const [, { rotate: rotateDirection, toArray: currentDirectionToArray }] =
+    useCurrentDirection();
   const [reachFlags, setReachFlags] = useReachFlags();
   const [isTEMPAI, setIsTEMPAI] = useReachFlags();
   const [isAppearanceScoreDiff, { on: onScoreDiff, off: offScoreDiff }] =
@@ -128,11 +124,6 @@ export const ScoreSummary: FC = () => {
     { id: "3", name: "Charlie", score: "0" },
     { id: "4", name: "Delta", score: "-10" },
   ];
-
-  const handleRotate = () => {
-    const winner = 0;
-    rotateByWinResult(winner);
-  };
 
   const handleRoundBonus = (winner: Player | null, parent: Player) => {
     if (winner === null) {
@@ -284,16 +275,6 @@ export const ScoreSummary: FC = () => {
             fontWeight={"bold"}
             bg={COLOR.BLACK}
             borderRadius={"5px"}
-            onClick={handleRotate}
-          >
-            rotate
-          </Box>
-          <Box
-            p={"10px"}
-            color={COLOR.WHITE}
-            fontWeight={"bold"}
-            bg={COLOR.BLACK}
-            borderRadius={"5px"}
           >
             供託{poolBonus}本
           </Box>
@@ -309,10 +290,9 @@ export const ScoreSummary: FC = () => {
             color={COLOR.WHITE}
             fontSize={"20px"}
             bg={COLOR.BLACK}
-            onClick={() => setScore.set([25000, 25000, 25000, 25000])}
+            onClick={rollDice}
           >
-            {/*🎲 {dice[0]} 🎲 {dice[1]}*/}
-            reset
+            🎲 {dice[0]} 🎲 {dice[1]}
           </Button>
         </Flex>
       </Grid>
