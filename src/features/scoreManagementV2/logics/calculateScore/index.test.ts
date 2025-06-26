@@ -44,6 +44,16 @@ describe("calculateWinnerScore", () => {
     ]);
   });
 
+  it("子供のツモで綺麗に割れない時", () => {
+    const winner = 2;
+    const score: ScoreMap = [25000, 25000, 25000, 25000];
+    const point = 1100;
+    const loser = null;
+    expect(calculateScore(winner, score, point, parent, loser)).toEqual([
+      24700, 24500, 26100, 24700,
+    ]);
+  });
+
   it("winnerがnullのときはそのままscoreを返す", () => {
     const winner = null;
     const score = [25000, 25000, 25000, 25000] as ScoreMap;

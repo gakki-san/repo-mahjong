@@ -38,7 +38,6 @@ export const ScoreSummary: FC = () => {
   const [plusScoreRule] = usePlusScoreRule();
   console.log(rankOrderRule, plusScoreRule);
   const [winnerInfo, setWinnerInfo] = useWinnerInfo();
-  console.log("勝利条件", winnerInfo);
   const [currentModal, { openModal, closeModal, resetModal }] = useModalStack();
   const [selectedDirection, { set: setSelectedDirection }] =
     useCurrentDirection();
@@ -59,14 +58,8 @@ export const ScoreSummary: FC = () => {
     roundBonus,
     { increment: incrementRoundBonus, reset: resetRoundBonus },
   ] = useCount();
-  const [
-    poolBonus,
-    {
-      add: addPoolBonus,
-      // reset: resetPoolBonus
-    },
-  ] = useCount();
-  const [reachPlayer, { add: setReachPlayer }] = useCount();
+  const [poolBonus, { add: addPoolBonus, reset: resetPoolBonus }] = useCount();
+  const [reachPlayer, { set: setReachPlayer }] = useCount();
   const WinType = currentModal === "winType";
   const isAfterWinType = currentModal === "finishWinType";
   const isRon = isAfterWinType && winnerInfo.winType === "ron";
@@ -196,6 +189,7 @@ export const ScoreSummary: FC = () => {
     const calculatedScore = calculateTotalScore(winnerInfo.winPoints);
 
     handleRoundBonus(winnerInfo.winner, parent);
+    resetPoolBonus();
     setScore.set(calculatedScore);
   };
 
@@ -212,6 +206,7 @@ export const ScoreSummary: FC = () => {
 
     setScore.set(calculatedScore);
     resetRoundBonus();
+    resetPoolBonus();
   };
 
   return (
@@ -314,9 +309,10 @@ export const ScoreSummary: FC = () => {
             color={COLOR.WHITE}
             fontSize={"20px"}
             bg={COLOR.BLACK}
-            // onClick={rollBoth}
+            onClick={() => setScore.set([25000, 25000, 25000, 25000])}
           >
             {/*🎲 {dice[0]} 🎲 {dice[1]}*/}
+            reset
           </Button>
         </Flex>
       </Grid>
