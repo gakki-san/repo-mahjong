@@ -2,6 +2,7 @@ import {
   Player,
   ScoreMap,
 } from "@/features/scoreManagementV2/hooks/useScore.ts";
+import { calcScoreForRon } from "@/features/scoreManagementV2/logics/calcScoreForRon";
 
 export const calculateScore = (
   winner: Player | null,
@@ -17,11 +18,9 @@ export const calculateScore = (
 
   const result = [...score] as ScoreMap;
 
-  // 【ロン】── 振込がある場合は winner と loser だけ加減算
+  // 【ロン】
   if (loser !== null) {
-    result[winner] += point;
-    result[loser] -= point;
-    return result as ScoreMap;
+    return calcScoreForRon(result, loser, winner, point);
   }
 
   // 【ツモ】── 振込なし・全部持ち回し
