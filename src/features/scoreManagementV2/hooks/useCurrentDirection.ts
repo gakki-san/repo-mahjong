@@ -6,7 +6,7 @@ export type CurrentDirection = 0 | 1 | 2 | 3;
 type UseSetCurrentDirection = {
   set: (value: CurrentDirection) => void;
   rotate: () => void;
-  toArray: () => number[];
+  toArray: () => Player[];
   rotateByWinResult: (winner: Player) => void;
 };
 
@@ -34,7 +34,7 @@ export const useCurrentDirection = (): UseCurrentDirection => {
       const base = [0, 1, 2, 3];
       return base
         .slice(currentDirection)
-        .concat(base.slice(0, currentDirection));
+        .concat(base.slice(0, currentDirection)) as Player[];
     },
   };
 

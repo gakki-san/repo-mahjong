@@ -23,7 +23,7 @@ import { useIsBoolean } from "@/features/scoreManagementV2/hooks/useIsBoolean.ts
 import { usePlayerName } from "@/features/scoreManagementV2/hooks/usePlayerName.ts";
 import { usePlusScoreRule } from "@/features/scoreManagementV2/hooks/usePlusScoreRule.ts";
 import { useRankOrderRule } from "@/features/scoreManagementV2/hooks/useRankOrderRule.ts";
-import { useScoreAtom } from "@/globalState/scoreAtom.ts";
+import { ScoreMap, useScoreAtom } from "@/globalState/scoreAtom.ts";
 import { useCount } from "@/features/scoreManagementV2/hooks/useCount.ts";
 import { calculateScore } from "@/features/scoreManagementV2/logics/calculateScore";
 import { calculateRoundBonusToScore } from "@/features/scoreManagementV2/logics/calculateRoundBonusToScore";
@@ -31,13 +31,13 @@ import { calculatePoolBonus } from "@/features/scoreManagementV2/logics/calculat
 import { calculateReachBonus } from "@/features/scoreManagementV2/logics/calculateReachBonus";
 import { calculatePenalty } from "@/features/scoreManagementV2/logics/calculatePenalty";
 import { useDice } from "@/features/scoreManagementV2/hooks/useDice.ts";
+import { calculateFinishScore } from "@/features/scoreManagementV2/logics/calculateFinishScore";
 
 export const ScoreSummary: FC = () => {
   const [score, setScore] = useScoreAtom();
   const [playerName] = usePlayerName();
   const [rankOrderRule] = useRankOrderRule();
   const [plusScoreRule] = usePlusScoreRule();
-  console.log(rankOrderRule, plusScoreRule);
   const [winnerInfo, setWinnerInfo] = useWinnerInfo();
   const [currentModal, { openModal, closeModal, resetModal }] = useModalStack();
   const [selectedDirection, { set: setSelectedDirection }] =
@@ -56,6 +56,15 @@ export const ScoreSummary: FC = () => {
   ] = useCount();
   const [poolBonus, { add: addPoolBonus, reset: resetPoolBonus }] = useCount();
   const [reachPlayer, { set: setReachPlayer }] = useCount();
+  const { handleReach, handleResetReach } = useHandleReach({
+    reachFlags,
+    setReachFlags,
+    openModal,
+    closeModal,
+    setReachPlayer,
+    reachPlayer,
+  });
+
   const WinType = currentModal === "winType";
   const isAfterWinType = currentModal === "finishWinType";
   const isRon = isAfterWinType && winnerInfo.winType === "ron";
@@ -109,21 +118,22 @@ export const ScoreSummary: FC = () => {
     setReachFlags.reset();
   };
 
-  const { handleReach, handleResetReach } = useHandleReach({
-    reachFlags,
-    setReachFlags,
-    openModal,
-    closeModal,
-    setReachPlayer,
-    reachPlayer,
-  });
+  const newGameData = (playersName: string[], score: ScoreMap) => {
+    return playersName.map((name, index) => {
+      const raw = score[index] / 1000;
+      const scoreValue = raw === 0 ? "0" : `${raw > 0 ? "+" : ""}${raw}`;
+      return {
+        id: (index + 1).toString(),
+        name: name,
+        score: scoreValue,
+      };
+    });
+  };
 
-  const mockGameData = [
-    { id: "1", name: "Alpha", score: "20" },
-    { id: "2", name: "Bravo", score: "10" },
-    { id: "3", name: "Charlie", score: "0" },
-    { id: "4", name: "Delta", score: "-10" },
-  ];
+  const gameData = newGameData(
+    playerName,
+    calculateFinishScore(score, plusScoreRule, rankOrderRule),
+  );
 
   const handleRoundBonus = (winner: Player | null, parent: Player) => {
     if (winner === null) {
@@ -334,7 +344,7 @@ export const ScoreSummary: FC = () => {
         />
       )}
       {isFinishModal && (
-        <FinishGameModal gameData={mockGameData} handleBack={handleBack} />
+        <FinishGameModal gameData={gameData} handleBack={handleBack} />
       )}
       {isTempaiModal && (
         <SelectTempaiModal
