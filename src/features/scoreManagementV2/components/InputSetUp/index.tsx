@@ -7,7 +7,7 @@ export const InputSetUp: FC = () => {
   const [showRulePanel, { on: setShowRulePanel }] = useIsBoolean();
   return (
     <>
-      <InputPlayerName onClick={setShowRulePanel} />
+      <InputPlayerName onSubmit={setShowRulePanel} />
       {showRulePanel && <InputRulePanel />}
     </>
   );

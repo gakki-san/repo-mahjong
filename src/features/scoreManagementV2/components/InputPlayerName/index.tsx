@@ -5,10 +5,10 @@ import { playerList } from "@/features/scoreManagementV2/const/playerList.ts";
 import { usePlayerName } from "@/features/scoreManagementV2/hooks/usePlayerName.ts";
 
 type InputPlayerNameProps = {
-  onClick: () => void;
+  onSubmit: () => void;
 };
 
-export const InputPlayerName: FC<InputPlayerNameProps> = ({ onClick }) => {
+export const InputPlayerName: FC<InputPlayerNameProps> = ({ onSubmit }) => {
   const [, onPlayerNameChange] = usePlayerName();
   return (
     <Flex
@@ -37,7 +37,7 @@ export const InputPlayerName: FC<InputPlayerNameProps> = ({ onClick }) => {
             ))}
           </Field.Root>
         </Fieldset.Content>
-        <Button onClick={onClick}>次へ</Button>
+        <Button onClick={onSubmit}>次へ</Button>
       </Fieldset.Root>
     </Flex>
   );

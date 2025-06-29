@@ -52,6 +52,7 @@ export const InputRulePanel: FC = () => {
       h={"100vh"}
       pt={"30px"}
       bgColor={COLOR.GREEN_PRIMARY}
+      onSubmit={onSubmit}
     >
       <InputSelectPoint
         input={inputStartPoint}
@@ -75,7 +76,7 @@ export const InputRulePanel: FC = () => {
         isSubmit={isSubmit}
       />
 
-      <Button w={"100px"} mt="4" onClick={onSubmit} type="button">
+      <Button w={"100px"} mt="4" type="submit">
         完了
       </Button>
     </Box>
