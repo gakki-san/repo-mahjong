@@ -1,9 +1,9 @@
 import { FC } from "react";
-import { Box, Flex, NumberInput } from "@chakra-ui/react";
-import { COLOR } from "@/features/scoreManagementV2/const/color.ts";
+import { Flex, NumberInput } from "@chakra-ui/react";
 import { DecisionButton } from "@/features/scoreManagementV2/components/DecisionButton";
 import { BackButton } from "@/features/scoreManagementV2/components/BackButton";
 import { useCount } from "@/features/scoreManagementV2/hooks/useCount.ts";
+import { ModalView } from "@/features/scoreManagementV2/components/ModalView";
 
 type InputChildrenPointProps = {
   handleBack: () => void;
@@ -24,17 +24,7 @@ export const InputChildrenPoint: FC<InputChildrenPointProps> = ({
     };
 
   return (
-    <Box
-      pos={"absolute"}
-      top={0}
-      alignItems={"center"}
-      justifyContent={"center"}
-      flexDir={"column"}
-      display={"flex"}
-      w={"100vw"}
-      h={"100vh"}
-      bg={COLOR.GREEN_PRIMARY}
-    >
+    <ModalView>
       子
       <NumberInput.Root
         onValueChange={handlePointChange(setChildrenPoint)}
@@ -63,6 +53,6 @@ export const InputChildrenPoint: FC<InputChildrenPointProps> = ({
         />
         <BackButton handleBack={handleBack} />
       </Flex>
-    </Box>
+    </ModalView>
   );
 };

@@ -1,10 +1,11 @@
 import { FC } from "react";
-import { Box, Checkbox, Flex, Stack } from "@chakra-ui/react";
+import { Checkbox, Flex, Stack } from "@chakra-ui/react";
 import { ReachFlags } from "../../hooks/useReachFlags";
 import { Player } from "../../hooks/useScore";
 import { COLOR } from "../../const/color";
 import { DecisionButton } from "@/features/scoreManagementV2/components/DecisionButton";
 import { BackButton } from "@/features/scoreManagementV2/components/BackButton";
+import { ModalView } from "@/features/scoreManagementV2/components/ModalView";
 
 type SelectTempaiModalProps = {
   playersName: string[];
@@ -21,20 +22,9 @@ export const SelectTempaiModal: FC<SelectTempaiModalProps> = ({
   handleBack,
 }) => {
   return (
-    <Box
-      pos={"absolute"}
-      top={0}
-      alignItems={"center"}
-      justifyContent={"center"}
-      flexDir={"column"}
-      display={"flex"}
-      w={"100vw"}
-      h={"100vh"}
-      p={"50px"}
-      bg={COLOR.WHITE}
-    >
+    <ModalView height={"70%"} mt={10}>
       誰がテンパイ？
-      <Stack align="flex-start" flex="1" gap="4">
+      <Stack align="flex-center" flex="1" gap="1">
         {playersName.map((name, index) => {
           const player = index as Player;
           return (
@@ -58,6 +48,6 @@ export const SelectTempaiModal: FC<SelectTempaiModalProps> = ({
         <DecisionButton handleDecisionButton={handleDecide} />
         <BackButton handleBack={handleBack} />
       </Flex>
-    </Box>
+    </ModalView>
   );
 };

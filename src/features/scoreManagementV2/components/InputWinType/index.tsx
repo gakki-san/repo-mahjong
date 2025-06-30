@@ -1,10 +1,10 @@
 import { ComponentProps, FC } from "react";
-import { Box, Flex, HStack, RadioGroup } from "@chakra-ui/react";
-import { COLOR } from "@/features/scoreManagementV2/const/color.ts";
+import { Flex, HStack, RadioGroup } from "@chakra-ui/react";
 import { DecisionButton } from "@/features/scoreManagementV2/components/DecisionButton";
 import { BackButton } from "@/features/scoreManagementV2/components/BackButton";
 import { WinInfo } from "@/features/scoreManagementV2/hooks/useWinnerinfo.ts";
 import { ModalType } from "@/features/scoreManagementV2/hooks/useModalStack.ts";
+import { ModalView } from "@/features/scoreManagementV2/components/ModalView";
 
 type InputWinTypeProps = {
   winnerInfo: WinInfo;
@@ -43,17 +43,7 @@ export const InputWinType: FC<InputWinTypeProps> = ({
   ];
 
   return (
-    <Box
-      pos={"absolute"}
-      top={0}
-      alignItems={"center"}
-      justifyContent={"center"}
-      flexDir={"column"}
-      display={"flex"}
-      w={"100vw"}
-      h={"100vh"}
-      bg={COLOR.GREEN_PRIMARY}
-    >
+    <ModalView>
       <RadioGroup.Root
         defaultValue={"0"}
         value={winnerInfo.winType}
@@ -73,6 +63,6 @@ export const InputWinType: FC<InputWinTypeProps> = ({
         <DecisionButton handleDecisionButton={handleDecideWinType} />
         <BackButton handleBack={handleBack} />
       </Flex>
-    </Box>
+    </ModalView>
   );
 };
