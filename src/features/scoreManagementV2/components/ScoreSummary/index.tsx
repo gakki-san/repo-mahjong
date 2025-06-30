@@ -66,15 +66,7 @@ export const ScoreSummary: FC = () => {
     reachPlayer,
   });
 
-  const WinType = currentModal === "winType";
   const isAfterWinType = currentModal === "finishWinType";
-  const isRon = isAfterWinType && winnerInfo.winType === "ron";
-  const isTsumo = isAfterWinType && winnerInfo.winType === "tsumo";
-  const isWinPointForRon = currentModal === "winPoint";
-  const isFinishModal = currentModal === "finish";
-  const isTempaiModal = currentModal === "tempai";
-  const isReach = currentModal === "reachVideo";
-  const isAlreadyReach = currentModal === "reachConfirm";
   const isParent = 0 === selectedDirection;
 
   const calculateTotalScore = (point: number | null) => {
@@ -285,7 +277,7 @@ export const ScoreSummary: FC = () => {
           </Button>
         </Flex>
       </Grid>
-      {WinType && (
+      {currentModal === "winType" && (
         <InputWinType
           winnerInfo={winnerInfo}
           setWinnerInfo={setWinnerInfo}
@@ -293,7 +285,7 @@ export const ScoreSummary: FC = () => {
           handleBack={closeModal}
         />
       )}
-      {isRon && (
+      {isAfterWinType && winnerInfo.winType === "ron" && (
         <SelectLoser
           winnerInfo={winnerInfo}
           setWinnerInfo={setWinnerInfo}
@@ -302,7 +294,8 @@ export const ScoreSummary: FC = () => {
           handleBack={closeModal}
         />
       )}
-      {isTsumo &&
+      {isAfterWinType &&
+        winnerInfo.winType === "tsumo" &&
         (isParent ? (
           <InputWinPoint
             handleBack={closeModal}
@@ -315,17 +308,17 @@ export const ScoreSummary: FC = () => {
             handleCloseInputPoint={handleCloseInputChildrenPoint}
           />
         ))}
-      {isWinPointForRon && (
+      {currentModal === "winPoint" && (
         <InputWinPoint
           handleBack={closeModal}
           setPoint={setWinnerInfo}
           handleCloseInputPoint={handleCloseInputPoint}
         />
       )}
-      {isFinishModal && (
+      {currentModal === "finish" && (
         <FinishGameModal gameData={gameData} handleBack={closeModal} />
       )}
-      {isTempaiModal && (
+      {currentModal === "tempai" && (
         <SelectTempaiModal
           playersName={playerName}
           isTEMPAI={isTEMPAI}
@@ -334,8 +327,8 @@ export const ScoreSummary: FC = () => {
           handleBack={closeModal}
         />
       )}
-      {isReach && <ReachVideo selectedReachPlayer={0} />}
-      {isAlreadyReach && (
+      {currentModal === "reachVideo" && <ReachVideo selectedReachPlayer={0} />}
+      {currentModal === "reachConfirm" && (
         <AlreadyReachModal
           resetReach={handleResetReach}
           noResetReach={resetModal}
