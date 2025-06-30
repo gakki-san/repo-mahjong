@@ -23,7 +23,7 @@ import { useIsBoolean } from "@/features/scoreManagementV2/hooks/useIsBoolean.ts
 import { usePlayerName } from "@/features/scoreManagementV2/hooks/usePlayerName.ts";
 import { usePlusScoreRule } from "@/features/scoreManagementV2/hooks/usePlusScoreRule.ts";
 import { useRankOrderRule } from "@/features/scoreManagementV2/hooks/useRankOrderRule.ts";
-import { ScoreMap, useScoreAtom } from "@/globalState/scoreAtom.ts";
+import { useScoreAtom } from "@/globalState/scoreAtom.ts";
 import { useCount } from "@/features/scoreManagementV2/hooks/useCount.ts";
 import { calculateScore } from "@/features/scoreManagementV2/logics/calculateScore";
 import { calculateRoundBonusToScore } from "@/features/scoreManagementV2/logics/calculateRoundBonusToScore";
@@ -33,6 +33,7 @@ import { calculatePenalty } from "@/features/scoreManagementV2/logics/calculateP
 import { useDice } from "@/features/scoreManagementV2/hooks/useDice.ts";
 import { calculateFinishScore } from "@/features/scoreManagementV2/logics/calculateFinishScore";
 import { UI_POSITION } from "@/features/scoreManagementV2/const/UI_POSITION.ts";
+import { formatGameData } from "@/features/scoreManagementV2/logics/formatGameData";
 
 export const ScoreSummary: FC = () => {
   const [score, setScore] = useScoreAtom();
@@ -164,19 +165,7 @@ export const ScoreSummary: FC = () => {
     resetPoolBonus();
   };
 
-  const newGameData = (playersName: string[], score: ScoreMap) => {
-    return playersName.map((name, index) => {
-      const raw = score[index] / 1000;
-      const scoreValue = raw === 0 ? "0" : `${raw > 0 ? "+" : ""}${raw}`;
-      return {
-        id: (index + 1).toString(),
-        name: name,
-        score: scoreValue,
-      };
-    });
-  };
-
-  const gameData = newGameData(
+  const gameData = formatGameData(
     playerName,
     calculateFinishScore(score, plusScoreRule, rankOrderRule),
   );
