@@ -32,6 +32,7 @@ import { calculateReachBonus } from "@/features/scoreManagementV2/logics/calcula
 import { calculatePenalty } from "@/features/scoreManagementV2/logics/calculatePenalty";
 import { useDice } from "@/features/scoreManagementV2/hooks/useDice.ts";
 import { calculateFinishScore } from "@/features/scoreManagementV2/logics/calculateFinishScore";
+import { UI_POSITION } from "@/features/scoreManagementV2/const/UI_POSITION.ts";
 
 export const ScoreSummary: FC = () => {
   const [score, setScore] = useScoreAtom();
@@ -75,13 +76,6 @@ export const ScoreSummary: FC = () => {
   const isReach = currentModal === "reachVideo";
   const isAlreadyReach = currentModal === "reachConfirm";
   const isParent = 0 === selectedDirection;
-
-  const uiPositions = [
-    { gridColumn: 2, gridRow: 1, transform: "rotate(180deg)" },
-    { gridColumn: 3, gridRow: 2, transform: "rotate(-90deg)" },
-    { gridColumn: 2, gridRow: 3 },
-    { gridColumn: 1, gridRow: 2, transform: "rotate(90deg)" },
-  ];
 
   const calculateTotalScore = (point: number | null) => {
     const calculateWinScore = calculateScore(
@@ -190,8 +184,6 @@ export const ScoreSummary: FC = () => {
     });
   };
 
-  // console.log("uma", rankOrderRule);
-  // console.log("return", plusScoreRule);
   const gameData = newGameData(
     playerName,
     calculateFinishScore(score, plusScoreRule, rankOrderRule),
@@ -209,7 +201,7 @@ export const ScoreSummary: FC = () => {
         bg={COLOR.GREEN_PRIMARY}
       >
         {currentDirectionToArray().map((item, index) => {
-          const directionPosition = uiPositions[index];
+          const directionPosition = UI_POSITION[index];
           const player = playerName[index];
 
           return (
