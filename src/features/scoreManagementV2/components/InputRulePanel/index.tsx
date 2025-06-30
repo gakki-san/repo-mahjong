@@ -7,18 +7,19 @@ import { useSetInputValue } from "@/features/scoreManagementV2/hooks/useSetInput
 import { useIsBoolean } from "@/features/scoreManagementV2/hooks/useIsBoolean.ts";
 import { InputSelectUmaRule } from "@/features/scoreManagementV2/components/InputSelectUmaRule";
 import { handleScoreSubmit } from "@/features/scoreManagementV2/hooks/useScoreHookForm.ts";
-import { usePlusScoreRule } from "@/features/scoreManagementV2/hooks/usePlusScoreRule.ts";
-import { useRankOrderRule } from "@/features/scoreManagementV2/hooks/useRankOrderRule.ts";
 import { useNavigate } from "react-router";
 import { useScoreAtom } from "@/globalState/scoreAtom.ts";
+import { useSetAtom } from "jotai/index";
+import { rankScoreRuleAtom } from "@/globalState/rankOrderRuleAtom.ts";
+import { plusScoreRuleAtom } from "@/globalState/plusScoreRuleAtom.ts";
 
 export const InputRulePanel: FC = () => {
   const [isSubmit, setIsSubmit] = useIsBoolean();
   const [inputStartPoint, handleStartPoint] = useSetInputValue();
   const [inputReturnPoint, handleReturnPoint] = useSetInputValue();
   const [inputUmaRule, handleUmaRule] = useSetInputValue();
-  const [, setRankOrderRule] = useRankOrderRule();
-  const [, setPlusScoreRule] = usePlusScoreRule();
+  const setRankOrderRule = useSetAtom(rankScoreRuleAtom);
+  const setPlusScoreRule = useSetAtom(plusScoreRuleAtom);
   const [, { set: setScore }] = useScoreAtom();
 
   const navigate = useNavigate();
