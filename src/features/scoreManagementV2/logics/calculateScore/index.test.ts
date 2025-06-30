@@ -9,7 +9,7 @@ describe("calculateWinnerScore", () => {
     const score = [25000, 25000, 25000, 25000] as ScoreMap;
     const point = 8000;
     const loser = null;
-    expect(calculateScore(winner, score, point, parent, loser)).toEqual([
+    expect(calculateScore({ winner, score, point, parent, loser })).toEqual([
       33000, 21000, 23000, 23000,
     ]);
   });
@@ -19,7 +19,7 @@ describe("calculateWinnerScore", () => {
     const score = [21000, 28000, 23000, 28000] as ScoreMap;
     const point = 4000;
     const loser = null;
-    expect(calculateScore(winner, score, point, parent, loser)).toEqual([
+    expect(calculateScore({ winner, score, point, parent, loser })).toEqual([
       17000, 40000, 19000, 24000,
     ]);
   });
@@ -29,7 +29,7 @@ describe("calculateWinnerScore", () => {
     const score = [26000, 24000, 18000, 32000] as ScoreMap;
     const point = 10000;
     const loser = null;
-    expect(calculateScore(winner, score, point, parent, loser)).toEqual([
+    expect(calculateScore({ winner, score, point, parent, loser })).toEqual([
       23500, 19000, 28000, 29500,
     ]);
   });
@@ -39,7 +39,7 @@ describe("calculateWinnerScore", () => {
     const score = [30000, 20000, 25000, 25000] as ScoreMap;
     const point = 12000;
     const loser = null;
-    expect(calculateScore(winner, score, point, parent, loser)).toEqual([
+    expect(calculateScore({ winner, score, point, parent, loser })).toEqual([
       27000, 14000, 22000, 37000,
     ]);
   });
@@ -49,7 +49,7 @@ describe("calculateWinnerScore", () => {
     const score: ScoreMap = [25000, 25000, 25000, 25000];
     const point = 1100;
     const loser = null;
-    expect(calculateScore(winner, score, point, parent, loser)).toEqual([
+    expect(calculateScore({ winner, score, point, parent, loser })).toEqual([
       24700, 24500, 26100, 24700,
     ]);
   });
@@ -59,7 +59,7 @@ describe("calculateWinnerScore", () => {
     const score = [25000, 25000, 25000, 25000] as ScoreMap;
     const point = 8000;
     const loser = null;
-    expect(calculateScore(winner, score, point, parent, loser)).toEqual([
+    expect(calculateScore({ winner, score, point, parent, loser })).toEqual([
       25000, 25000, 25000, 25000,
     ]);
   });
@@ -69,7 +69,7 @@ describe("calculateWinnerScore", () => {
     const score = [25000, 25000, 25000, 25000] as ScoreMap;
     const point = null;
     const loser = null;
-    expect(calculateScore(winner, score, point, parent, loser)).toEqual([
+    expect(calculateScore({ winner, score, point, parent, loser })).toEqual([
       25000, 25000, 25000, 25000,
     ]);
   });
@@ -79,7 +79,7 @@ describe("calculateWinnerScore", () => {
     const score = [25000, 25000, 25000, 25000] as ScoreMap;
     const point = 8000;
     const loser = 1;
-    expect(calculateScore(winner, score, point, parent, loser)).toEqual([
+    expect(calculateScore({ winner, score, point, parent, loser })).toEqual([
       33000, 17000, 25000, 25000,
     ]);
   });
@@ -89,7 +89,7 @@ describe("calculateWinnerScore", () => {
     const score = [20000, 30000, 25000, 25000] as ScoreMap;
     const point = 6000;
     const loser = 2;
-    expect(calculateScore(winner, score, point, parent, loser)).toEqual([
+    expect(calculateScore({ winner, score, point, parent, loser })).toEqual([
       20000, 36000, 19000, 25000,
     ]);
   });
@@ -99,7 +99,7 @@ describe("calculateWinnerScore", () => {
     const score = [30000, 20000, 25000, 25000] as ScoreMap;
     const point = 10000;
     const loser = 1;
-    expect(calculateScore(winner, score, point, parent, loser)).toEqual([
+    expect(calculateScore({ winner, score, point, parent, loser })).toEqual([
       30000, 10000, 25000, 35000,
     ]);
   });

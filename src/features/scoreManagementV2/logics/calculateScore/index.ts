@@ -6,13 +6,21 @@ import { calcScoreForRon } from "@/features/scoreManagementV2/logics/calcScoreFo
 import { calcScoreForParentTsumo } from "@/features/scoreManagementV2/logics/calcScoreForParentTsumo";
 import { calcScoreForChildrenTsumo } from "@/features/scoreManagementV2/logics/calcScoreForChildrenTsumo";
 
-export const calculateScore = (
-  winner: Player | null,
-  score: ScoreMap,
-  point: number | null,
-  parent: Player,
-  loser: Player | null,
-): ScoreMap => {
+type CalculateScore = {
+  winner: Player | null;
+  score: ScoreMap;
+  point: number | null;
+  parent: Player;
+  loser: Player | null;
+};
+
+export const calculateScore = ({
+  winner,
+  score,
+  point,
+  parent,
+  loser,
+}: CalculateScore): ScoreMap => {
   // winner または point が null なら変化なし
   if (winner === null || point === null) {
     return [...score] as ScoreMap;

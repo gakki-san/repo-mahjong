@@ -78,13 +78,13 @@ export const ScoreSummary: FC = () => {
   const isParent = 0 === selectedDirection;
 
   const calculateTotalScore = (point: number | null) => {
-    const calculateWinScore = calculateScore(
-      winnerInfo.winner,
+    const calculateWinScore = calculateScore({
+      winner: winnerInfo.winner,
       score,
       point,
-      currentDirectionToArray().indexOf(0) as Player,
-      winnerInfo.loser,
-    );
+      parent: currentDirectionToArray().indexOf(0) as Player,
+      loser: winnerInfo.loser,
+    });
 
     const calculateRoundBonusScore = calculateRoundBonusToScore(
       calculateWinScore,
@@ -101,11 +101,11 @@ export const ScoreSummary: FC = () => {
 
     const countReach = Object.values(reachFlags).filter((item) => item).length;
 
-    return calculateReachBonus(
-      calculatePoolBonusScore,
-      winnerInfo.winner,
-      countReach,
-    );
+    return calculateReachBonus({
+      score: calculatePoolBonusScore,
+      winner: winnerInfo.winner,
+      countReachPlayer: countReach,
+    });
   };
 
   const handleCloseTempaiModal = () => {

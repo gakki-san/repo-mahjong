@@ -7,7 +7,7 @@ describe("calculateReachBonus", () => {
     const score: ScoreMap = [25000, 25000, 25000, 25000];
     const winner = 0;
     const countReachPlayer = 2;
-    expect(calculateReachBonus(score, winner, countReachPlayer)).toEqual([
+    expect(calculateReachBonus({ score, winner, countReachPlayer })).toEqual([
       27000, 25000, 25000, 25000,
     ]);
   });
@@ -16,7 +16,7 @@ describe("calculateReachBonus", () => {
     const score: ScoreMap = [30000, 20000, 35000, 15000];
     const winner = 1;
     const countReachPlayer = 3;
-    expect(calculateReachBonus(score, winner, countReachPlayer)).toEqual([
+    expect(calculateReachBonus({ score, winner, countReachPlayer })).toEqual([
       30000, 23000, 35000, 15000,
     ]);
   });
@@ -25,7 +25,7 @@ describe("calculateReachBonus", () => {
     const score: ScoreMap = [25000, 25000, 25000, 25000];
     const winner = 1;
     const countReachPlayer = 0;
-    expect(calculateReachBonus(score, winner, countReachPlayer)).toEqual([
+    expect(calculateReachBonus({ score, winner, countReachPlayer })).toEqual([
       25000, 25000, 25000, 25000,
     ]);
   });
@@ -34,7 +34,7 @@ describe("calculateReachBonus", () => {
     const score: ScoreMap = [25000, 25000, 25000, 25000];
     const winner = 1;
     const countReachPlayer = 4;
-    expect(calculateReachBonus(score, winner, countReachPlayer)).toEqual([
+    expect(calculateReachBonus({ score, winner, countReachPlayer })).toEqual([
       25000, 25000, 25000, 25000,
     ]);
   });

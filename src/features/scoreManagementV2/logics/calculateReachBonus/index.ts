@@ -3,11 +3,17 @@ import {
   ScoreMap,
 } from "@/features/scoreManagementV2/hooks/useScore.ts";
 
-export const calculateReachBonus = (
-  score: ScoreMap,
-  winner: Player | null,
-  countReachPlayer: number,
-): ScoreMap => {
+type CalculateReachBonus = {
+  score: ScoreMap;
+  winner: Player | null;
+  countReachPlayer: number;
+};
+
+export const calculateReachBonus = ({
+  score,
+  winner,
+  countReachPlayer,
+}: CalculateReachBonus): ScoreMap => {
   if (winner === null) return score;
   const updatedScore = [...score] as ScoreMap;
   if (countReachPlayer === 0 || countReachPlayer === 4) {
