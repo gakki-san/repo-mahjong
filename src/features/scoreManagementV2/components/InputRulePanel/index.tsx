@@ -2,10 +2,9 @@ import { FC } from "react";
 import { Box, Button } from "@chakra-ui/react";
 import { COLOR } from "@/features/scoreManagementV2/const/color.ts";
 import { RULE_OPTIONS } from "@/features/scoreManagementV2/const/rureOptions.ts";
-import { InputSelectPoint } from "@/features/scoreManagementV2/components/InputSelectPoint";
 import { useSetInputValue } from "@/features/scoreManagementV2/hooks/useSetInputValue.ts";
 import { useIsBoolean } from "@/features/scoreManagementV2/hooks/useIsBoolean.ts";
-import { InputSelectUmaRule } from "@/features/scoreManagementV2/components/InputSelectUmaRule";
+import { InputSelectRule } from "@/features/scoreManagementV2/components/InputSelectRule";
 import { handleScoreSubmit } from "@/features/scoreManagementV2/hooks/useScoreHookForm.ts";
 import { useNavigate } from "react-router";
 import { useScoreAtom } from "@/globalState/scoreAtom.ts";
@@ -17,7 +16,7 @@ export const InputRulePanel: FC = () => {
   const [isSubmit, setIsSubmit] = useIsBoolean();
   const [inputStartPoint, handleStartPoint] = useSetInputValue();
   const [inputReturnPoint, handleReturnPoint] = useSetInputValue();
-  const [inputUmaRule, handleUmaRule] = useSetInputValue();
+  const [inputRankOrderRule, handleRankOrderRule] = useSetInputValue();
   const setRankOrderRule = useSetAtom(rankScoreRuleAtom);
   const setPlusScoreRule = useSetAtom(plusScoreRuleAtom);
   const [, { set: setScore }] = useScoreAtom();
@@ -28,7 +27,7 @@ export const InputRulePanel: FC = () => {
     const isSuccess = handleScoreSubmit({
       inputStartPoint,
       inputReturnPoint,
-      inputUmaRule,
+      inputUmaRule: inputRankOrderRule,
       setScore,
       setPlusScoreRule,
       setRankOrderRule,
@@ -55,28 +54,27 @@ export const InputRulePanel: FC = () => {
       bgColor={COLOR.GREEN_PRIMARY}
       onSubmit={onSubmit}
     >
-      <InputSelectPoint
+      <InputSelectRule
         input={inputStartPoint}
         handleInputValue={handleStartPoint}
-        option={RULE_OPTIONS.START_SCORE}
+        options={RULE_OPTIONS.START_SCORE}
         placeholder={"持ち点を選択してください"}
         isSubmit={isSubmit}
       />
-      <InputSelectPoint
+      <InputSelectRule
         input={inputReturnPoint}
         handleInputValue={handleReturnPoint}
-        option={RULE_OPTIONS.RETURN_POINT}
+        options={RULE_OPTIONS.RETURN_POINT}
         placeholder={"返す点数を選択してください"}
         isSubmit={isSubmit}
       />
-      <InputSelectUmaRule
-        input={inputUmaRule}
-        handleInputValue={handleUmaRule}
-        option={RULE_OPTIONS.UMA_RULE}
+      <InputSelectRule
+        input={inputRankOrderRule}
+        handleInputValue={handleRankOrderRule}
+        options={RULE_OPTIONS.UMA_RULE}
         placeholder={"ウマを選択してください"}
         isSubmit={isSubmit}
       />
-
       <Button w={"100px"} mt="4" type="submit">
         完了
       </Button>

@@ -190,6 +190,8 @@ export const ScoreSummary: FC = () => {
     });
   };
 
+  // console.log("uma", rankOrderRule);
+  // console.log("return", plusScoreRule);
   const gameData = newGameData(
     playerName,
     calculateFinishScore(score, plusScoreRule, rankOrderRule),
