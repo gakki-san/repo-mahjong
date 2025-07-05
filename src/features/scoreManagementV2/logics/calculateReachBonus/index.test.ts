@@ -38,4 +38,13 @@ describe("calculateReachBonus", () => {
       25000, 25000, 25000, 25000,
     ]);
   });
+
+  it("勝者がnullの場合、scoreに反映されない", () => {
+    const score: ScoreMap = [25000, 25000, 25000, 25000];
+    const winner = null;
+    const countReachPlayer = 2;
+    expect(calculateReachBonus({ score, winner, countReachPlayer })).toEqual([
+      25000, 25000, 25000, 25000,
+    ]);
+  });
 });
