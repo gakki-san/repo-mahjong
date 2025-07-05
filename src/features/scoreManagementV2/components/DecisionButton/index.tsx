@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Button } from "@chakra-ui/react";
-import { COLOR } from "@/features/scoreManagement/const/color";
+import { COLOR } from "@/features/scoreManagementV2/const/color";
 
 type DecisionButtonProps = {
   handleDecisionButton: () => void;
