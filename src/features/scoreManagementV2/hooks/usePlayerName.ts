@@ -1,18 +1,11 @@
 import React from "react";
 import { useAtom } from "jotai";
-import { playerNameAtom } from "@/globalState/playerNameAtom.ts";
+import { playerNameAtom, PlayerNames } from "@/globalState/playerNameAtom.ts";
 
 export type UsePlayerNameReturn = [
   playersName: string[],
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
 ];
-
-export type PlayerNames = {
-  player1: string;
-  player2: string;
-  player3: string;
-  player4: string;
-};
 
 export const usePlayerName = (): UsePlayerNameReturn => {
   const [playersName, setPlayerName] = useAtom(playerNameAtom);
