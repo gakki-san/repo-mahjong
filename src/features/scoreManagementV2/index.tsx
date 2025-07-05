@@ -2,6 +2,11 @@ import { Button, Flex, Image } from "@chakra-ui/react";
 import { COLOR } from "@/features/scoreManagementV2/const/color.ts";
 import { NavLink } from "react-router";
 
+/**
+ * Renders the home screen with navigation options for score management and calculation.
+ *
+ * Displays a centered image and two buttons, one of which navigates to the setup page.
+ */
 function Home() {
   return (
     <>
