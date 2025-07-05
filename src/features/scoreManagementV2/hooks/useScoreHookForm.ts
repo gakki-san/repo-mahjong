@@ -35,7 +35,7 @@ export const handleScoreSubmit = ({
 
   const selectScore = Number(inputStartPoint);
   const isRuleFour = selectScore === SCORE.FOUR_PLAYER_RULE;
-  const seats = isRuleFour ? SCORE.FOUR_RULE : SCORE.THREE_RULR;
+  const seats = isRuleFour ? SCORE.FOUR_RULE : SCORE.THREE_RULE;
   const newScore = new Array(seats).fill(selectScore);
   const plusScoreRule = Number(inputReturnPoint) as PlusScoreRule;
   const rankOrderRule = inputUmaRule as RankOrderRuleAtom;
