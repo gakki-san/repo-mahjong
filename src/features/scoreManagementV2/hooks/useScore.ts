@@ -1,8 +1,7 @@
 import { useState } from "react";
+import { ScoreMap } from "@/globalState/scoreAtom.ts";
 
 export type Player = 0 | 1 | 2 | 3;
-
-export type ScoreMap = number[];
 
 export type UseScoreActionMap = {
   set: (value: ScoreMap) => void;

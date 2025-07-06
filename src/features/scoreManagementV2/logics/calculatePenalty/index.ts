@@ -1,6 +1,7 @@
 import { SCORE } from "../../const/score";
 import { ReachFlags } from "../../hooks/useReachFlags";
-import { Player, ScoreMap } from "../../hooks/useScore";
+import { Player } from "../../hooks/useScore";
+import { ScoreMap } from "@/globalState/scoreAtom.ts";
 
 export const calculatePenalty = (
   score: ScoreMap,

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { calculateReachBonus } from "./index";
-import { ScoreMap } from "@/features/scoreManagementV2/hooks/useScore.ts";
+import { ScoreMap } from "@/globalState/scoreAtom.ts";
 
 describe("calculateReachBonus", () => {
   it("立直分の点数を勝者scoreに反映させることができる", () => {

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { ScoreMap } from "@/features/scoreManagementV2/hooks/useScore.ts";
 import { calcScoreForParentTsumo } from "@/features/scoreManagementV2/logics/calcScoreForParentTsumo/index.ts";
+import { ScoreMap } from "@/globalState/scoreAtom.ts";
 
 describe("parentWinForTsumo", () => {
   it("和了者と親が同じ", () => {

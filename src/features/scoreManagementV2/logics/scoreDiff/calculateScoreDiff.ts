@@ -1,4 +1,4 @@
-import { ScoreMap } from "@/features/scoreManagementV2/hooks/useScore.ts";
+import { ScoreMap } from "@/globalState/scoreAtom.ts";
 
 export const calculateScoreDiff = (player: number, score: number[]) => {
   if (player < 0 || player >= score.length) {

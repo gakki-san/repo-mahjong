@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { calculateScore } from "@/features/scoreManagementV2/logics/calculateScore/index.ts";
-import { ScoreMap } from "@/features/scoreManagementV2/hooks/useScore.ts";
+import { ScoreMap } from "@/globalState/scoreAtom.ts";
 
 describe("calculateWinnerScore", () => {
   const parent = 1;

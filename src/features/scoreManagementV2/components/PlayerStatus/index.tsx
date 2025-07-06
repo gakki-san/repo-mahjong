@@ -5,12 +5,9 @@ import { CurrentDirection } from "@/features/scoreManagementV2/hooks/useCurrentD
 import { WinInfo } from "@/features/scoreManagementV2/hooks/useWinnerinfo.ts";
 import { ModalType } from "@/features/scoreManagementV2/hooks/useModalStack.ts";
 import { handleWinPlayer } from "@/features/scoreManagementV2/logics/handleWinPlayer";
-import {
-  Player,
-  ScoreMap,
-} from "@/features/scoreManagementV2/hooks/useScore.ts";
+import { Player } from "@/features/scoreManagementV2/hooks/useScore.ts";
 import { calculateScoreDiff } from "@/features/scoreManagementV2/logics/scoreDiff/calculateScoreDiff.ts";
-import { useScoreAtom } from "@/globalState/scoreAtom.ts";
+import { ScoreMap, useScoreAtom } from "@/globalState/scoreAtom.ts";
 
 type PlayerStatusProps = {
   player: string;

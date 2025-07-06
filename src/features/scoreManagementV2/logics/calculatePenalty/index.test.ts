@@ -1,8 +1,8 @@
 import { describe, it, expect } from "vitest";
 import { calculatePenalty } from "../../logics/calculatePenalty";
-import type { ScoreMap } from "../../hooks/useScore";
 import type { ReachFlags } from "../../hooks/useReachFlags";
 import { SCORE } from "../../const/score";
+import { ScoreMap } from "@/globalState/scoreAtom.ts";
 
 describe("calculatePenalty", () => {
   const baseScore: ScoreMap = [25000, 25000, 25000, 25000];

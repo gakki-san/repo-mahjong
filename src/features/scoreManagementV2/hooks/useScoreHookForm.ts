@@ -1,8 +1,8 @@
 // hooks/useScoreForm.ts
 import { SCORE } from "@/features/scoreManagementV2/const/score.ts";
-import { ScoreMap } from "@/features/scoreManagementV2/hooks/useScore.ts";
 import { PlusScoreRule } from "@/features/scoreManagementV2/hooks/usePlusScoreRule.ts";
 import { RankOrderRuleAtom } from "@/globalState/rankOrderRuleAtom.ts";
+import { ScoreMap } from "@/globalState/scoreAtom.ts";
 
 type Params = {
   inputStartPoint: string;

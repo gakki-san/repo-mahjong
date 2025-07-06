@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { calcScoreForRon } from "./index";
-import { ScoreMap } from "@/features/scoreManagementV2/hooks/useScore.ts";
+import { ScoreMap } from "@/globalState/scoreAtom.ts";
 
 describe("calcScoreForRon", () => {
   it("ロン: 和了者0が1から上がった場合", () => {

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { calculateRoundBonusToScore } from "./index";
-import { ScoreMap } from "@/features/scoreManagementV2/hooks/useScore.ts";
+import { ScoreMap } from "@/globalState/scoreAtom.ts";
 
 describe("calculateRoundBonusToScore", () => {
   const initialScore: ScoreMap = [25000, 25000, 25000, 25000];
