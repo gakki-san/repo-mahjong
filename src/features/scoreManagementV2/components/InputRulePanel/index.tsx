@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Button } from "@chakra-ui/react";
-import { RULE_OPTIONS } from "@/features/scoreManagementV2/const/rureOptions.ts";
+import { RULE_OPTIONS } from "@/features/scoreManagementV2/const/ruleOptions.ts";
 import { useSetInputValue } from "@/features/scoreManagementV2/hooks/useSetInputValue.ts";
 import { useIsBoolean } from "@/features/scoreManagementV2/hooks/useIsBoolean.ts";
 import { InputSelectRule } from "@/features/scoreManagementV2/components/InputSelectRule";
