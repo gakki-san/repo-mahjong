@@ -18,8 +18,6 @@ export const calculatePenalty = (
     3: [SCORE.SINGLE, -SCORE.TRIPLE],
   };
 
-  if (tempaiCount === 0 || tempaiCount === 4) return calcScore as ScoreMap;
-
   const [gain, loss] = PENALTY_ADJUSTMENTS[tempaiCount as 1 | 2 | 3];
 
   return calcScore.map(
