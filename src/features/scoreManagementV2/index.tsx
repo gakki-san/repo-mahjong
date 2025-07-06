@@ -1,6 +1,6 @@
 import { Button, Flex, Image } from "@chakra-ui/react";
 import { COLOR } from "@/features/scoreManagementV2/const/color.ts";
-import { NavLink } from "react-router";
+import { NavLink } from "react-router-dom";
 
 function Home() {
   return (

@@ -5,7 +5,7 @@ import { useSetInputValue } from "@/features/scoreManagementV2/hooks/useSetInput
 import { useIsBoolean } from "@/features/scoreManagementV2/hooks/useIsBoolean.ts";
 import { InputSelectRule } from "@/features/scoreManagementV2/components/InputSelectRule";
 import { handleScoreSubmit } from "@/features/scoreManagementV2/hooks/useScoreHookForm.ts";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { useScoreAtom } from "@/globalState/scoreAtom.ts";
 import { useSetAtom } from "jotai/index";
 import { rankScoreRuleAtom } from "@/globalState/rankOrderRuleAtom.ts";
