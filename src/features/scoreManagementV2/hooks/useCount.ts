@@ -15,7 +15,7 @@ export const useCount = (): useCountReturn => {
 
   const action = {
     increment: () => {
-      setCount(count + 1);
+      setCount((prev) => prev + 1);
     },
     reset: () => setCount(initialCount),
     // ここなおす
