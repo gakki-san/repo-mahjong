@@ -11,7 +11,6 @@ type Params = {
   setScore: (value: ScoreMap) => void;
   setPlusScoreRule: (num: PlusScoreRule) => void;
   setRankOrderRule: (num: RankOrderRuleAtom) => void;
-  close: () => void;
   setIsSubmit: { on: () => void };
 };
 
@@ -22,7 +21,6 @@ export const handleScoreSubmit = ({
   setScore,
   setPlusScoreRule,
   setRankOrderRule,
-  close,
   setIsSubmit,
 }: Params) => {
   const isEmptyInputField =
@@ -43,6 +41,5 @@ export const handleScoreSubmit = ({
   setScore(newScore as ScoreMap);
   setPlusScoreRule(plusScoreRule);
   setRankOrderRule(rankOrderRule);
-  close();
   return true;
 };

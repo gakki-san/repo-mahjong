@@ -23,7 +23,8 @@ export const InputRulePanel: FC = () => {
 
   const navigate = useNavigate();
 
-  const onSubmit = () => {
+  const onSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
     const isSuccess = handleScoreSubmit({
       inputStartPoint,
       inputReturnPoint,
@@ -31,7 +32,6 @@ export const InputRulePanel: FC = () => {
       setScore,
       setPlusScoreRule,
       setRankOrderRule,
-      close,
       setIsSubmit,
     });
     if (!isSuccess) return;
