@@ -1,4 +1,4 @@
-import { COLOR } from "@/features/scoreManagement/const/color.ts";
+import { COLOR } from "@/features/scoreManagementV2/const/color.ts";
 import { Box, Flex } from "@chakra-ui/react";
 import { FC } from "react";
 
