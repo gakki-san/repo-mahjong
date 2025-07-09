@@ -8,8 +8,7 @@ export const calculateRoundBonusToScore = (
   loser: Player | null,
 ): ScoreMap => {
   if (winner === null) {
-    console.error("winnerが選択されていません");
-    return score;
+    throw new Error("Winner must be selected for round bonus calculation");
   }
   const currentScore = [...score] as ScoreMap;
   if (roundBonus === 0) return currentScore;
