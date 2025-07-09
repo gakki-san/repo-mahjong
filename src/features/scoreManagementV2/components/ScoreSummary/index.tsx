@@ -10,7 +10,7 @@ import { useWinnerInfo } from "@/features/scoreManagementV2/hooks/useWinnerinfo.
 import { InputWinType } from "@/features/scoreManagementV2/components/InputWinType";
 import { SelectLoser } from "@/features/scoreManagementV2/components/SelectLoser";
 import { useCurrentDirection } from "@/features/scoreManagementV2/hooks/useCurrentDirection.ts";
-import { InputWinPoint } from "@/features/scoreManagementV2/components/InputParentPoint";
+import { InputWinPoint } from "../InputWinPoint";
 import { InputChildrenPoint } from "@/features/scoreManagementV2/components/InputChildrenPoint";
 import { FinishGameModal } from "@/features/scoreManagementV2/components/FinishGameModal";
 import { SelectTempaiModal } from "@/features/scoreManagementV2/components/SelectTempaiModal";
