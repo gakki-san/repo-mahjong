@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Player } from "./useScore.ts";
+import { Player } from "./useScore";
 
 export type WinInfo = {
   winType: "tsumo" | "ron" | null;
