@@ -26,9 +26,13 @@ export const SelectLoser: FC<SelectLoserProps> = ({
   const selectedLoser: ComponentProps<
     typeof RadioGroup.Root
   >["onValueChange"] = (event) => {
-    const loser = Number(event.value) as Player;
+    const loser = Number(event.value);
+    if (![0, 1, 2, 3].includes(loser)) {
+      console.error(`Invalid player index: ${loser}`);
+      return;
+    }
     setWinnerInfo({
-      loser: loser,
+      loser: loser as Player,
     });
   };
 
