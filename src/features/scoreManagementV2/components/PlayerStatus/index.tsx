@@ -51,7 +51,7 @@ export const PlayerStatus: FC<PlayerStatusProps> = ({
     offScoreDiff();
   };
 
-  const parent = 0;
+  const DEALER_POSITION = 0;
   return (
     <Flex gap="20px">
       <Box>
@@ -63,9 +63,9 @@ export const PlayerStatus: FC<PlayerStatusProps> = ({
           w="200px"
           h="auto"
           p="2"
-          color={direction === parent ? COLOR.WHITE : COLOR.BLACK}
+          color={direction === DEALER_POSITION ? COLOR.WHITE : COLOR.BLACK}
           textAlign="center"
-          bg={direction === parent ? COLOR.RED : COLOR.WHITE}
+          bg={direction === DEALER_POSITION ? COLOR.RED : COLOR.WHITE}
           onPointerDown={handlePressStart(index as Player)}
           onPointerLeave={handlePressEnd}
           onPointerUp={handlePressEnd}
