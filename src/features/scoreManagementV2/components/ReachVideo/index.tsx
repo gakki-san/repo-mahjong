@@ -2,12 +2,7 @@ import { COLOR } from "@/features/scoreManagementV2/const/color.ts";
 import { Box, Flex } from "@chakra-ui/react";
 import { FC } from "react";
 
-type ReachVideoProps = {
-  selectedReachPlayer: number;
-};
-
-export const ReachVideo: FC<ReachVideoProps> = ({ selectedReachPlayer }) => {
-  const video = selectedReachPlayer === 1 ? "/atmic.mp4" : "/reach.mp4";
+export const ReachVideo: FC = () => {
   return (
     <Flex
       pos="absolute"
@@ -30,7 +25,7 @@ export const ReachVideo: FC<ReachVideoProps> = ({ selectedReachPlayer }) => {
       >
         <Box pos="relative" pt="56.25%">
           <video
-            src={video}
+            src={"/reach.mp4"}
             autoPlay
             muted
             playsInline

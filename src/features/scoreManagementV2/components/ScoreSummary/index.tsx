@@ -316,7 +316,7 @@ export const ScoreSummary: FC = () => {
           handleBack={closeModal}
         />
       )}
-      {currentModal === "reachVideo" && <ReachVideo selectedReachPlayer={0} />}
+      {currentModal === "reachVideo" && <ReachVideo />}
       {currentModal === "reachConfirm" && (
         <AlreadyReachModal
           resetReach={handleResetReach}
