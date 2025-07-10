@@ -1,7 +1,7 @@
 import { Player } from "../../hooks/useScore";
 import { RankOrderRuleAtom } from "@/globalState/rankOrderRuleAtom.ts";
-import { PlusScoreRule } from "@/features/scoreManagementV2/hooks/usePlusScoreRule.ts";
 import { ScoreMap } from "@/globalState/scoreAtom.ts";
+import { PlusScoreRule } from "@/globalState/plusScoreRuleAtom.ts";
 
 export const calculateFinishScore = (
   score: ScoreMap,
