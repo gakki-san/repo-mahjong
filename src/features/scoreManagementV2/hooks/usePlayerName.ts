@@ -19,6 +19,10 @@ export const usePlayerName = (): UsePlayerNameReturn => {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
+    if (!["player1", "player2", "player3", "player4"].includes(name)) {
+      console.error(`Invalid player name key: ${name}`);
+      return;
+    }
     action(name as keyof PlayerNames, value);
   };
 
