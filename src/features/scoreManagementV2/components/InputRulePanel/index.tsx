@@ -8,7 +8,7 @@ import { handleScoreSubmit } from "@/features/scoreManagementV2/hooks/useScoreHo
 import { useNavigate } from "react-router-dom";
 import { useScoreAtom } from "@/globalState/scoreAtom.ts";
 import { useSetAtom } from "jotai/index";
-import { rankScoreRuleAtom } from "@/globalState/rankOrderRuleAtom.ts";
+import { rankScoreRuleAtom } from "@/globalState/rankOrderRule.ts";
 import { plusScoreRuleAtom } from "@/globalState/plusScoreRuleAtom.ts";
 import { ModalView } from "@/features/scoreManagementV2/components/ModalView";
 

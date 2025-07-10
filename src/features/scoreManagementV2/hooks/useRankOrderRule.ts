@@ -1,18 +1,15 @@
 import { useAtom } from "jotai";
 import {
-  RankOrderRuleAtom,
+  RankOrderRule,
   rankScoreRuleAtom,
-} from "@/globalState/rankOrderRuleAtom.ts";
+} from "@/globalState/rankOrderRule.ts";
 
-type RankOrderRuleReturn = [
-  RankOrderRuleAtom | null,
-  (num: RankOrderRuleAtom) => void,
-];
+type RankOrderRuleReturn = [RankOrderRule | null, (num: RankOrderRule) => void];
 
 export const useRankOrderRule = (): RankOrderRuleReturn => {
   const [rankOrderRule, setRankOrderRule] = useAtom(rankScoreRuleAtom);
 
-  const handleSet = (num: RankOrderRuleAtom) => {
+  const handleSet = (num: RankOrderRule) => {
     setRankOrderRule(num);
   };
   return [rankOrderRule, handleSet];
