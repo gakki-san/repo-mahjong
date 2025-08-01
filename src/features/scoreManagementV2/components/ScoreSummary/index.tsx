@@ -24,6 +24,10 @@ import { usePlayerName } from "@/features/scoreManagementV2/hooks/usePlayerName.
 import { usePlusScoreRule } from "@/features/scoreManagementV2/hooks/usePlusScoreRule.ts";
 import { useRankOrderRule } from "@/features/scoreManagementV2/hooks/useRankOrderRule.ts";
 import { useScoreAtom } from "@/globalState/scoreAtom.ts";
+import { useCount } from "@/features/scoreManagementV2/hooks/useCount.ts";
+import { calculateScore } from "@/features/scoreManagementV2/logics/calculateScore";
+import { calculateRoundBonusToScore } from "@/features/scoreManagementV2/logics/calculateRoundBonusToScore";
+import { calculatePoolBonus } from "@/features/scoreManagementV2/logics/calculatePoolBonus";
 
 export const ScoreSummary: FC = () => {
   const [score, setScore] = useScoreAtom();
@@ -48,6 +52,17 @@ export const ScoreSummary: FC = () => {
   const [isAppearanceScoreDiff, { on: onScoreDiff, off: offScoreDiff }] =
     useIsBoolean();
   const [scoreDiff, setScoreDiff] = useScore();
+  const [
+    roundBonus,
+    { increment: incrementRoundBonus, reset: resetRoundBonus },
+  ] = useCount();
+  const [
+    poolBonus,
+    {
+      add: addPoolBonus,
+      // reset: resetPoolBonus
+    },
+  ] = useCount();
   const WinType = currentModal === "winType";
   const isAfterWinType = currentModal === "finishWinType";
   const isRon = isAfterWinType && winnerInfo.winType === "ron";
@@ -81,7 +96,14 @@ export const ScoreSummary: FC = () => {
   };
 
   const handleCloseTempaiModal = () => {
+    // reachFlagでtrueの数だけincrementかaddする
+    // そして、reachFlagのtrueを全てfalseにする
+    // const countReach = Object.values(reachFlags).filter((item) => item).length;
+    // console.log("立直のかず", countReach);
     reset();
+    addPoolBonus(2);
+    console.log("poolBonus", poolBonus);
+    incrementRoundBonus();
   };
 
   const { handleReach } = useHandleReach({
@@ -108,6 +130,66 @@ export const ScoreSummary: FC = () => {
   const handleRotate = () => {
     const winner = 0;
     rotateByWinResult(winner);
+  };
+
+  const handleRoundBonus = (winner: Player | null, parent: Player) => {
+    if (winner === null) {
+      console.error("winnerが選択されていません。");
+      return;
+    }
+    if (winner === parent) {
+      incrementRoundBonus();
+    } else {
+      resetRoundBonus();
+    }
+  };
+
+  const calculateTotalScore = (point: number | null) => {
+    const calculateWinScore = calculateScore(
+      winnerInfo.winner,
+      score,
+      point,
+      currentDirectionToArray().indexOf(0) as Player,
+      winnerInfo.loser,
+    );
+
+    const calculateRoundBonusScore = calculateRoundBonusToScore(
+      calculateWinScore,
+      roundBonus,
+      winnerInfo.winner,
+      winnerInfo.loser,
+    );
+
+    const calculatePoolBonusScore = calculatePoolBonus(
+      calculateRoundBonusScore,
+      poolBonus,
+      winnerInfo.winner,
+    );
+
+    return calculatePoolBonusScore;
+  };
+
+  const handleCloseInputPoint = () => {
+    reset();
+
+    const calculatedScore = calculateTotalScore(winnerInfo.winPoints);
+
+    handleRoundBonus(winnerInfo.winner, parent);
+    setScore.set(calculatedScore);
+  };
+
+  const handleCloseInputChildren = (
+    childrenPoint: number,
+    parentPoint: number,
+  ) => {
+    reset();
+
+    const point = childrenPoint * 2 + parentPoint;
+
+    const calculatedScore = calculateTotalScore(point);
+
+    setScore.set(calculatedScore);
+    resetRoundBonus();
   };
 
   return (
@@ -178,8 +260,7 @@ export const ScoreSummary: FC = () => {
             bg={COLOR.BLACK}
             borderRadius={"5px"}
           >
-            {/*{countHonba}本場*/}
-            0本場
+            {roundBonus}本場
           </Box>
           <Box
             p={"10px"}
@@ -189,7 +270,6 @@ export const ScoreSummary: FC = () => {
             borderRadius={"5px"}
             onClick={handleRotate}
           >
-            {/*{countHonba}本場*/}
             rotate
           </Box>
           <Box
@@ -199,8 +279,7 @@ export const ScoreSummary: FC = () => {
             bg={COLOR.BLACK}
             borderRadius={"5px"}
           >
-            {/*供託{countKyotaku}本*/}
-            0本
+            供託{poolBonus}本
           </Box>
           <Button
             color={COLOR.WHITE}
@@ -241,36 +320,20 @@ export const ScoreSummary: FC = () => {
         (isParent ? (
           <InputWinPoint
             handleBack={handleBack}
-            reset={reset}
             setPoint={setWinnerInfo}
-            setScore={setScore.set}
-            winner={winnerInfo.winner}
-            score={score}
-            point={winnerInfo.winPoints}
-            parent={currentDirectionToArray().indexOf(0) as Player}
+            handleCloseInputPoint={handleCloseInputPoint}
           />
         ) : (
           <InputChildrenPoint
             handleBack={handleBack}
-            reset={reset}
-            setPoint={setWinnerInfo}
-            setScore={setScore.set}
-            score={score}
-            winner={winnerInfo.winner}
-            parent={currentDirectionToArray().indexOf(0) as Player}
+            handleCloseInputPoint={handleCloseInputChildren}
           />
         ))}
       {isWinPointForRon && (
         <InputWinPoint
           handleBack={handleBack}
-          reset={reset}
           setPoint={setWinnerInfo}
-          setScore={setScore.set}
-          winner={winnerInfo.winner}
-          score={score}
-          point={winnerInfo.winPoints}
-          parent={currentDirectionToArray().indexOf(0) as Player}
-          loser={winnerInfo.loser as Player}
+          handleCloseInputPoint={handleCloseInputPoint}
         />
       )}
       {isFinishModal && (

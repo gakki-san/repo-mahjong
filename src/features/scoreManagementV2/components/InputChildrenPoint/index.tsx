@@ -4,45 +4,18 @@ import { COLOR } from "@/features/scoreManagementV2/const/color.ts";
 import { DecisionButton } from "@/features/scoreManagementV2/components/DecisionButton";
 import { BackButton } from "@/features/scoreManagementV2/components/BackButton";
 import { useCount } from "@/features/scoreManagementV2/hooks/useCount.ts";
-import { WinInfo } from "@/features/scoreManagementV2/hooks/useWinnerinfo.ts";
-import {
-  Player,
-  ScoreMap,
-} from "@/features/scoreManagementV2/hooks/useScore.ts";
-import { calculateScore } from "@/features/scoreManagementV2/logics/calculateScore";
 
 type InputChildrenPointProps = {
   handleBack: () => void;
-  reset: () => void;
-  setPoint: (value: Partial<WinInfo>) => void;
-  setScore: (score: ScoreMap) => void;
-  score: ScoreMap;
-  winner: Player | null;
-  parent: Player;
+  handleCloseInputPoint: (children: number, parent: number) => void;
 };
 
 export const InputChildrenPoint: FC<InputChildrenPointProps> = ({
   handleBack,
-  reset,
-  setScore,
-  score,
-  winner,
-  parent,
+  handleCloseInputPoint,
 }) => {
   const [childrenPoint, { add: setChildrenPoint }] = useCount();
   const [parentPoint, { add: setParentPoint }] = useCount();
-
-  const handleCloseInputPoint = () => {
-    reset();
-
-    const result = calculateScore(
-      winner,
-      score,
-      childrenPoint * 2 + parentPoint,
-      parent,
-    );
-    setScore(result);
-  };
 
   const handlePointChange =
     (setter: (point: number) => void) => (event: { value: string }) => {
@@ -83,7 +56,11 @@ export const InputChildrenPoint: FC<InputChildrenPointProps> = ({
         <NumberInput.Input />
       </NumberInput.Root>
       <Flex gap={"20px"}>
-        <DecisionButton handleDecisionButton={handleCloseInputPoint} />
+        <DecisionButton
+          handleDecisionButton={() =>
+            handleCloseInputPoint(childrenPoint, parentPoint)
+          }
+        />
         <BackButton handleBack={handleBack} />
       </Flex>
     </Box>
