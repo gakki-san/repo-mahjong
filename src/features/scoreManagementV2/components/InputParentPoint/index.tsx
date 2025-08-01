@@ -1,9 +1,9 @@
 import { ComponentProps, FC } from "react";
-import { Box, Flex, NumberInput } from "@chakra-ui/react";
-import { COLOR } from "@/features/scoreManagementV2/const/color.ts";
+import { Flex, NumberInput } from "@chakra-ui/react";
 import { DecisionButton } from "@/features/scoreManagementV2/components/DecisionButton";
 import { BackButton } from "@/features/scoreManagementV2/components/BackButton";
 import { WinInfo } from "@/features/scoreManagementV2/hooks/useWinnerinfo.ts";
+import { ModalView } from "@/features/scoreManagementV2/components/ModalView";
 
 type InputWinPointProps = {
   handleBack: () => void;
@@ -24,17 +24,7 @@ export const InputWinPoint: FC<InputWinPointProps> = ({
   };
 
   return (
-    <Box
-      pos={"absolute"}
-      top={0}
-      alignItems={"center"}
-      justifyContent={"center"}
-      flexDir={"column"}
-      display={"flex"}
-      w={"100vw"}
-      h={"100vh"}
-      bg={COLOR.GREEN_PRIMARY}
-    >
+    <ModalView>
       点数入力
       <NumberInput.Root
         onValueChange={handleWinPointChange}
@@ -48,6 +38,6 @@ export const InputWinPoint: FC<InputWinPointProps> = ({
         <DecisionButton handleDecisionButton={handleCloseInputPoint} />
         <BackButton handleBack={handleBack} />
       </Flex>
-    </Box>
+    </ModalView>
   );
 };

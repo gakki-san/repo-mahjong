@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { Box, Button, Flex } from "@chakra-ui/react";
 import { COLOR } from "../../const/color";
+import { ModalView } from "@/features/scoreManagementV2/components/ModalView";
 
 type FinishGameModalProps = {
   gameData: GameData[];
@@ -18,18 +19,7 @@ export const FinishGameModal: FC<FinishGameModalProps> = ({
   handleBack,
 }) => {
   return (
-    <Box
-      pos={"absolute"}
-      top={0}
-      alignItems={"center"}
-      justifyContent={"center"}
-      flexDir={"column"}
-      display={"flex"}
-      w={"100vw"}
-      h={"100vh"}
-      p={"50px"}
-      bg={COLOR.WHITE}
-    >
+    <ModalView>
       <Box mb={"20px"} fontSize={"30px"} fontWeight={"bold"}>
         終局結果
       </Box>
@@ -57,6 +47,6 @@ export const FinishGameModal: FC<FinishGameModalProps> = ({
       >
         戻る
       </Button>
-    </Box>
+    </ModalView>
   );
 };

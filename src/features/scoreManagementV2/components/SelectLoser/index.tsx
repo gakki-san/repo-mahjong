@@ -6,6 +6,7 @@ import { BackButton } from "@/features/scoreManagementV2/components/BackButton";
 import { Player } from "@/features/scoreManagementV2/hooks/useScore.ts";
 import { WinInfo } from "@/features/scoreManagementV2/hooks/useWinnerinfo.ts";
 import { useModalActions } from "@/features/scoreManagementV2/hooks/useModalStack.ts";
+import { ModalView } from "@/features/scoreManagementV2/components/ModalView";
 
 type SelectLoserProps = {
   winnerInfo: WinInfo;
@@ -45,17 +46,7 @@ export const SelectLoser: FC<SelectLoserProps> = ({
   };
 
   return (
-    <Box
-      pos={"absolute"}
-      top={0}
-      alignItems={"center"}
-      justifyContent={"center"}
-      flexDir={"column"}
-      display={"flex"}
-      w={"100vw"}
-      h={"100vh"}
-      bg={COLOR.GREEN_PRIMARY}
-    >
+    <ModalView>
       <Box
         alignItems={"center"}
         justifyContent={"center"}
@@ -89,6 +80,6 @@ export const SelectLoser: FC<SelectLoserProps> = ({
           <BackButton handleBack={handleBack} />
         </Flex>
       </Box>
-    </Box>
+    </ModalView>
   );
 };

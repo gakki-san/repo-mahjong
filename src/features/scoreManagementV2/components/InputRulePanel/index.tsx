@@ -1,6 +1,5 @@
 import { FC } from "react";
-import { Box, Button } from "@chakra-ui/react";
-import { COLOR } from "@/features/scoreManagementV2/const/color.ts";
+import { Button } from "@chakra-ui/react";
 import { RULE_OPTIONS } from "@/features/scoreManagementV2/const/rureOptions.ts";
 import { useSetInputValue } from "@/features/scoreManagementV2/hooks/useSetInputValue.ts";
 import { useIsBoolean } from "@/features/scoreManagementV2/hooks/useIsBoolean.ts";
@@ -11,6 +10,7 @@ import { useScoreAtom } from "@/globalState/scoreAtom.ts";
 import { useSetAtom } from "jotai/index";
 import { rankScoreRuleAtom } from "@/globalState/rankOrderRuleAtom.ts";
 import { plusScoreRuleAtom } from "@/globalState/plusScoreRuleAtom.ts";
+import { ModalView } from "@/features/scoreManagementV2/components/ModalView";
 
 export const InputRulePanel: FC = () => {
   const [isSubmit, setIsSubmit] = useIsBoolean();
@@ -40,20 +40,7 @@ export const InputRulePanel: FC = () => {
   };
 
   return (
-    <Box
-      as="form"
-      pos={"absolute"}
-      top={0}
-      alignItems={"center"}
-      flexDir={"column"}
-      gap={"30px"}
-      display={"flex"}
-      w={"100vw"}
-      h={"100vh"}
-      pt={"30px"}
-      bgColor={COLOR.GREEN_PRIMARY}
-      onSubmit={onSubmit}
-    >
+    <ModalView as="form" onSubmit={onSubmit} gap={"30px"}>
       <InputSelectRule
         input={inputStartPoint}
         handleInputValue={handleStartPoint}
@@ -78,6 +65,6 @@ export const InputRulePanel: FC = () => {
       <Button w={"100px"} mt="4" type="submit">
         完了
       </Button>
-    </Box>
+    </ModalView>
   );
 };
