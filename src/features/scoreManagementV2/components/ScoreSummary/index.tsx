@@ -1,41 +1,39 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import { Box, Button, Flex, Grid, VStack } from "@chakra-ui/react";
 import { COLOR } from "@/features/scoreManagementV2/const/color.ts";
-import {
-  Player,
-  ScoreMap,
-} from "@/features/scoreManagementV2/hooks/useScore.ts";
+import { ScoreMap } from "@/features/scoreManagementV2/hooks/useScore.ts";
 import { useModalStack } from "@/features/scoreManagementV2/hooks/useModalStack.ts";
 import { useWinnerInfo } from "@/features/scoreManagementV2/hooks/useWinnerinfo.ts";
 import { InputWinType } from "@/features/scoreManagementV2/components/InputWinType";
 import { SelectLoser } from "@/features/scoreManagementV2/components/SelectLoser";
-import {
-  CurrentDirection,
-  useCurrentDirection,
-} from "@/features/scoreManagementV2/hooks/useCurrentDirection.ts";
+import { useCurrentDirection } from "@/features/scoreManagementV2/hooks/useCurrentDirection.ts";
 import { InputWinPoint } from "@/features/scoreManagementV2/components/InputParentPoint";
 import { InputChildrenPoint } from "@/features/scoreManagementV2/components/InputChildrenPoint";
 import { FinishGameModal } from "@/features/scoreManagementV2/components/FinishGameModal";
 import { SelectTempaiModal } from "@/features/scoreManagementV2/components/SelectTempaiModal";
-import {
-  PlayerIndex,
-  useReachFlags,
-} from "@/features/scoreManagementV2/hooks/useReachFlags.ts";
+import { useReachFlags } from "@/features/scoreManagementV2/hooks/useReachFlags.ts";
 import { ReachVideo } from "@/features/scoreManagementV2/components/ReachVideo";
 import { AlreadyReachModal } from "@/features/scoreManagementV2/components/AlreadyReachModal";
+import { PlayerStatus } from "@/features/scoreManagementV2/components/PlayerStatus";
+import { useHandleReach } from "@/features/scoreManagementV2/hooks/useHandleReach.ts";
 
 type ScoreSummaryProps = {
   score: ScoreMap;
   playerName: string[];
+  // setScore: (score: ScoreMap) => void;
 };
 
-export const ScoreSummary: FC<ScoreSummaryProps> = ({ score, playerName }) => {
+export const ScoreSummary: FC<ScoreSummaryProps> = ({
+  score,
+  playerName,
+  // setScore,
+}) => {
   const [winnerInfo, setWinnerInfo] = useWinnerInfo();
   const [currentModal, { openModal, closeModal, reset }] = useModalStack();
   const [
-    currentDirection,
+    selectedDirection,
     {
-      set: setCurrentDirection,
+      set: setSelectedDirection,
       // rotate: rotateDirection
     },
   ] = useCurrentDirection();
@@ -58,19 +56,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({ score, playerName }) => {
   ];
 
   const parent = 0;
-  const isParent = parent === currentDirection;
-
-  const handleWin = (
-    event: React.MouseEvent<HTMLButtonElement>,
-    currentScore: number,
-  ) => {
-    const currentDirection = Number(
-      event.currentTarget.value,
-    ) as CurrentDirection;
-    setCurrentDirection(currentDirection);
-    setWinnerInfo({ winner: currentScore as Player });
-    openModal("winType");
-  };
+  const isParent = parent === selectedDirection;
 
   const handleBack = () => {
     closeModal();
@@ -91,24 +77,12 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({ score, playerName }) => {
     reset();
   };
 
-  const handleReach = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const reachPlayer = Number(event.currentTarget.value) as PlayerIndex;
-    if (reachFlags[reachPlayer]) {
-      const audio = new Audio("/dio.mp3");
-      audio.play();
-      openModal("reachConfirm");
-    } else {
-      openModal("reachVideo");
-      const audio = new Audio("/audio.mp3");
-      audio.play();
-      audio.addEventListener("ended", () => {
-        closeModal();
-        setReachFlags.toggle(reachPlayer);
-      });
-    }
-  };
-
-  console.log(reachFlags);
+  const { handleReach } = useHandleReach({
+    reachFlags,
+    setReachFlags,
+    openModal,
+    closeModal,
+  });
 
   const mockGameData = [
     { id: "1", name: "Alpha", score: "20" },
@@ -116,8 +90,6 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({ score, playerName }) => {
     { id: "3", name: "Charlie", score: "0" },
     { id: "4", name: "Delta", score: "-10" },
   ];
-
-  console.log("currentModal", currentModal);
 
   const mockIsTempaiFlag = {
     0: true,
@@ -148,56 +120,17 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({ score, playerName }) => {
               gridRow={directionPosition.gridRow}
               transform={directionPosition.transform}
             >
-              <Flex gap="20px">
-                <Box>
-                  <Box mb={"5px"} fontWeight={"bold"} textAlign={"center"}>
-                    {player}
-                  </Box>
-                  <Button
-                    textStyle={"5xl"}
-                    w="200px"
-                    h="auto"
-                    p="2"
-                    color={item === parent ? COLOR.WHITE : COLOR.BLACK}
-                    textAlign="center"
-                    bg={item === parent ? COLOR.RED : COLOR.WHITE}
-                    // onPointerDown={handlePressStart(index as Player)}
-                    // onPointerLeave={handlePressEnd}
-                    // onPointerUp={handlePressEnd}
-                  >
-                    {/*{isAppearanceScoreDiff ? scoreDiff[index] : score[index]}*/}
-                    {score[index]}
-                  </Button>
-                </Box>
-                <Flex direction={"column"}>
-                  <Button
-                    w="40px"
-                    h="40px"
-                    m="auto"
-                    color={COLOR.BLACK}
-                    fontWeight="bold"
-                    bg={COLOR.WHITE}
-                    borderRadius="50%"
-                    onClick={(event) => handleWin(event, index)}
-                    value={item}
-                  >
-                    和了
-                  </Button>
-                  <Button
-                    w="40px"
-                    h="40px"
-                    m="auto"
-                    color={COLOR.WHITE}
-                    fontWeight="bold"
-                    bg={COLOR.RED}
-                    borderRadius="50%"
-                    onClick={handleReach}
-                    value={index}
-                  >
-                    立直
-                  </Button>
-                </Flex>
-              </Flex>
+              <PlayerStatus
+                key={item}
+                player={player}
+                direction={item}
+                index={index}
+                score={score[index]}
+                handleReach={handleReach}
+                setSelectedDirection={setSelectedDirection}
+                setWinnerInfo={setWinnerInfo}
+                openModal={openModal}
+              />
             </VStack>
           );
         })}

@@ -7,7 +7,7 @@ questions:
   name: "Please enter the logic name."
 ---
 
-# `{{ inputs.name | camel }}/index.ts`
+# `{{ inputs.name | camel }}/useHandleReach.ts`
 
 ```typescript
 export const {{ inputs.name | camel }} = (a: any, b: any): any => {
