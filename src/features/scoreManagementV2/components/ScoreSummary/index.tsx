@@ -44,7 +44,7 @@ export const ScoreSummary: FC = () => {
   const [
     ,
     {
-      // rotate: rotateDirection,
+      rotate: rotateDirection,
       toArray: currentDirectionToArray,
       rotateByWinResult,
     },
@@ -179,10 +179,15 @@ export const ScoreSummary: FC = () => {
 
   const handleCloseInputPoint = () => {
     reset();
+    const parent = currentDirectionToArray().indexOf(0);
+    const isWinnerChildren = parent !== winnerInfo.winner;
+    if (isWinnerChildren) {
+      rotateDirection();
+    }
 
     const calculatedScore = calculateTotalScore(winnerInfo.winPoints);
 
-    handleRoundBonus(winnerInfo.winner, parent);
+    handleRoundBonus(winnerInfo.winner, parent as Player);
     setScore.set(calculatedScore);
   };
 
@@ -191,6 +196,7 @@ export const ScoreSummary: FC = () => {
     parentPoint: number,
   ) => {
     reset();
+    rotateDirection();
 
     const point = childrenPoint * 2 + parentPoint;
 
