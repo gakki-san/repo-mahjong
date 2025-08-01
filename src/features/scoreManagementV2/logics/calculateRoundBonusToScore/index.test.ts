@@ -3,7 +3,7 @@ import { calculateRoundBonusToScore } from "./index";
 import { ScoreMap } from "@/features/scoreManagementV2/hooks/useScore.ts";
 
 describe("calculateRoundBonusToScore", () => {
-  const initialScore = [25000, 25000, 25000, 25000] as ScoreMap;
+  const initialScore: ScoreMap = [25000, 25000, 25000, 25000];
 
   it("本場が1でloserがいる場合はloserから本場分を引く", () => {
     const roundBonus = 1;
