@@ -16,6 +16,7 @@ import {
 import { InputWinPoint } from "@/features/scoreManagementV2/components/InputParentPoint";
 import { InputChildrenPoint } from "@/features/scoreManagementV2/components/InputChildrenPoint";
 import { FinishGameModal } from "@/features/scoreManagementV2/components/FinishGameModal";
+import { SelectTempaiModal } from "@/features/scoreManagementV2/components/SelectTempaiModal";
 
 type ScoreSummaryProps = {
   score: ScoreMap;
@@ -38,6 +39,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({ score, playerName }) => {
   const isTsumo = isAfterWinType && winnerInfo.winType === "tsumo";
   const isWinPointForRon = currentModal === "winPoint";
   const isFinishModal = currentModal === "finish";
+  const isTempaiModal = currentModal === "tempai";
 
   const uiPositions = [
     { gridColumn: 2, gridRow: 1, transform: "rotate(180deg)" },
@@ -72,9 +74,13 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({ score, playerName }) => {
     openModal("finish");
   };
 
-  // const handleCloseInputPoint = () => {
-  //   reset();
-  // };
+  const handleMoveDirection = () => {
+    openModal("tempai");
+  };
+
+  const handleCloseTempaiModal = () => {
+    reset();
+  };
 
   const mockGameData = [
     { id: "1", name: "Alpha", score: "20" },
@@ -84,6 +90,13 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({ score, playerName }) => {
   ];
 
   console.log("currentModal", currentModal);
+
+  const mockIsTempaiFlag = {
+    0: true,
+    1: false,
+    2: false,
+    3: false,
+  };
 
   return (
     <>
@@ -176,7 +189,7 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({ score, playerName }) => {
             color={COLOR.WHITE}
             fontWeight={"bold"}
             bg={COLOR.RED}
-            // onClick={handleMoveDirection}
+            onClick={handleMoveDirection}
           >
             流局
           </Button>
@@ -246,6 +259,13 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({ score, playerName }) => {
       )}
       {isFinishModal && (
         <FinishGameModal gameData={mockGameData} handleBack={handleBack} />
+      )}
+      {isTempaiModal && (
+        <SelectTempaiModal
+          playersName={playerName}
+          isTEMPAI={mockIsTempaiFlag}
+          handleCloseTENPAIModal={handleCloseTempaiModal}
+        />
       )}
     </>
   );
