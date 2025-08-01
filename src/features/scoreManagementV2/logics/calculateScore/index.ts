@@ -8,7 +8,7 @@ export const calculateScore = (
   score: ScoreMap,
   point: number,
   parent: Player,
-) => {
+): ScoreMap => {
   const currentScore = [...score];
   const fromEachPlayerWhenParentWins = point / 3;
   const fromParentWhenChildWins = point / 2;
