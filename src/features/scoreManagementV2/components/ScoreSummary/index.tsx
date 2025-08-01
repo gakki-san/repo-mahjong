@@ -23,32 +23,28 @@ import { useIsBoolean } from "@/features/scoreManagementV2/hooks/useIsBoolean.ts
 import { usePlayerName } from "@/features/scoreManagementV2/hooks/usePlayerName.ts";
 import { usePlusScoreRule } from "@/features/scoreManagementV2/hooks/usePlusScoreRule.ts";
 import { useRankOrderRule } from "@/features/scoreManagementV2/hooks/useRankOrderRule.ts";
-import { useScoreAtom } from "@/globalState/scoreAtom.ts";
+import { ScoreMap, useScoreAtom } from "@/globalState/scoreAtom.ts";
 import { useCount } from "@/features/scoreManagementV2/hooks/useCount.ts";
 import { calculateScore } from "@/features/scoreManagementV2/logics/calculateScore";
 import { calculateRoundBonusToScore } from "@/features/scoreManagementV2/logics/calculateRoundBonusToScore";
 import { calculatePoolBonus } from "@/features/scoreManagementV2/logics/calculatePoolBonus";
 import { calculateReachBonus } from "@/features/scoreManagementV2/logics/calculateReachBonus";
 import { calculatePenalty } from "@/features/scoreManagementV2/logics/calculatePenalty";
+import { useDice } from "@/features/scoreManagementV2/hooks/useDice.ts";
+import { calculateFinishScore } from "@/features/scoreManagementV2/logics/calculateFinishScore";
 
 export const ScoreSummary: FC = () => {
   const [score, setScore] = useScoreAtom();
   const [playerName] = usePlayerName();
   const [rankOrderRule] = useRankOrderRule();
   const [plusScoreRule] = usePlusScoreRule();
-  console.log(rankOrderRule, plusScoreRule);
   const [winnerInfo, setWinnerInfo] = useWinnerInfo();
   const [currentModal, { openModal, closeModal, resetModal }] = useModalStack();
   const [selectedDirection, { set: setSelectedDirection }] =
     useCurrentDirection();
-  const [
-    ,
-    {
-      rotate: rotateDirection,
-      toArray: currentDirectionToArray,
-      rotateByWinResult,
-    },
-  ] = useCurrentDirection();
+  const [dice, rollDice] = useDice();
+  const [, { rotate: rotateDirection, toArray: currentDirectionToArray }] =
+    useCurrentDirection();
   const [reachFlags, setReachFlags] = useReachFlags();
   const [isTEMPAI, setIsTEMPAI] = useReachFlags();
   const [isAppearanceScoreDiff, { on: onScoreDiff, off: offScoreDiff }] =
@@ -60,6 +56,15 @@ export const ScoreSummary: FC = () => {
   ] = useCount();
   const [poolBonus, { add: addPoolBonus, reset: resetPoolBonus }] = useCount();
   const [reachPlayer, { set: setReachPlayer }] = useCount();
+  const { handleReach, handleResetReach } = useHandleReach({
+    reachFlags,
+    setReachFlags,
+    openModal,
+    closeModal,
+    setReachPlayer,
+    reachPlayer,
+  });
+
   const WinType = currentModal === "winType";
   const isAfterWinType = currentModal === "finishWinType";
   const isRon = isAfterWinType && winnerInfo.winType === "ron";
@@ -113,26 +118,22 @@ export const ScoreSummary: FC = () => {
     setReachFlags.reset();
   };
 
-  const { handleReach, handleResetReach } = useHandleReach({
-    reachFlags,
-    setReachFlags,
-    openModal,
-    closeModal,
-    setReachPlayer,
-    reachPlayer,
-  });
-
-  const mockGameData = [
-    { id: "1", name: "Alpha", score: "20" },
-    { id: "2", name: "Bravo", score: "10" },
-    { id: "3", name: "Charlie", score: "0" },
-    { id: "4", name: "Delta", score: "-10" },
-  ];
-
-  const handleRotate = () => {
-    const winner = 0;
-    rotateByWinResult(winner);
+  const newGameData = (playersName: string[], score: ScoreMap) => {
+    return playersName.map((name, index) => {
+      const raw = score[index] / 1000;
+      const scoreValue = raw === 0 ? "0" : `${raw > 0 ? "+" : ""}${raw}`;
+      return {
+        id: (index + 1).toString(),
+        name: name,
+        score: scoreValue,
+      };
+    });
   };
+
+  const gameData = newGameData(
+    playerName,
+    calculateFinishScore(score, plusScoreRule, rankOrderRule),
+  );
 
   const handleRoundBonus = (winner: Player | null, parent: Player) => {
     if (winner === null) {
@@ -284,16 +285,6 @@ export const ScoreSummary: FC = () => {
             fontWeight={"bold"}
             bg={COLOR.BLACK}
             borderRadius={"5px"}
-            onClick={handleRotate}
-          >
-            rotate
-          </Box>
-          <Box
-            p={"10px"}
-            color={COLOR.WHITE}
-            fontWeight={"bold"}
-            bg={COLOR.BLACK}
-            borderRadius={"5px"}
           >
             供託{poolBonus}本
           </Box>
@@ -309,10 +300,9 @@ export const ScoreSummary: FC = () => {
             color={COLOR.WHITE}
             fontSize={"20px"}
             bg={COLOR.BLACK}
-            onClick={() => setScore.set([25000, 25000, 25000, 25000])}
+            onClick={rollDice}
           >
-            {/*🎲 {dice[0]} 🎲 {dice[1]}*/}
-            reset
+            🎲 {dice[0]} 🎲 {dice[1]}
           </Button>
         </Flex>
       </Grid>
@@ -354,7 +344,7 @@ export const ScoreSummary: FC = () => {
         />
       )}
       {isFinishModal && (
-        <FinishGameModal gameData={mockGameData} handleBack={handleBack} />
+        <FinishGameModal gameData={gameData} handleBack={handleBack} />
       )}
       {isTempaiModal && (
         <SelectTempaiModal
