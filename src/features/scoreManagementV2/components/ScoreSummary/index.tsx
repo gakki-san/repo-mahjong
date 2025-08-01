@@ -28,6 +28,7 @@ import { useCount } from "@/features/scoreManagementV2/hooks/useCount.ts";
 import { calculateScore } from "@/features/scoreManagementV2/logics/calculateScore";
 import { calculateRoundBonusToScore } from "@/features/scoreManagementV2/logics/calculateRoundBonusToScore";
 import { calculatePoolBonus } from "@/features/scoreManagementV2/logics/calculatePoolBonus";
+import { calculateReachBonus } from "@/features/scoreManagementV2/logics/calculateReachBonus";
 
 export const ScoreSummary: FC = () => {
   const [score, setScore] = useScoreAtom();
@@ -166,7 +167,14 @@ export const ScoreSummary: FC = () => {
       winnerInfo.winner,
     );
 
-    return calculatePoolBonusScore;
+    const countReach = Object.values(reachFlags).filter((item) => item).length;
+    const calculatedScore = calculateReachBonus(
+      calculatePoolBonusScore,
+      winnerInfo.winner,
+      countReach,
+    );
+
+    return calculatedScore;
   };
 
   const handleCloseInputPoint = () => {
@@ -178,7 +186,7 @@ export const ScoreSummary: FC = () => {
     setScore.set(calculatedScore);
   };
 
-  const handleCloseInputChildren = (
+  const handleCloseInputChildrenPoint = (
     childrenPoint: number,
     parentPoint: number,
   ) => {
@@ -326,7 +334,7 @@ export const ScoreSummary: FC = () => {
         ) : (
           <InputChildrenPoint
             handleBack={handleBack}
-            handleCloseInputPoint={handleCloseInputChildren}
+            handleCloseInputPoint={handleCloseInputChildrenPoint}
           />
         ))}
       {isWinPointForRon && (
