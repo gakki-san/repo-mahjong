@@ -1,10 +1,13 @@
 import { useState } from "react";
+import { Player } from "@/features/scoreManagementV2/hooks/useScore.ts";
 
 export type CurrentDirection = 0 | 1 | 2 | 3;
 
 type UseSetCurrentDirection = {
   set: (value: CurrentDirection) => void;
   rotate: () => void;
+  toArray: () => number[];
+  rotateByWinResult: (winner: Player) => void;
 };
 
 type UseCurrentDirection = [CurrentDirection, UseSetCurrentDirection];
@@ -15,12 +18,24 @@ const infinityDirection = 0 as CurrentDirection;
 export const useCurrentDirection = (): UseCurrentDirection => {
   const [currentDirection, setCurrentDirection] = useState(infinityDirection);
 
-  const action = {
-    set: (value: CurrentDirection) => setCurrentDirection(value),
+  const action: UseSetCurrentDirection = {
+    set: (value) => setCurrentDirection(value),
     rotate: () =>
       setCurrentDirection((prev) =>
         prev === 3 ? 0 : ((prev + 1) as CurrentDirection),
       ),
+    rotateByWinResult: (winner: Player) => {
+      const isChildren = action.toArray().indexOf(0) !== winner;
+      if (isChildren) {
+        action.rotate();
+      }
+    },
+    toArray: () => {
+      const base = [0, 1, 2, 3];
+      return base
+        .slice(currentDirection)
+        .concat(base.slice(0, currentDirection));
+    },
   };
 
   return [currentDirection, action];
