@@ -29,6 +29,7 @@ import { calculateScore } from "@/features/scoreManagementV2/logics/calculateSco
 import { calculateRoundBonusToScore } from "@/features/scoreManagementV2/logics/calculateRoundBonusToScore";
 import { calculatePoolBonus } from "@/features/scoreManagementV2/logics/calculatePoolBonus";
 import { calculateReachBonus } from "@/features/scoreManagementV2/logics/calculateReachBonus";
+import { calculatePenalty } from "@/features/scoreManagementV2/logics/calculatePenalty";
 
 export const ScoreSummary: FC = () => {
   const [score, setScore] = useScoreAtom();
@@ -50,6 +51,7 @@ export const ScoreSummary: FC = () => {
     },
   ] = useCurrentDirection();
   const [reachFlags, setReachFlags] = useReachFlags();
+  const [isTEMPAI, setIsTEMPAI] = useReachFlags();
   const [isAppearanceScoreDiff, { on: onScoreDiff, off: offScoreDiff }] =
     useIsBoolean();
   const [scoreDiff, setScoreDiff] = useScore();
@@ -98,17 +100,25 @@ export const ScoreSummary: FC = () => {
   };
 
   const handleCloseTempaiModal = () => {
-    // reachFlagでtrueの数だけincrementかaddする
-    // そして、reachFlagのtrueを全てfalseにする
-    // const countReach = Object.values(reachFlags).filter((item) => item).length;
-    // console.log("立直のかず", countReach);
-    resetModal();
-    addPoolBonus(2);
-    console.log("poolBonus", poolBonus);
-    incrementRoundBonus();
-  };
+    const countTrue = (obj: Record<string, boolean>) =>
+      Object.values(obj).filter(Boolean).length;
+    const countReach = countTrue(reachFlags);
+    const countTEMPAI = countTrue(isTEMPAI);
+    const calcScore = calculatePenalty(score, countTEMPAI, isTEMPAI);
+    setScore.set(calcScore);
 
-  console.log("reachFlags", reachFlags);
+    const parent = currentDirectionToArray().indexOf(0) as Player;
+    const shouldContinueParent = !isTEMPAI[parent];
+    if (shouldContinueParent) {
+      rotateDirection();
+    }
+
+    resetModal();
+    addPoolBonus(countReach);
+    incrementRoundBonus();
+    setIsTEMPAI.reset();
+    setReachFlags.reset();
+  };
 
   const { handleReach, handleResetReach } = useHandleReach({
     reachFlags,
@@ -125,13 +135,6 @@ export const ScoreSummary: FC = () => {
     { id: "3", name: "Charlie", score: "0" },
     { id: "4", name: "Delta", score: "-10" },
   ];
-
-  const mockIsTempaiFlag = {
-    0: true,
-    1: false,
-    2: false,
-    3: false,
-  };
 
   const handleRotate = () => {
     const winner = 0;
@@ -360,8 +363,10 @@ export const ScoreSummary: FC = () => {
       {isTempaiModal && (
         <SelectTempaiModal
           playersName={playerName}
-          isTEMPAI={mockIsTempaiFlag}
-          handleCloseTENPAIModal={handleCloseTempaiModal}
+          isTEMPAI={isTEMPAI}
+          toggle={setIsTEMPAI.toggle}
+          handleDecide={handleCloseTempaiModal}
+          handleBack={handleBack}
         />
       )}
       {isReach && <ReachVideo selectedReachPlayer={0} />}

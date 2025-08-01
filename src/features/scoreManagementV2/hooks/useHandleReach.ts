@@ -1,6 +1,6 @@
 import {
   PlayerIndex,
-  ReachFlagsProps,
+  ReachFlags,
   SetReachFlagsReturn,
 } from "@/features/scoreManagementV2/hooks/useReachFlags.ts";
 import { ModalType } from "@/features/scoreManagementV2/hooks/useModalStack.ts";
@@ -8,7 +8,7 @@ import React, { useCallback } from "react";
 import { useScoreAtom } from "@/globalState/scoreAtom.ts";
 
 type UseHandleReachProps = {
-  reachFlags: ReachFlagsProps;
+  reachFlags: ReachFlags;
   setReachFlags: SetReachFlagsReturn;
   openModal: (type: Exclude<ModalType, null>) => void;
   closeModal: () => void;

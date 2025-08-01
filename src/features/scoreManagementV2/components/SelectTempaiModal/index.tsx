@@ -1,20 +1,24 @@
 import { FC } from "react";
-import { Box, Button, Checkbox, Stack } from "@chakra-ui/react";
-import { ReachFlagsProps } from "../../hooks/useReachFlags";
+import { Box, Checkbox, Flex, Stack } from "@chakra-ui/react";
+import { ReachFlags } from "../../hooks/useReachFlags";
 import { Player } from "../../hooks/useScore";
 import { COLOR } from "../../const/color";
+import { DecisionButton } from "@/features/scoreManagementV2/components/DecisionButton";
+import { BackButton } from "@/features/scoreManagementV2/components/BackButton";
 
 type SelectTempaiModalProps = {
   playersName: string[];
-  isTEMPAI: ReachFlagsProps;
-  // toggleTempai: (player: Player) => void;
-  handleCloseTENPAIModal: () => void;
+  isTEMPAI: ReachFlags;
+  toggle: (player: Player) => void;
+  handleDecide: () => void;
+  handleBack: () => void;
 };
 export const SelectTempaiModal: FC<SelectTempaiModalProps> = ({
   playersName,
   isTEMPAI,
-  // toggleTempai,
-  handleCloseTENPAIModal,
+  toggle,
+  handleDecide,
+  handleBack,
 }) => {
   return (
     <Box
@@ -38,23 +42,22 @@ export const SelectTempaiModal: FC<SelectTempaiModalProps> = ({
               mt={"20px"}
               key={index}
               checked={isTEMPAI[player]}
-              // onChange={() => toggleTenpai(player)}
+              onChange={() => toggle(player)}
             >
               <Checkbox.HiddenInput />
-              <Checkbox.Control color={COLOR.BLACK} />
+              <Checkbox.Control
+                color={COLOR.BLACK}
+                backgroundColor={COLOR.WHITE}
+              />
               <Checkbox.Label>{name}</Checkbox.Label>
             </Checkbox.Root>
           );
         })}
       </Stack>
-      <Button
-        color={COLOR.WHITE}
-        fontWeight={"bold"}
-        bg={COLOR.BLACK}
-        onClick={handleCloseTENPAIModal}
-      >
-        完了
-      </Button>
+      <Flex gap={"20px"}>
+        <DecisionButton handleDecisionButton={handleDecide} />
+        <BackButton handleBack={handleBack} />
+      </Flex>
     </Box>
   );
 };
