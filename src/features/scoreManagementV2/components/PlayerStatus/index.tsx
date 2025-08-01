@@ -10,12 +10,12 @@ import {
   ScoreMap,
 } from "@/features/scoreManagementV2/hooks/useScore.ts";
 import { calculateScoreDiff } from "@/features/scoreManagementV2/logics/scoreDiff/calculateScoreDiff.ts";
+import { useScoreAtom } from "@/globalState/scoreAtom.ts";
 
 type PlayerStatusProps = {
   player: string;
   direction: number;
   index: number;
-  score: ScoreMap;
   handleReach: (event: React.MouseEvent<HTMLButtonElement>) => void;
   setSelectedDirection: (direction: CurrentDirection) => void;
   setWinnerInfo: (value: Partial<WinInfo>) => void;
@@ -31,7 +31,6 @@ export const PlayerStatus: FC<PlayerStatusProps> = ({
   player,
   direction,
   index,
-  score,
   handleReach,
   setSelectedDirection,
   setWinnerInfo,
@@ -42,6 +41,7 @@ export const PlayerStatus: FC<PlayerStatusProps> = ({
   onScoreDiff,
   offScoreDiff,
 }) => {
+  const [score] = useScoreAtom();
   const handlePressStart = (playerIndex: Player) => {
     return () => {
       const scoreDiff = calculateScoreDiff(playerIndex, score);
@@ -74,7 +74,6 @@ export const PlayerStatus: FC<PlayerStatusProps> = ({
           onPointerUp={handlePressEnd}
         >
           {isAppearanceScoreDiff ? scoreDiff[index] : score[index]}
-          {/*{score}*/}
         </Button>
       </Box>
       <Flex direction={"column"}>

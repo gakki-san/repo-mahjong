@@ -3,12 +3,12 @@ import { Box, Button } from "@chakra-ui/react";
 import { COLOR } from "@/features/scoreManagement/const/color.ts";
 
 type AlreadyReachModalProps = {
-  // resetReach: () => void;
+  resetReach: () => void;
   noResetReach: () => void;
 };
 
 export const AlreadyReachModal: FC<AlreadyReachModalProps> = ({
-  // resetReach,
+  resetReach,
   noResetReach,
 }) => {
   return (
@@ -28,7 +28,7 @@ export const AlreadyReachModal: FC<AlreadyReachModalProps> = ({
         mt={"20px"}
         color={COLOR.WHITE}
         bg={COLOR.BLACK}
-        // onClick={resetReach}
+        onClick={resetReach}
       >
         はい
       </Button>
