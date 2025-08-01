@@ -1,6 +1,7 @@
 import { SCORE } from "../../const/score";
 import { ReachFlags } from "../../hooks/useReachFlags";
-import { Player, ScoreMap } from "../../hooks/useScore";
+import { Player } from "../../hooks/useScore";
+import { ScoreMap } from "@/globalState/scoreAtom.ts";
 
 export const calculatePenalty = (
   score: ScoreMap,
@@ -17,8 +18,6 @@ export const calculatePenalty = (
     2: [SCORE.DOUBLE, -SCORE.DOUBLE],
     3: [SCORE.SINGLE, -SCORE.TRIPLE],
   };
-
-  if (tempaiCount === 0 || tempaiCount === 4) return calcScore as ScoreMap;
 
   const [gain, loss] = PENALTY_ADJUSTMENTS[tempaiCount as 1 | 2 | 3];
 

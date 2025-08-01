@@ -1,11 +1,12 @@
-import { Player, ScoreMap } from "../../hooks/useScore";
-import { RankOrderRuleAtom } from "@/globalState/rankOrderRuleAtom.ts";
-import { PlusScoreRule } from "@/features/scoreManagementV2/hooks/usePlusScoreRule.ts";
+import { Player } from "../../hooks/useScore";
+import { RankOrderRule } from "@/globalState/rankOrderRule.ts";
+import { ScoreMap } from "@/globalState/scoreAtom.ts";
+import { PlusScoreRule } from "@/globalState/plusScoreRuleAtom.ts";
 
 export const calculateFinishScore = (
   score: ScoreMap,
   plusScoreRule: PlusScoreRule | null,
-  rankOrderRule: RankOrderRuleAtom | null,
+  rankOrderRule: RankOrderRule | null,
 ): ScoreMap => {
   if (plusScoreRule === null || rankOrderRule === null) {
     return score;

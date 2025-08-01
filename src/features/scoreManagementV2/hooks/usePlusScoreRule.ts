@@ -1,7 +1,8 @@
-import { plusScoreRuleAtom } from "@/globalState/plusScoreRuleAtom.ts";
+import {
+  PlusScoreRule,
+  plusScoreRuleAtom,
+} from "@/globalState/plusScoreRuleAtom.ts";
 import { useAtom } from "jotai";
-
-export type PlusScoreRule = 25000 | 30000;
 
 type PlusScoreRuleReturn = [PlusScoreRule | null, (num: PlusScoreRule) => void];
 

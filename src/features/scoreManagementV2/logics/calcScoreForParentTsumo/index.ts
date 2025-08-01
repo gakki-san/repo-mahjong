@@ -1,7 +1,5 @@
-import {
-  Player,
-  ScoreMap,
-} from "@/features/scoreManagementV2/hooks/useScore.ts";
+import { Player } from "@/features/scoreManagementV2/hooks/useScore.ts";
+import { ScoreMap } from "@/globalState/scoreAtom.ts";
 
 export const calcScoreForParentTsumo = (
   score: ScoreMap,

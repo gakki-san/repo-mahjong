@@ -11,9 +11,12 @@ export const handleWinPlayer = (
   setWinnerInfo: (value: Partial<WinInfo>) => void,
   openModal: (type: Exclude<ModalType, null>) => void,
 ) => {
-  const selectedDirection = Number(
-    event.currentTarget.value,
-  ) as CurrentDirection;
+  const directionValue = Number(event.currentTarget.value);
+  if (![0, 1, 2, 3].includes(directionValue)) {
+    throw new Error(`Invalid direction value: ${directionValue}`);
+  }
+
+  const selectedDirection = directionValue as CurrentDirection;
   setSelectedDirection(selectedDirection);
   setWinnerInfo({ winner: currentScore as Player });
   openModal("winType");

@@ -23,20 +23,23 @@ export const FinishGameModal: FC<FinishGameModalProps> = ({
       <Box mb={"20px"} fontSize={"30px"} fontWeight={"bold"}>
         終局結果
       </Box>
-      {gameData.map((item) => (
-        <Flex
-          key={item.id}
-          justify={"space-between"}
-          gap={"10px"}
-          w={"150px"}
-          mt={"10px"}
-          fontSize={"20px"}
-          textAlign={"center"}
-        >
-          <Box>{item.name}</Box>
-          <Box>{item.score}</Box>
-        </Flex>
-      ))}
+      <Box as="ul" p={0} listStyleType="none">
+        {gameData.map((item) => (
+          <Flex
+            key={item.id}
+            as="li"
+            justify="space-between"
+            gap="10px"
+            w="150px"
+            mt="10px"
+            fontSize="20px"
+            textAlign="center"
+          >
+            <Box>{item.name}</Box>
+            <Box>{item.score}</Box>
+          </Flex>
+        ))}
+      </Box>
       <Button
         mt={"20px"}
         color={COLOR.BLACK}

@@ -1,7 +1,7 @@
 // tests/calculateFinishScore.test.ts
 import { describe, it, expect } from "vitest";
 import { calculateFinishScore } from "../../logics/calculateFinishScore";
-import type { ScoreMap } from "../../hooks/useScore";
+import { ScoreMap } from "@/globalState/scoreAtom.ts";
 
 describe("calculateFinishScore (umaRule = 0, returnPoint = 30000)", () => {
   it("should handle a clear 1–4 ordering without ties", () => {

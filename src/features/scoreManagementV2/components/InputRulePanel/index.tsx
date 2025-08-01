@@ -1,14 +1,14 @@
 import { FC } from "react";
 import { Button } from "@chakra-ui/react";
-import { RULE_OPTIONS } from "@/features/scoreManagementV2/const/rureOptions.ts";
+import { RULE_OPTIONS } from "@/features/scoreManagementV2/const/ruleOptions.ts";
 import { useSetInputValue } from "@/features/scoreManagementV2/hooks/useSetInputValue.ts";
 import { useIsBoolean } from "@/features/scoreManagementV2/hooks/useIsBoolean.ts";
 import { InputSelectRule } from "@/features/scoreManagementV2/components/InputSelectRule";
 import { handleScoreSubmit } from "@/features/scoreManagementV2/hooks/useScoreHookForm.ts";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { useScoreAtom } from "@/globalState/scoreAtom.ts";
 import { useSetAtom } from "jotai/index";
-import { rankScoreRuleAtom } from "@/globalState/rankOrderRuleAtom.ts";
+import { rankScoreRuleAtom } from "@/globalState/rankOrderRule.ts";
 import { plusScoreRuleAtom } from "@/globalState/plusScoreRuleAtom.ts";
 import { ModalView } from "@/features/scoreManagementV2/components/ModalView";
 
@@ -23,7 +23,8 @@ export const InputRulePanel: FC = () => {
 
   const navigate = useNavigate();
 
-  const onSubmit = () => {
+  const onSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
     const isSuccess = handleScoreSubmit({
       inputStartPoint,
       inputReturnPoint,
@@ -31,7 +32,6 @@ export const InputRulePanel: FC = () => {
       setScore,
       setPlusScoreRule,
       setRankOrderRule,
-      close,
       setIsSubmit,
     });
     if (!isSuccess) return;

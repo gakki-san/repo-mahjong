@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { calcScoreForChildrenTsumo } from "./index";
-import { ScoreMap } from "@/features/scoreManagementV2/hooks/useScore.ts";
+import { ScoreMap } from "@/globalState/scoreAtom.ts";
 
 describe("calcScoreForChildrenTsumo", () => {
   const parent = 1;

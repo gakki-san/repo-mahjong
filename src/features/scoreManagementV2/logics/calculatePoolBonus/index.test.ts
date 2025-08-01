@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { calculatePoolBonus } from "./index";
-import { ScoreMap } from "@/features/scoreManagementV2/hooks/useScore.ts";
+import { ScoreMap } from "@/globalState/scoreAtom.ts";
 
 describe("calculatePoolBonus", () => {
   const score = [25000, 25000, 25000, 25000] as ScoreMap;

@@ -5,12 +5,9 @@ import { CurrentDirection } from "@/features/scoreManagementV2/hooks/useCurrentD
 import { WinInfo } from "@/features/scoreManagementV2/hooks/useWinnerinfo.ts";
 import { ModalType } from "@/features/scoreManagementV2/hooks/useModalStack.ts";
 import { handleWinPlayer } from "@/features/scoreManagementV2/logics/handleWinPlayer";
-import {
-  Player,
-  ScoreMap,
-} from "@/features/scoreManagementV2/hooks/useScore.ts";
+import { Player } from "@/features/scoreManagementV2/hooks/useScore.ts";
 import { calculateScoreDiff } from "@/features/scoreManagementV2/logics/scoreDiff/calculateScoreDiff.ts";
-import { useScoreAtom } from "@/globalState/scoreAtom.ts";
+import { ScoreMap, useScoreAtom } from "@/globalState/scoreAtom.ts";
 
 type PlayerStatusProps = {
   player: string;
@@ -54,7 +51,7 @@ export const PlayerStatus: FC<PlayerStatusProps> = ({
     offScoreDiff();
   };
 
-  const parent = 0;
+  const DEALER_POSITION = 0;
   return (
     <Flex gap="20px">
       <Box>
@@ -66,9 +63,9 @@ export const PlayerStatus: FC<PlayerStatusProps> = ({
           w="200px"
           h="auto"
           p="2"
-          color={direction === parent ? COLOR.WHITE : COLOR.BLACK}
+          color={direction === DEALER_POSITION ? COLOR.WHITE : COLOR.BLACK}
           textAlign="center"
-          bg={direction === parent ? COLOR.RED : COLOR.WHITE}
+          bg={direction === DEALER_POSITION ? COLOR.RED : COLOR.WHITE}
           onPointerDown={handlePressStart(index as Player)}
           onPointerLeave={handlePressEnd}
           onPointerUp={handlePressEnd}

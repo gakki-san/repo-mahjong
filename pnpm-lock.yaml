@@ -16,9 +16,6 @@ importers:
       "@emotion/react":
         specifier: ^11.14.0
         version: 11.14.0(@types/react@19.1.2)(react@19.1.0)
-      add:
-        specifier: ^2.0.6
-        version: 2.0.6
       jotai:
         specifier: ^2.12.5
         version: 2.12.5(@types/react@19.1.2)(react@19.1.0)
@@ -40,6 +37,9 @@ importers:
       react-router:
         specifier: ^7.6.2
         version: 7.6.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      react-router-dom:
+        specifier: ^7.6.3
+        version: 7.6.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
     devDependencies:
       "@chakra-ui/cli":
         specifier: ^3.16.0
@@ -2137,12 +2137,6 @@ packages:
       }
     engines: { node: ">=0.4.0" }
     hasBin: true
-
-  add@2.0.6:
-    resolution:
-      {
-        integrity: sha512-j5QzrmsokwWWp6kUcJQySpbG+xfOBqqKnup3OIk1pz+kB/80SLorZ9V8zHFLO92Lcd+hbvq8bT+zOGoPkmBV0Q==,
-      }
 
   agent-base@7.1.3:
     resolution:
@@ -5490,10 +5484,33 @@ packages:
       "@types/react":
         optional: true
 
+  react-router-dom@7.6.3:
+    resolution:
+      {
+        integrity: sha512-DiWJm9qdUAmiJrVWaeJdu4TKu13+iB/8IEi0EW/XgaHCjW/vWGrwzup0GVvaMteuZjKnh5bEvJP/K0MDnzawHw==,
+      }
+    engines: { node: ">=20.0.0" }
+    peerDependencies:
+      react: ">=18"
+      react-dom: ">=18"
+
   react-router@7.6.2:
     resolution:
       {
         integrity: sha512-U7Nv3y+bMimgWjhlT5CRdzHPu2/KVmqPwKUCChW8en5P3znxUqwlYFlbmyj8Rgp1SF6zs5X4+77kBVknkg6a0w==,
+      }
+    engines: { node: ">=20.0.0" }
+    peerDependencies:
+      react: ">=18"
+      react-dom: ">=18"
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
+
+  react-router@7.6.3:
+    resolution:
+      {
+        integrity: sha512-zf45LZp5skDC6I3jDLXQUu0u26jtuP4lEGbc7BbdyxenBN1vJSTA18czM2D+h5qyMBuMrD+9uB+mU37HIoKGRA==,
       }
     engines: { node: ">=20.0.0" }
     peerDependencies:
@@ -8374,8 +8391,6 @@ snapshots:
 
   acorn@8.14.1: {}
 
-  add@2.0.6: {}
-
   agent-base@7.1.3: {}
 
   ajv@6.12.6:
@@ -10516,7 +10531,21 @@ snapshots:
     optionalDependencies:
       "@types/react": 19.1.2
 
+  react-router-dom@7.6.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+    dependencies:
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
+      react-router: 7.6.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+
   react-router@7.6.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+    dependencies:
+      cookie: 1.0.2
+      react: 19.1.0
+      set-cookie-parser: 2.7.1
+    optionalDependencies:
+      react-dom: 19.1.0(react@19.1.0)
+
+  react-router@7.6.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
     dependencies:
       cookie: 1.0.2
       react: 19.1.0

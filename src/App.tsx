@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router";
+import { Route, Routes } from "react-router-dom";
 import { ScoreSummary } from "@/features/scoreManagementV2/components/ScoreSummary";
 import Home from "@/features/scoreManagementV2";
 import { InputSetUp } from "@/features/scoreManagementV2/components/InputSetUp";

@@ -11,7 +11,7 @@ type InputSelectFieldProps = {
 };
 
 type Options = {
-  value: number;
+  value: string;
   label: string;
 };
 

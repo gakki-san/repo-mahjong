@@ -22,7 +22,10 @@ export const InputWinType: FC<InputWinTypeProps> = ({
   const handleWinTypeChange: ComponentProps<
     typeof RadioGroup.Root
   >["onValueChange"] = (event) => {
-    const winType = event.value as "tsumo" | "ron";
+    const winType = event.value;
+    if (winType !== "tsumo" && winType !== "ron") {
+      throw new Error(`Invalid winType: ${winType}`);
+    }
     setWinnerInfo({
       winType: winType,
     });

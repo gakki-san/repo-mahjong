@@ -12,11 +12,11 @@ type UseSetCurrentDirection = {
 
 type UseCurrentDirection = [CurrentDirection, UseSetCurrentDirection];
 
-const infinityDirection = 0 as CurrentDirection;
+const INITIAL_DIRECTION = 0 as CurrentDirection;
 
 // 現在の上側にいるdirection(number)を示す。setでrotateする。
 export const useCurrentDirection = (): UseCurrentDirection => {
-  const [currentDirection, setCurrentDirection] = useState(infinityDirection);
+  const [currentDirection, setCurrentDirection] = useState(INITIAL_DIRECTION);
 
   const action: UseSetCurrentDirection = {
     set: (value) => setCurrentDirection(value),

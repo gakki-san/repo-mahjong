@@ -31,6 +31,8 @@ export const InputChildrenPoint: FC<InputChildrenPointProps> = ({
         w={"200px"}
         margin={"10px 0px 40px 0px"}
         max={48000}
+        min={0}
+        aria-label={"子供の点数入力"}
       >
         <NumberInput.Control />
         <NumberInput.Input />
@@ -41,6 +43,8 @@ export const InputChildrenPoint: FC<InputChildrenPointProps> = ({
         w={"200px"}
         max={48000}
         mt={"20px"}
+        min={0}
+        aria-label={"親の点数入力"}
       >
         <NumberInput.Control />
         <NumberInput.Input />

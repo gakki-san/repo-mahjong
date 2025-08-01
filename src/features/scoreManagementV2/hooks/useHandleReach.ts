@@ -25,7 +25,6 @@ export const useHandleReach = ({
   reachPlayer,
 }: UseHandleReachProps) => {
   const [score, { set: setScore }] = useScoreAtom();
-  const newScore = [...score];
 
   const handleReach = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -43,19 +42,29 @@ export const useHandleReach = ({
           closeModal();
         });
         setReachFlags.toggle(reachPlayer);
+        const newScore = [...score];
         newScore[reachPlayer] -= 1000;
         setScore(newScore);
       }
     },
-    [reachFlags, setReachFlags, openModal, closeModal, reachPlayer],
+    [
+      reachFlags,
+      setReachFlags,
+      openModal,
+      closeModal,
+      setReachPlayer,
+      score,
+      setScore,
+    ],
   );
 
   const handleResetReach = useCallback(() => {
     setReachFlags.toggle(reachPlayer as PlayerIndex);
+    const newScore = [...score];
     newScore[reachPlayer] += 1000;
     setScore(newScore);
     closeModal();
-  }, [reachFlags, setReachFlags, openModal, closeModal, reachPlayer]);
+  }, [setReachFlags, reachPlayer, score, setScore, closeModal]);
 
   return { handleReach, handleResetReach };
 };

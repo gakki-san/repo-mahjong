@@ -1,10 +1,8 @@
-import {
-  Player,
-  ScoreMap,
-} from "@/features/scoreManagementV2/hooks/useScore.ts";
+import { Player } from "@/features/scoreManagementV2/hooks/useScore.ts";
 import { calcScoreForRon } from "@/features/scoreManagementV2/logics/calcScoreForRon";
 import { calcScoreForParentTsumo } from "@/features/scoreManagementV2/logics/calcScoreForParentTsumo";
 import { calcScoreForChildrenTsumo } from "@/features/scoreManagementV2/logics/calcScoreForChildrenTsumo";
+import { ScoreMap } from "@/globalState/scoreAtom.ts";
 
 type CalculateScore = {
   winner: Player | null;
