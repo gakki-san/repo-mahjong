@@ -1,11 +1,7 @@
 import { FC } from "react";
 import { Box, Button, Flex, Grid, VStack } from "@chakra-ui/react";
 import { COLOR } from "@/features/scoreManagementV2/const/color.ts";
-import {
-  Player,
-  ScoreMap,
-  useScore,
-} from "@/features/scoreManagementV2/hooks/useScore.ts";
+import { useScore } from "@/features/scoreManagementV2/hooks/useScore.ts";
 import { useModalStack } from "@/features/scoreManagementV2/hooks/useModalStack.ts";
 import { useWinnerInfo } from "@/features/scoreManagementV2/hooks/useWinnerinfo.ts";
 import { InputWinType } from "@/features/scoreManagementV2/components/InputWinType";
@@ -21,18 +17,18 @@ import { AlreadyReachModal } from "@/features/scoreManagementV2/components/Alrea
 import { PlayerStatus } from "@/features/scoreManagementV2/components/PlayerStatus";
 import { useHandleReach } from "@/features/scoreManagementV2/hooks/useHandleReach.ts";
 import { useIsBoolean } from "@/features/scoreManagementV2/hooks/useIsBoolean.ts";
+import { usePlayerName } from "@/features/scoreManagementV2/hooks/usePlayerName.ts";
+import { usePlusScoreRule } from "@/features/scoreManagementV2/hooks/usePlusScoreRule.ts";
+import { useRankOrderRule } from "@/features/scoreManagementV2/hooks/useRankOrderRule.ts";
+import { useScoreAtom } from "@/globalState/scoreAtom.ts";
 
-type ScoreSummaryProps = {
-  score: ScoreMap;
-  playerName: string[];
-  // setScore: (score: ScoreMap) => void;
-};
+export const ScoreSummary: FC = () => {
+  const [score] = useScoreAtom();
+  const [playerName] = usePlayerName();
+  const [rankOrderRule] = useRankOrderRule();
+  const [plusScoreRule] = usePlusScoreRule();
+  console.log(rankOrderRule, plusScoreRule);
 
-export const ScoreSummary: FC<ScoreSummaryProps> = ({
-  score,
-  playerName,
-  // setScore,
-}) => {
   const [winnerInfo, setWinnerInfo] = useWinnerInfo();
   const [currentModal, { openModal, closeModal, reset }] = useModalStack();
   const [
@@ -106,25 +102,6 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
     3: false,
   };
 
-  const handleScoreDiff = (playerIndex: Player, score: ScoreMap) => {
-    const currentScore = [...score];
-    return currentScore.map(
-      (playerScore) => playerScore - currentScore[playerIndex],
-    ) as ScoreMap;
-  };
-
-  const handlePressStart = (playerIndex: Player) => {
-    return () => {
-      const scoreDiff = handleScoreDiff(playerIndex, score);
-      setScoreDiff.set(scoreDiff);
-      onScoreDiff();
-    };
-  };
-
-  const handlePressEnd = () => {
-    offScoreDiff();
-  };
-
   return (
     <>
       <Grid
@@ -152,15 +129,16 @@ export const ScoreSummary: FC<ScoreSummaryProps> = ({
                 player={player}
                 direction={item}
                 index={index}
-                score={score[index]}
+                score={score}
                 handleReach={handleReach}
                 setSelectedDirection={setSelectedDirection}
                 setWinnerInfo={setWinnerInfo}
                 openModal={openModal}
-                handlePressStart={handlePressStart}
-                handlePressEnd={handlePressEnd}
                 isAppearanceScoreDiff={isAppearanceScoreDiff}
                 scoreDiff={scoreDiff}
+                setScoreDiff={setScoreDiff.set}
+                onScoreDiff={onScoreDiff}
+                offScoreDiff={offScoreDiff}
               />
             </VStack>
           );

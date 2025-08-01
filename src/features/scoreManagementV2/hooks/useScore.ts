@@ -9,15 +9,15 @@ export type UseScoreActionMap = {
   reset: () => void;
 };
 
-export type useScoreReturn = [ScoreMap, action: UseScoreActionMap];
-const initialScore: ScoreMap = [0, 0, 0, 0];
+const initialScore = [0, 0, 0, 0] as ScoreMap;
 
-export const useScore = (): useScoreReturn => {
+export const useScore = () => {
   const [score, setScore] = useState<ScoreMap>(initialScore);
 
   const action = {
     set: (value: ScoreMap) => setScore(value),
-    reset: () => setScore(initialScore),
+    reset: () => setScore([0, 0, 0, 0]),
   };
-  return [score, action];
+
+  return [score, action] as const;
 };

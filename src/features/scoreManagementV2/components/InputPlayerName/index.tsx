@@ -1,17 +1,15 @@
-import { COLOR } from "@/features/scoreManagementV2/const/color.ts";
+import { FC } from "react";
 import { Box, Button, Field, Fieldset, Flex, Input } from "@chakra-ui/react";
+import { COLOR } from "@/features/scoreManagementV2/const/color.ts";
 import { playerList } from "@/features/scoreManagementV2/const/playerList.ts";
-import React, { FC } from "react";
+import { usePlayerName } from "@/features/scoreManagementV2/hooks/usePlayerName.ts";
 
 type InputPlayerNameProps = {
-  onPlayerNameChange: React.ChangeEventHandler<HTMLInputElement>;
-  closeModal: () => void;
+  onClick: () => void;
 };
 
-export const InputPlayerName: FC<InputPlayerNameProps> = ({
-  onPlayerNameChange,
-  closeModal,
-}) => {
+export const InputPlayerName: FC<InputPlayerNameProps> = ({ onClick }) => {
+  const [, onPlayerNameChange] = usePlayerName();
   return (
     <Flex
       align={"center"}
@@ -39,10 +37,7 @@ export const InputPlayerName: FC<InputPlayerNameProps> = ({
             ))}
           </Field.Root>
         </Fieldset.Content>
-
-        <Button onClick={closeModal} type="submit">
-          set
-        </Button>
+        <Button onClick={onClick}>次へ</Button>
       </Fieldset.Root>
     </Flex>
   );
