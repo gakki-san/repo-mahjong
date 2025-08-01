@@ -66,11 +66,7 @@ export const SelectLoser: FC<SelectLoserProps> = ({
         bg={COLOR.WHITE}
       >
         だれが放銃した？
-        <RadioGroup.Root
-          mt={"20px"}
-          onValueChange={selectedLoser}
-          defaultValue="0"
-        >
+        <RadioGroup.Root mt={"20px"} onValueChange={selectedLoser}>
           <HStack
             alignItems={"start"}
             flexDir={"column"}

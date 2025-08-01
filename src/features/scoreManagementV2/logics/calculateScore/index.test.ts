@@ -16,9 +16,9 @@ describe("calculateWinnerScore", () => {
   it("和了者と親が同じ", () => {
     const winner = 1;
     const score = [21000, 28000, 23000, 28000] as ScoreMap;
-    const point = 6000;
+    const point = 4000;
     expect(calculateScore(winner, score, point, parent)).toEqual([
-      19000, 34000, 21000, 26000,
+      17000, 40000, 19000, 24000,
     ]);
   });
 
@@ -37,6 +37,54 @@ describe("calculateWinnerScore", () => {
     const point = 12000;
     expect(calculateScore(winner, score, point, parent)).toEqual([
       27000, 14000, 22000, 37000,
+    ]);
+  });
+
+  it("winnerがnullのときはそのままscoreを返す", () => {
+    const winner = null;
+    const score = [25000, 25000, 25000, 25000] as ScoreMap;
+    const point = 8000;
+    expect(calculateScore(winner, score, point, parent)).toEqual([
+      25000, 25000, 25000, 25000,
+    ]);
+  });
+
+  it("pointがnullのときはそのままscoreを返す", () => {
+    const winner = 0;
+    const score = [25000, 25000, 25000, 25000] as ScoreMap;
+    const point = null;
+    expect(calculateScore(winner, score, point, parent)).toEqual([
+      25000, 25000, 25000, 25000,
+    ]);
+  });
+
+  it("ロン: 和了者0が1から上がった場合", () => {
+    const winner = 0;
+    const score = [25000, 25000, 25000, 25000] as ScoreMap;
+    const point = 8000;
+    const loser = 1;
+    expect(calculateScore(winner, score, point, parent, loser)).toEqual([
+      33000, 17000, 25000, 25000,
+    ]);
+  });
+
+  it("ロン: 和了者が親のパターン (親が振り込まれた場合)", () => {
+    const winner = 1;
+    const score = [20000, 30000, 25000, 25000] as ScoreMap;
+    const point = 6000;
+    const loser = 2;
+    expect(calculateScore(winner, score, point, parent, loser)).toEqual([
+      20000, 36000, 19000, 25000,
+    ]);
+  });
+
+  it("ロン: 和了者3が親から上がった場合", () => {
+    const winner = 3;
+    const score = [30000, 20000, 25000, 25000] as ScoreMap;
+    const point = 10000;
+    const loser = 1;
+    expect(calculateScore(winner, score, point, parent, loser)).toEqual([
+      30000, 10000, 25000, 35000,
     ]);
   });
 });

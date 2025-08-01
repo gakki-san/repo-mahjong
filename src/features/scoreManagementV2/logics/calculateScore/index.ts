@@ -4,13 +4,18 @@ import {
 } from "@/features/scoreManagementV2/hooks/useScore.ts";
 
 export const calculateScore = (
-  winner: Player,
+  winner: Player | null,
   score: ScoreMap,
-  point: number,
+  point: number | null,
   parent: Player,
+  loser?: Player,
 ): ScoreMap => {
+  if (winner === null || point === null) {
+    console.error("winnerかpointが入力されていないです。");
+    return score;
+  }
   const currentScore = [...score];
-  const fromEachPlayerWhenParentWins = point / 3;
+  const fromEachPlayerWhenParentWins = point;
   const fromParentWhenChildWins = point / 2;
   const fromOtherChildWhenChildWins = point / 4;
   const payments = currentScore.map((_, index) => {
@@ -24,8 +29,16 @@ export const calculateScore = (
     }
   });
 
+  if (loser !== undefined) {
+    currentScore[winner] += point;
+    currentScore[loser] -= point;
+    return currentScore as ScoreMap;
+  }
+
   return currentScore.map((score, index) => {
-    if (index === winner) {
+    if (index === parent && index === winner) {
+      return score + point * 3;
+    } else if (index === winner) {
       return score + point;
     } else {
       return score - payments[index];
