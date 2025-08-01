@@ -6,6 +6,7 @@ type SetUseCountAction = {
   increment: () => void;
   reset: () => void;
   add: (num: number) => void;
+  set: (num: number) => void;
 };
 
 const initialCount = 0;
@@ -17,7 +18,9 @@ export const useCount = (): useCountReturn => {
       setCount(count + 1);
     },
     reset: () => setCount(initialCount),
-    add: (num: number) => setCount(num),
+    // ここなおす
+    add: (num: number) => setCount((prev) => prev + num),
+    set: (num: number) => setCount(num),
   };
 
   return [count, action];

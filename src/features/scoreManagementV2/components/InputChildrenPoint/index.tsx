@@ -14,8 +14,8 @@ export const InputChildrenPoint: FC<InputChildrenPointProps> = ({
   handleBack,
   handleCloseInputPoint,
 }) => {
-  const [childrenPoint, { add: setChildrenPoint }] = useCount();
-  const [parentPoint, { add: setParentPoint }] = useCount();
+  const [childrenPoint, { set: setChildrenPoint }] = useCount();
+  const [parentPoint, { set: setParentPoint }] = useCount();
 
   const handlePointChange =
     (setter: (point: number) => void) => (event: { value: string }) => {
