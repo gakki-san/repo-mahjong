@@ -3,19 +3,33 @@ import { Box, Flex, NumberInput } from "@chakra-ui/react";
 import { COLOR } from "@/features/scoreManagementV2/const/color.ts";
 import { DecisionButton } from "@/features/scoreManagementV2/components/DecisionButton";
 import { BackButton } from "@/features/scoreManagementV2/components/BackButton";
+import { useCount } from "@/features/scoreManagementV2/hooks/useCount.ts";
+import { WinInfo } from "@/features/scoreManagementV2/hooks/useWinnerinfo.ts";
 
 type InputChildrenPointProps = {
   handleBack: () => void;
   reset: () => void;
+  setPoint: (value: Partial<WinInfo>) => void;
 };
 
 export const InputChildrenPoint: FC<InputChildrenPointProps> = ({
   handleBack,
   reset,
+  setPoint,
 }) => {
+  const [childrenPoint, { add: setChildrenPoint }] = useCount();
+  const [parentPoint, { add: setParentPoint }] = useCount();
   const handleCloseInputPoint = () => {
     reset();
+    setPoint({ winPoints: childrenPoint * 2 + parentPoint });
   };
+
+  const handlePointChange =
+    (setter: (point: number) => void) => (event: { value: string }) => {
+      const point = Number(event.value);
+      setter(point);
+    };
+
   return (
     <Box
       pos={"absolute"}
@@ -30,7 +44,7 @@ export const InputChildrenPoint: FC<InputChildrenPointProps> = ({
     >
       子
       <NumberInput.Root
-        // onValueChange={handleChildrenPoint}
+        onValueChange={handlePointChange(setChildrenPoint)}
         w={"200px"}
         margin={"10px 0px 40px 0px"}
         max={48000}
@@ -40,7 +54,7 @@ export const InputChildrenPoint: FC<InputChildrenPointProps> = ({
       </NumberInput.Root>
       親
       <NumberInput.Root
-        // onValueChange={handleParentPoint}
+        onValueChange={handlePointChange(setParentPoint)}
         w={"200px"}
         max={48000}
         mt={"20px"}
