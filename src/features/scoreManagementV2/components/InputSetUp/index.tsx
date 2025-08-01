@@ -6,6 +6,7 @@ import { InputPlayerName } from "@/features/scoreManagementV2/components/InputPl
 import { SelectedRulePanel } from "@/features/scoreManagementV2/components/SelectedRulePanel";
 import { useScore } from "@/features/scoreManagementV2/hooks/useScore.ts";
 import { useCount } from "@/features/scoreManagementV2/hooks/useCount.ts";
+import { ScoreSummary } from "@/features/scoreManagementV2/components/ScoreSummary";
 
 export const InputSetUp = () => {
   const [isSelectedScorePanel, { on: openRuleModal, off: closeRuleModal }] =
@@ -21,6 +22,10 @@ export const InputSetUp = () => {
     closeInputModal();
     openRuleModal();
   };
+
+  console.log(returnPoint, umaRule);
+
+  const playerName = Object.values(playersName);
 
   return (
     <Box
@@ -50,17 +55,7 @@ export const InputSetUp = () => {
         />
       )}
       {isOpenScoreSummary && (
-        <Box>
-          scoreSummary
-          {score.map((item, index) => (
-            <Box key={index}>{item}</Box>
-          ))}
-          {Object.entries(playersName).map(([key, value]) => (
-            <Box key={key}>{value}</Box>
-          ))}
-          <Box>{returnPoint}</Box>
-          <Box>{umaRule}</Box>
-        </Box>
+        <ScoreSummary score={score} playerName={playerName} />
       )}
     </Box>
   );

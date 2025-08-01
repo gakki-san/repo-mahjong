@@ -3,6 +3,7 @@ import { useState } from "react";
 export type ModalType =
   | null
   | "winType"
+  | "finishWinType"
   | "winPoint"
   | "childrenTsumo"
   | "loser"
@@ -12,9 +13,9 @@ export type ModalType =
   | "finish"
   | "appearanceScore";
 
-type UseModalStackReturn = [currentModal: ModalType, actions: Actions];
+type UseModalStackReturn = [currentModal: ModalType, actions: useModalActions];
 
-type Actions = {
+export type useModalActions = {
   openModal: (type: Exclude<ModalType, null>) => void;
   closeModal: () => void;
   reset: () => void;
