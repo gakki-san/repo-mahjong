@@ -4,11 +4,11 @@ import { useIsBoolean } from "@/features/scoreManagementV2/hooks/useIsBoolean.ts
 import { InputPlayerName } from "@/features/scoreManagementV2/components/InputPlayerName";
 
 export const InputSetUp: FC = () => {
-  const [isRulePanel, { on: setIsRulePanel }] = useIsBoolean();
+  const [showRulePanel, { on: setShowRulePanel }] = useIsBoolean();
   return (
     <>
-      <InputPlayerName onClick={setIsRulePanel} />
-      {isRulePanel && <InputRulePanel />}
+      <InputPlayerName onSubmit={setShowRulePanel} />
+      {showRulePanel && <InputRulePanel />}
     </>
   );
 };

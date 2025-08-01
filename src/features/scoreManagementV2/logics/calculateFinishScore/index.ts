@@ -11,11 +11,11 @@ export const calculateFinishScore = (
     return score;
   }
 
-  const rule: Record<number, [number, number]> = {
-    0: [5000, 10000],
-    1: [10000, 20000],
-    2: [10000, 30000],
-    3: [20000, 30000],
+  const rule: Record<string, [number, number]> = {
+    "5-10": [5000, 10000],
+    "10-20": [10000, 20000],
+    "10-30": [10000, 30000],
+    "20-30": [20000, 30000],
   };
 
   const [smallUma, bigUma] = rule[rankOrderRule];

@@ -74,6 +74,7 @@ export const ScoreSummary: FC = () => {
   const isTempaiModal = currentModal === "tempai";
   const isReach = currentModal === "reachVideo";
   const isAlreadyReach = currentModal === "reachConfirm";
+  const isParent = 0 === selectedDirection;
 
   const uiPositions = [
     { gridColumn: 2, gridRow: 1, transform: "rotate(180deg)" },
@@ -81,71 +82,6 @@ export const ScoreSummary: FC = () => {
     { gridColumn: 2, gridRow: 3 },
     { gridColumn: 1, gridRow: 2, transform: "rotate(90deg)" },
   ];
-
-  const parent = 0;
-  const isParent = parent === selectedDirection;
-
-  const handleBack = () => {
-    closeModal();
-  };
-
-  const handleFinishGame = () => {
-    openModal("finish");
-  };
-
-  const handleMoveDirection = () => {
-    openModal("tempai");
-  };
-
-  const handleCloseTempaiModal = () => {
-    const countTrue = (obj: Record<string, boolean>) =>
-      Object.values(obj).filter(Boolean).length;
-    const countReach = countTrue(reachFlags);
-    const countTEMPAI = countTrue(isTEMPAI);
-    const calcScore = calculatePenalty(score, countTEMPAI, isTEMPAI);
-    setScore.set(calcScore);
-
-    const parent = currentDirectionToArray().indexOf(0) as Player;
-    const shouldContinueParent = !isTEMPAI[parent];
-    if (shouldContinueParent) {
-      rotateDirection();
-    }
-
-    resetModal();
-    addPoolBonus(countReach);
-    incrementRoundBonus();
-    setIsTEMPAI.reset();
-    setReachFlags.reset();
-  };
-
-  const newGameData = (playersName: string[], score: ScoreMap) => {
-    return playersName.map((name, index) => {
-      const raw = score[index] / 1000;
-      const scoreValue = raw === 0 ? "0" : `${raw > 0 ? "+" : ""}${raw}`;
-      return {
-        id: (index + 1).toString(),
-        name: name,
-        score: scoreValue,
-      };
-    });
-  };
-
-  const gameData = newGameData(
-    playerName,
-    calculateFinishScore(score, plusScoreRule, rankOrderRule),
-  );
-
-  const handleRoundBonus = (winner: Player | null, parent: Player) => {
-    if (winner === null) {
-      console.error("winnerが選択されていません。");
-      return;
-    }
-    if (winner === parent) {
-      incrementRoundBonus();
-    } else {
-      resetRoundBonus();
-    }
-  };
 
   const calculateTotalScore = (point: number | null) => {
     const calculateWinScore = calculateScore(
@@ -170,13 +106,45 @@ export const ScoreSummary: FC = () => {
     );
 
     const countReach = Object.values(reachFlags).filter((item) => item).length;
-    const calculatedScore = calculateReachBonus(
+
+    return calculateReachBonus(
       calculatePoolBonusScore,
       winnerInfo.winner,
       countReach,
     );
+  };
 
-    return calculatedScore;
+  const handleCloseTempaiModal = () => {
+    const countTrue = (obj: Record<string, boolean>) =>
+      Object.values(obj).filter(Boolean).length;
+    const countReach = countTrue(reachFlags);
+    const countTEMPAI = countTrue(isTEMPAI);
+    const calcScore = calculatePenalty(score, countTEMPAI, isTEMPAI);
+    setScore.set(calcScore);
+
+    const parent = currentDirectionToArray().indexOf(0) as Player;
+    const shouldContinueParent = !isTEMPAI[parent];
+    if (shouldContinueParent) {
+      rotateDirection();
+    }
+
+    resetModal();
+    addPoolBonus(countReach);
+    incrementRoundBonus();
+    setIsTEMPAI.reset();
+    setReachFlags.reset();
+  };
+
+  const handleRoundBonus = (winner: Player | null, parent: Player) => {
+    if (winner === null) {
+      console.error("winnerが選択されていません。");
+      return;
+    }
+    if (winner === parent) {
+      incrementRoundBonus();
+    } else {
+      resetRoundBonus();
+    }
   };
 
   const handleCloseInputPoint = () => {
@@ -209,6 +177,25 @@ export const ScoreSummary: FC = () => {
     resetRoundBonus();
     resetPoolBonus();
   };
+
+  const newGameData = (playersName: string[], score: ScoreMap) => {
+    return playersName.map((name, index) => {
+      const raw = score[index] / 1000;
+      const scoreValue = raw === 0 ? "0" : `${raw > 0 ? "+" : ""}${raw}`;
+      return {
+        id: (index + 1).toString(),
+        name: name,
+        score: scoreValue,
+      };
+    });
+  };
+
+  // console.log("uma", rankOrderRule);
+  // console.log("return", plusScoreRule);
+  const gameData = newGameData(
+    playerName,
+    calculateFinishScore(score, plusScoreRule, rankOrderRule),
+  );
 
   return (
     <>
@@ -266,7 +253,7 @@ export const ScoreSummary: FC = () => {
             color={COLOR.WHITE}
             fontWeight={"bold"}
             bg={COLOR.RED}
-            onClick={handleMoveDirection}
+            onClick={() => openModal("tempai")}
           >
             流局
           </Button>
@@ -292,7 +279,7 @@ export const ScoreSummary: FC = () => {
             color={COLOR.WHITE}
             fontWeight={"bold"}
             bg={COLOR.RED}
-            onClick={handleFinishGame}
+            onClick={() => openModal("finish")}
           >
             終局
           </Button>
@@ -311,7 +298,7 @@ export const ScoreSummary: FC = () => {
           winnerInfo={winnerInfo}
           setWinnerInfo={setWinnerInfo}
           openModal={openModal}
-          handleBack={handleBack}
+          handleBack={closeModal}
         />
       )}
       {isRon && (
@@ -320,31 +307,31 @@ export const ScoreSummary: FC = () => {
           setWinnerInfo={setWinnerInfo}
           playerName={playerName}
           openModal={openModal}
-          handleBack={handleBack}
+          handleBack={closeModal}
         />
       )}
       {isTsumo &&
         (isParent ? (
           <InputWinPoint
-            handleBack={handleBack}
+            handleBack={closeModal}
             setPoint={setWinnerInfo}
             handleCloseInputPoint={handleCloseInputPoint}
           />
         ) : (
           <InputChildrenPoint
-            handleBack={handleBack}
+            handleBack={closeModal}
             handleCloseInputPoint={handleCloseInputChildrenPoint}
           />
         ))}
       {isWinPointForRon && (
         <InputWinPoint
-          handleBack={handleBack}
+          handleBack={closeModal}
           setPoint={setWinnerInfo}
           handleCloseInputPoint={handleCloseInputPoint}
         />
       )}
       {isFinishModal && (
-        <FinishGameModal gameData={gameData} handleBack={handleBack} />
+        <FinishGameModal gameData={gameData} handleBack={closeModal} />
       )}
       {isTempaiModal && (
         <SelectTempaiModal
@@ -352,7 +339,7 @@ export const ScoreSummary: FC = () => {
           isTEMPAI={isTEMPAI}
           toggle={setIsTEMPAI.toggle}
           handleDecide={handleCloseTempaiModal}
-          handleBack={handleBack}
+          handleBack={closeModal}
         />
       )}
       {isReach && <ReachVideo selectedReachPlayer={0} />}

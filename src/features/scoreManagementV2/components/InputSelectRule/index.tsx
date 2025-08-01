@@ -1,19 +1,24 @@
-import React, { FC } from "react";
+import { COLOR } from "../../const/color";
 import { Field, NativeSelect } from "@chakra-ui/react";
-import { COLOR } from "@/features/scoreManagementV2/const/color.ts";
+import React, { FC } from "react";
 
-type InputSelectPointProps = {
+type InputSelectFieldProps = {
   input: string;
   handleInputValue: (event: React.ChangeEvent<HTMLSelectElement>) => void;
-  option: number[];
+  options: Options[];
   placeholder: string;
   isSubmit: boolean;
 };
 
-export const InputSelectPoint: FC<InputSelectPointProps> = ({
+type Options = {
+  value: number;
+  label: string;
+};
+
+export const InputSelectRule: FC<InputSelectFieldProps> = ({
   input,
   handleInputValue,
-  option,
+  options,
   placeholder,
   isSubmit,
 }) => {
@@ -26,9 +31,9 @@ export const InputSelectPoint: FC<InputSelectPointProps> = ({
           value={input}
           onChange={handleInputValue}
         >
-          {option.map((num) => (
-            <option key={num} value={num}>
-              {num}
+          {options.map((item) => (
+            <option key={item.value} value={item.label}>
+              {item.label}
             </option>
           ))}
         </NativeSelect.Field>
