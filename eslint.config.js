@@ -9,27 +9,6 @@ import parser from "@typescript-eslint/parser";
 import react from "eslint-plugin-react";
 
 export default defineConfig([
-  {
-    files: ["./src/**/*.{js,mjs,cjs,ts,jsx,tsx}"],
-    plugins: {
-      react,
-      "chakra-ui": chakraUi,
-      "@typescript-eslint": tseslint.plugin,
-    },
-  },
-  {
-    languageOptions: {
-      parserOptions: {
-        parser,
-        project: ["./tsconfig.json"],
-        ecmaFeatures: {
-          jsx: true,
-        },
-      },
-      ecmaVersion: "latest",
-      sourceType: "module",
-    },
-  },
   js.configs.recommended,
   tseslint.configs.recommended,
   pluginReact.configs.flat.recommended,
@@ -37,6 +16,18 @@ export default defineConfig([
   importPlugin.flatConfigs.recommended,
 
   {
+    files: ["./src/**/*.{js,mjs,cjs,ts,jsx,tsx}"],
+    languageOptions: {
+      parser,
+      parserOptions: {
+        project: ["./tsconfig.json"],
+        ecmaFeatures: {
+          jsx: true,
+        },
+        sourceType: "module",
+        ecmaVersion: "latest",
+      },
+    },
     settings: {
       react: {
         version: "detect",
@@ -45,6 +36,11 @@ export default defineConfig([
         typescript: true,
         node: true,
       },
+    },
+    plugins: {
+      react,
+      "chakra-ui": chakraUi,
+      "@typescript-eslint": tseslint.plugin,
     },
     rules: {
       semi: "error",
@@ -59,5 +55,6 @@ export default defineConfig([
       "chakra-ui/require-specific-component": "error",
     },
   },
+
   globalIgnores(["./src/components/ui"]),
 ]);
