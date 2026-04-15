@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, FormEvent } from "react";
 import { Button } from "@chakra-ui/react";
 import { RULE_OPTIONS } from "@/features/scoreManagementV2/const/rureOptions.ts";
 import { useSetInputValue } from "@/features/scoreManagementV2/hooks/useSetInputValue.ts";
@@ -23,7 +23,9 @@ export const InputRulePanel: FC = () => {
 
   const navigate = useNavigate();
 
-  const onSubmit = () => {
+  const onSubmit = (event: FormEvent<HTMLDivElement>) => {
+    event.preventDefault();
+
     const isSuccess = handleScoreSubmit({
       inputStartPoint,
       inputReturnPoint,
