@@ -59,8 +59,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: 'pnpm'
+          node-version: 22
 
       - name: Enable Corepack
         run: corepack enable
@@ -72,27 +71,3 @@ jobs:
         uses: google-github-actions/release-please-action@v4
         with:
           release-type: node
-
-  notify:
-    if: always()
-    needs: [build, release]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Slack Notification
-        uses: slackapi/slack-github-action@v1.24.0
-        with:
-          payload: |
-            {
-              "text": "✅ CI/CD Workflow completed on branch: ${{ github.ref_name }}",
-              "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "*CI/CD完了*\nBranch: ${{ github.ref_name }}\nStatus: ${{ job.status }}"
-                  }
-                }
-              ]
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
